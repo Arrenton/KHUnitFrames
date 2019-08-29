@@ -8,6 +8,7 @@
 kh_main.lua
 
 modules\kh2.lua
+modules\kh2_party.lua
 unitframes\player.lua
 unitframes\party.lua
 

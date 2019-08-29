@@ -79,14 +79,14 @@ end
 local function am(text)
     DEFAULT_CHAT_FRAME:AddMessage(text)
 end
-
+local ring_count = 0
 function KH_UI:cre_ring_holder(ring_config, parent)
     --am(ring_config.global.anchorframe)
-    local f = CreateFrame("Frame", ring_config.global.ringname, parent)
-    f:SetWidth(ring_config.global.size)
-    f:SetHeight(ring_config.global.size)
+    ring_count = ring_count + 1
+    local f = CreateFrame("Frame", "FRAME_KH_RING_" .. ring_count, parent)
+    f:SetWidth(256)
+    f:SetHeight(256)
     f:SetPoint("CENTER", 0, 0)
-    f:SetAlpha(ring_config.global.alpha)
     return f
 end
 
@@ -334,16 +334,16 @@ end
 function KH_UI:cre_segment_textures(ring_config, self, mainFrame)
     --am(self.field)
 
-    local direction = ring_config.global.orientation[KH_UI_Settings[mainFrame.settings].orientation].fill_direction
-    local segmentsize = ring_config.segment.segmentsize
+    local direction = ring_config.global.fill_direction
+    local segmentsize = 128
     local outer_radius = ring_config.segment.outer_radius
     local difference = segmentsize - outer_radius
     local inner_radius = ring_config.segment.inner_radius
     local ring_factor = outer_radius / inner_radius
     local ring_width = outer_radius - inner_radius
 
-    self.direction = ring_config.global.orientation[KH_UI_Settings[mainFrame.settings].orientation].fill_direction
-    self.segmentsize = ring_config.segment.segmentsize
+    self.direction = ring_config.global.fill_direction
+    self.segmentsize = 128
     self.outer_radius = ring_config.segment.outer_radius
     self.difference = segmentsize - outer_radius
     self.inner_radius = ring_config.segment.inner_radius
@@ -421,8 +421,8 @@ end
 
 --calculate the segment number based on starting segment and direction
 function KH_UI:calc_segment_num(ring_config, current, mainFrame)
-    local start = ring_config.global.orientation[KH_UI_Settings[mainFrame.settings].orientation].start_segment
-    local dir = ring_config.global.orientation[KH_UI_Settings[mainFrame.settings].orientation].fill_direction
+    local start = ring_config.global.start_segment
+    local dir = ring_config.global.fill_direction
     local id
     if dir == 0 then
         if start - current < 1 then
@@ -447,8 +447,8 @@ function KH_UI:cre_ring_segments(ring_config, ring_object, mainFrame)
     f:SetFrameLevel(ring_config.segment.framelevel)
     for i = 1, (ring_config.global.segments_used) do
         f[i] = CreateFrame("Frame", nil, f)
-        f[i]:SetWidth(ring_config.global.size / 2)
-        f[i]:SetHeight(ring_config.global.size / 2)
+        f[i]:SetWidth(256 / 2)
+        f[i]:SetHeight(256 / 2)
         f[i].id = i
         f[i].field = KH_UI:calc_segment_num(ring_config, i - 1, mainFrame)
         if f[i].field == 1 then
@@ -491,8 +491,7 @@ function KH_UI:update_ring_segments(mainFrame)
                 f[i]:SetPoint("TOPLEFT", 0, 0)
                 f[i].fullsegment:SetTexCoord(1, 0, 0, 0, 1, 1, 0, 1)
             end
-            f[i].direction =
-                ring_config[k].global.orientation[KH_UI_Settings[mainFrame.settings].orientation].fill_direction
+            f[i].direction = ring_config[k].global.fill_direction
             if f[i].direction == 1 then
                 f[i].slicer:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\slicer1")
             else
@@ -523,10 +522,16 @@ function KH_UI:calc_ring_health(self, ring_config, unit, type, mainFrame)
         mainFrame.lastHealth = UnitHealth(unit)
     end
 
-    perc = (perc * mainFrame.healthMaxMult) * (max / KH_UI_Settings[mainFrame.settings].ringMaxHealth)
+    if (KH_UI_Settings[mainFrame.settings].style == "KH2") then
+        perc = (perc * mainFrame.healthMaxMult) * (max / KH_UI_Settings[mainFrame.settings].ringMaxHealth)
 
-    if type == "maxhealth" or type == "maxhealthbg" then
-        perc = (max / KH_UI_Settings[mainFrame.settings].ringMaxHealth) * 100 * mainFrame.healthMaxMult
+        if type == "maxhealth" or type == "maxhealthbg" then
+            perc = (max / KH_UI_Settings[mainFrame.settings].ringMaxHealth) * 100 * mainFrame.healthMaxMult
+        end
+    elseif (KH_UI_Settings[mainFrame.settings].style == "KH2 Party") then
+        if type == "maxhealth" or type == "maxhealthbg" then
+            perc = 100
+        end
     end
 
     perc = round(perc, 4)
@@ -594,10 +599,16 @@ function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
         r, g, b = altR, altG, altB
     end
 
-    perc = perc * (max / KH_UI_Settings[mainFrame.settings].ringMaxPower)
+    if (KH_UI_Settings[mainFrame.settings].style == "KH2") then
+        perc = perc * (max / KH_UI_Settings[mainFrame.settings].ringMaxPower)
+    end
 
     if type == "maxpower" then
-        perc = (max / KH_UI_Settings[mainFrame.settings].ringMaxPower) * 100
+        if (KH_UI_Settings[mainFrame.settings].style == "KH2") then
+            perc = (max / KH_UI_Settings[mainFrame.settings].ringMaxPower) * 100
+        elseif (KH_UI_Settings[mainFrame.settings].style == "KH2 Party") then
+            perc = 100
+        end
         mainFrame.unitPowerMax = max
     elseif type == "power" then
         for i = 1, anz_seg do
@@ -606,6 +617,7 @@ function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
             self.segments[i].slicer:SetVertexColor(r, g, b, 1)
             self.segments[i].fullsegment:SetVertexColor(r, g, b, 1)
         end
+        mainFrame.unitPower = act
     end
 
     perc = round(perc, 4)
@@ -656,97 +668,96 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
     local ring_config = ring_table[id]
     local ring_object
 
-    if ring_config.global.active == 1 then
-        local parent = mainFrame
-        if
-            ring_config.global.ringtype == "health" or ring_config.global.ringtype == "lasthealth" or
-                ring_config.global.ringtype == "maxhealth" or
-                ring_config.global.ringtype == "maxhealthbg"
-         then
-            parent = mainFrame.healthFrame
-        end
+    local parent = mainFrame
+    if
+        ring_config.global.ringtype == "health" or ring_config.global.ringtype == "lasthealth" or
+            ring_config.global.ringtype == "maxhealth" or
+            ring_config.global.ringtype == "maxhealthbg"
+     then
+        parent = mainFrame.healthFrame
+    end
 
-        if ring_config.global.ringtype == "power" or ring_config.global.ringtype == "maxpower" then
-            parent = mainFrame.powerFrame
-        end
+    if ring_config.global.ringtype == "power" or ring_config.global.ringtype == "maxpower" then
+        parent = mainFrame.powerFrame
+    end
 
-        ring_object = KH_UI:cre_ring_holder(ring_config, parent)
-        ring_object.alpha = 1
-        ring_object.parent = parent
-        ring_object.lastUpdate = 0
-        ring_object.ringtype = ring_config.global.ringtype
+    ring_object = KH_UI:cre_ring_holder(ring_config, parent)
+    ring_object.alpha = 1
+    ring_object.parent = parent
+    ring_object.lastUpdate = 0
+    ring_object.ringtype = ring_config.global.ringtype
 
-        ring_object.segments = KH_UI:cre_ring_segments(ring_config, ring_object, mainFrame)
+    ring_object.segments = KH_UI:cre_ring_segments(ring_config, ring_object, mainFrame)
 
-        if
-            ring_config.global.ringtype == "health" or ring_config.global.ringtype == "lasthealth" or
-                ring_config.global.ringtype == "maxhealth" or
-                ring_config.global.ringtype == "maxhealthbg"
-         then
-            ring_object:SetScript(
-                "OnEvent",
-                function(self, event, unit)
-                    if
-                        ((event == "UNIT_HEALTH_FREQUENT" or event == "UNIT_MAXHEALTH") and unit == mainFrame.unit) or
-                            event == "PLAYER_ENTERING_WORLD"
-                     then
-                        KH_UI:calc_ring_health(
-                            ring_object,
-                            ring_config,
-                            mainFrame.unit,
-                            ring_config.global.ringtype,
-                            mainFrame
-                        )
-                        mainFrame.unitHealth = UnitHealth(mainFrame.unit)
-                    end
+    if
+        ring_config.global.ringtype == "health" or ring_config.global.ringtype == "lasthealth" or
+            ring_config.global.ringtype == "maxhealth" or
+            ring_config.global.ringtype == "maxhealthbg"
+     then
+        ring_object:SetScript(
+            "OnEvent",
+            function(self, event, unit)
+                if
+                    ((event == "UNIT_HEALTH_FREQUENT" or event == "UNIT_MAXHEALTH") and unit == mainFrame.unit) or
+                        event == "PLAYER_ENTERING_WORLD"
+                 then
+                    KH_UI:calc_ring_health(
+                        ring_object,
+                        ring_config,
+                        mainFrame.unit,
+                        ring_config.global.ringtype,
+                        mainFrame
+                    )
+                    mainFrame.unitHealth = UnitHealth(mainFrame.unit)
                 end
-            )
-            ring_object:RegisterEvent("UNIT_HEALTH_FREQUENT")
-            ring_object:RegisterEvent("UNIT_MAXHEALTH")
-            ring_object:RegisterEvent("PLAYER_ENTERING_WORLD")
-        end
+            end
+        )
+        ring_object:RegisterEvent("UNIT_HEALTH_FREQUENT")
+        ring_object:RegisterEvent("UNIT_MAXHEALTH")
+        ring_object:RegisterEvent("PLAYER_ENTERING_WORLD")
+    end
 
-        if ring_config.global.ringtype == "maxpower" then
-            ring_object:SetScript(
-                "OnEvent",
-                function(self, event, unit)
-                    if
-                        ((event == "UNIT_POWER_UPDATE" or event == "UNIT_DISPLAYPOWER") and
-                            unit == ring_config.global.unit) or
-                            event == "PLAYER_ENTERING_WORLD"
-                     then
-                        KH_UI:calc_ring_power(
-                            ring_object,
-                            ring_config,
-                            mainFrame.unit,
-                            ring_config.global.ringtype,
-                            mainFrame
-                        )
-                    end
+    if ring_config.global.ringtype == "maxpower" then
+        ring_object:SetScript(
+            "OnEvent",
+            function(self, event, unit)
+                if
+                    ((event == "UNIT_POWER_UPDATE" or event == "UNIT_DISPLAYPOWER") and unit == ring_config.global.unit) or
+                        event == "PLAYER_ENTERING_WORLD"
+                 then
+                    KH_UI:calc_ring_power(
+                        ring_object,
+                        ring_config,
+                        mainFrame.unit,
+                        ring_config.global.ringtype,
+                        mainFrame
+                    )
+                    mainFrame.unitPower = UnitPower(mainFrame.unit)
                 end
-            )
-            ring_object:RegisterEvent("UNIT_POWER_UPDATE")
-            ring_object:RegisterEvent("UNIT_DISPLAYPOWER")
-            ring_object:RegisterEvent("PLAYER_ENTERING_WORLD")
-        end
-        if ring_config.global.ringtype == "power" then
-            ring_object:SetScript(
-                "OnUpdate",
-                function(self, elapsed)
-                    self.lastUpdate = self.lastUpdate + elapsed
-                    if (self.lastUpdate >= 0.05) then
-                        self.lastUpdate = self.lastUpdate - 0.05
-                        KH_UI:calc_ring_power(
-                            ring_object,
-                            ring_config,
-                            mainFrame.unit,
-                            ring_config.global.ringtype,
-                            mainFrame
-                        )
-                    end
+            end
+        )
+        ring_object:RegisterEvent("UNIT_POWER_UPDATE")
+        ring_object:RegisterEvent("UNIT_DISPLAYPOWER")
+        ring_object:RegisterEvent("PLAYER_ENTERING_WORLD")
+    end
+    if ring_config.global.ringtype == "power" then
+        ring_object:SetScript(
+            "OnUpdate",
+            function(self, elapsed)
+                self.lastUpdate = self.lastUpdate + elapsed
+                if (self.lastUpdate >= 0.05) then
+                    self.lastUpdate = self.lastUpdate - 0.05
+                    KH_UI:calc_ring_power(
+                        ring_object,
+                        ring_config,
+                        mainFrame.unit,
+                        ring_config.global.ringtype,
+                        mainFrame
+                    )
+                    mainFrame.unitPower = UnitPower(mainFrame.unit)
                 end
-            )
-        end
+            end
+        )
     end
 
     return ring_object
@@ -817,7 +828,7 @@ function KH_UI:create_portrait(mainFrame)
                 elseif (UnitAffectingCombat(mainFrame.unit)) then
                     mainFrame.portrait.stateFrame:Show()
                     mainFrame.portrait.levelFrame.text:Hide()
-                    mainFrame.portrait.stateFrame.texture:SetTexCoord(0.5, 1.0, 0, 0.5)
+                    mainFrame.portrait.stateFrame.texture:SetTexCoord(0.51, 1.0, 0, 0.49)
                 else
                     mainFrame.portrait.stateFrame:Hide()
                     mainFrame.portrait.levelFrame.text:Show()
@@ -942,8 +953,8 @@ function KH_UI:create_portrait(mainFrame)
     --Master Loot------
     --------------------
     mainFrame.portrait.masterLootFrame = CreateFrame("Frame", nil, mainFrame.portrait)
-    mainFrame.portrait.masterLootFrame:SetSize(16, 16)
-    mainFrame.portrait.masterLootFrame:SetPoint("TopLeft", 80, -10)
+    mainFrame.portrait.masterLootFrame:SetSize(24, 24)
+    mainFrame.portrait.masterLootFrame:SetPoint("TopLeft", 64, -6)
     mainFrame.portrait.masterLootFrame.texture = mainFrame.portrait.masterLootFrame:CreateTexture(nil, "BACKGROUND")
     mainFrame.portrait.masterLootFrame.texture:SetPoint("CENTER", 16, 16)
     mainFrame.portrait.masterLootFrame.texture:SetAllPoints()
@@ -958,7 +969,7 @@ function KH_UI:create_portrait(mainFrame)
     mainFrame.portrait.pvpIcon.texture = mainFrame.portrait.pvpIcon:CreateTexture(nil, "BACKGROUND")
     mainFrame.portrait.pvpIcon.texture:SetPoint("CENTER", 0, 0)
     mainFrame.portrait.pvpIcon.texture:SetAllPoints()
-    mainFrame.portrait.pvpIcon.texture:SetTexture("Interface\\GROUPFRAME\\UI-Group-LeaderIcon")
+    mainFrame.portrait.pvpIcon.texture:SetTexture("Interface\\TargetingFrame\\UI-PVP-HORDE")
 
     -----------------------------
     --Disconnected Icon----------

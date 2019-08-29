@@ -479,11 +479,12 @@ function KH_UI:KH_Player_Frame_Options(panel)
 		110,
 		{"Bottom Right", "Top Right", "Bottom Left", "Top Left"},
 		function(value)
-			KH_UI_Settings[panel.name].orientation = value
-			KH_UI:update_ring_segments(KH_UI.playerFrame)
-			KH_UI.playerFrame.Update_Health()
-			KH_UI.playerFrame.Update_Power()
-			KH_UI.playerFrame.Refresh_Points()
+			KH_UI_Settings[panel.name].orientation = value;
+			KH_UI:update_ring_segments(KH_UI.playerFrame);
+			KH_UI.playerFrame.Update_FrameInfo();
+			KH_UI.playerFrame.Update_Health();
+			KH_UI.playerFrame.Update_Power();
+			KH_UI.playerFrame.Refresh_Points();
 		end
 	)
 	panel.styleContainer.orientationDropDown.tip =

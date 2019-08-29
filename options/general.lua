@@ -31,7 +31,7 @@ function KH_UI:General_Options(panel)
 		16,
 		0,
 		110,
-		{"KH2"},
+		{"KH2","KH2 Party"},
 		function(value)
 			KH_UI_Settings["Player Frame"].style = value
 		end
@@ -50,7 +50,7 @@ function KH_UI:General_Options(panel)
 		140,
 		0,
 		110,
-		{"KH2"},
+		{"KH2","KH2 Party"},
 		function(value)
 			KH_UI_Settings["Party Frame"].style = value
 		end

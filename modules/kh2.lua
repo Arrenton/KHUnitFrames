@@ -1,30 +1,10 @@
 local ring_table = {
 	[1] = {
 		global = {
-			active = 1,
-			ringname = "rM_PlayerHealth",
-			size = 256,
-			alpha = 1,
 			gfx_texture = "KH2\\ring_segment",
 			segments_used = 3,
-			orientation = {
-				["Bottom Right"] = {
-					start_segment = 4,
-					fill_direction = 1
-				},
-				["Top Left"] = {
-					start_segment = 2,
-					fill_direction = 1
-				},
-				["Top Right"] = {
-					start_segment = 3,
-					fill_direction = 0
-				},
-				["Bottom Left"] = {
-					start_segment = 1,
-					fill_direction = 0
-				}
-			},
+			start_segment = 1,
+			fill_direction = 1,
 			ringtype = "health"
 		},
 		segment = {
@@ -37,252 +17,105 @@ local ring_table = {
 	},
 	[2] = {
 		global = {
-			active = 1,
-			ringname = "rM_PlayerHealthBack",
-			size = 256,
-			alpha = 1,
 			gfx_texture = "KH2\\ring_segment",
 			segments_used = 3,
-			orientation = {
-				["Bottom Right"] = {
-					start_segment = 4,
-					fill_direction = 1
-				},
-				["Top Left"] = {
-					start_segment = 2,
-					fill_direction = 1
-				},
-				["Top Right"] = {
-					start_segment = 3,
-					fill_direction = 0
-				},
-				["Bottom Left"] = {
-					start_segment = 1,
-					fill_direction = 0
-				}
-			},
+			start_segment = 1,
+			fill_direction = 1,
 			ringtype = "maxhealthbg"
 		},
 		segment = {
 			color = {r = 32 / 255, g = 32 / 255, b = 31 / 255, a = 1},
 			framelevel = 12,
-			segmentsize = 128,
 			outer_radius = 96,
 			inner_radius = 72
 		}
 	},
 	[3] = {
 		global = {
-			active = 1,
-			ringname = "rM_PlayerHealthLast",
-			size = 256,
-			alpha = 1,
 			gfx_texture = "KH2\\ring_segment",
 			segments_used = 3,
-			orientation = {
-				["Bottom Right"] = {
-					start_segment = 4,
-					fill_direction = 1
-				},
-				["Top Left"] = {
-					start_segment = 2,
-					fill_direction = 1
-				},
-				["Top Right"] = {
-					start_segment = 3,
-					fill_direction = 0
-				},
-				["Bottom Left"] = {
-					start_segment = 1,
-					fill_direction = 0
-				}
-			},
+			start_segment = 1,
+			fill_direction = 1,
 			ringtype = "lasthealth"
 		},
 		segment = {
 			color = {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1},
 			framelevel = 13,
-			segmentsize = 128,
 			outer_radius = 96,
 			inner_radius = 72
 		}
 	},
 	[4] = {
 		global = {
-			active = 1,
-			ringname = "rM_PlayerHealthBack2",
-			size = 256,
-			alpha = 1,
 			gfx_texture = "KH2\\background_segment",
 			segments_used = 3,
-			orientation = {
-				["Bottom Right"] = {
-					start_segment = 4,
-					fill_direction = 1
-				},
-				["Top Left"] = {
-					start_segment = 2,
-					fill_direction = 1
-				},
-				["Top Right"] = {
-					start_segment = 3,
-					fill_direction = 0
-				},
-				["Bottom Left"] = {
-					start_segment = 1,
-					fill_direction = 0
-				}
-			},
+			start_segment = 1,
+			fill_direction = 1,
 			ringtype = "maxhealth"
 		},
 		segment = {
 			color = {r = 0 / 255, g = 0 / 255, b = 0 / 255, a = 1},
 			framelevel = 11,
-			segmentsize = 128,
 			outer_radius = 100,
 			inner_radius = 67
 		}
 	},
 	[5] = {
 		global = {
-			active = 1,
-			ringname = "rM_PlayerPowerBack",
-			size = 256,
-			alpha = 1,
 			gfx_texture = "KH2\\power_background_segment",
 			segments_used = 3,
-			orientation = {
-				["Bottom Right"] = {
-					start_segment = 4,
-					fill_direction = 1
-				},
-				["Top Left"] = {
-					start_segment = 2,
-					fill_direction = 1
-				},
-				["Top Right"] = {
-					start_segment = 3,
-					fill_direction = 0
-				},
-				["Bottom Left"] = {
-					start_segment = 1,
-					fill_direction = 0
-				}
-			},
+			start_segment = 1,
+			fill_direction = 1,
 			ringtype = "maxpower"
 		},
 		segment = {
 			color = {r = 0 / 255, g = 0 / 255, b = 0 / 255, a = 1},
 			framelevel = 1,
-			segmentsize = 128,
 			outer_radius = 118,
 			inner_radius = 96
 		}
 	},
 	[6] = {
 		global = {
-			active = 1,
-			ringname = "rM_PlayerPowerBack2",
-			size = 256,
-			alpha = 1,
 			gfx_texture = "KH2\\power_ring_segment",
 			segments_used = 3,
-			orientation = {
-				["Bottom Right"] = {
-					start_segment = 4,
-					fill_direction = 1
-				},
-				["Top Left"] = {
-					start_segment = 2,
-					fill_direction = 1
-				},
-				["Top Right"] = {
-					start_segment = 3,
-					fill_direction = 0
-				},
-				["Bottom Left"] = {
-					start_segment = 1,
-					fill_direction = 0
-				}
-			},
+			start_segment = 1,
+			fill_direction = 1,
 			ringtype = "maxpower"
 		},
 		segment = {
 			color = {r = 32 / 255, g = 32 / 255, b = 31 / 255, a = 1},
 			framelevel = 2,
-			segmentsize = 128,
 			outer_radius = 115,
 			inner_radius = 100
 		}
 	},
 	[7] = {
 		global = {
-			active = 1,
-			ringname = "rM_PlayerPower",
-			size = 256,
-			alpha = 1,
 			gfx_texture = "KH2\\power_ring_segment",
 			segments_used = 3,
-			orientation = {
-				["Bottom Right"] = {
-					start_segment = 4,
-					fill_direction = 1
-				},
-				["Top Left"] = {
-					start_segment = 2,
-					fill_direction = 1
-				},
-				["Top Right"] = {
-					start_segment = 3,
-					fill_direction = 0
-				},
-				["Bottom Left"] = {
-					start_segment = 1,
-					fill_direction = 0
-				}
-			},
+			start_segment = 1,
+			fill_direction = 1,
 			ringtype = "power"
 		},
 		segment = {
 			color = {r = 32 / 255, g = 32 / 255, b = 31 / 255, a = 1},
 			framelevel = 3,
-			segmentsize = 128,
 			outer_radius = 115,
 			inner_radius = 100
 		}
 	},
 	[8] = {
 		global = {
-			active = 1,
-			ringname = "rM_PlayerLowHealth",
-			size = 256,
-			alpha = 1,
 			gfx_texture = "KH2\\ring_segment",
 			segments_used = 3,
-			orientation = {
-				["Bottom Right"] = {
-					start_segment = 4,
-					fill_direction = 1
-				},
-				["Top Left"] = {
-					start_segment = 2,
-					fill_direction = 1
-				},
-				["Top Right"] = {
-					start_segment = 3,
-					fill_direction = 0
-				},
-				["Bottom Left"] = {
-					start_segment = 1,
-					fill_direction = 0
-				}
-			},
+			start_segment = 1,
+			fill_direction = 1,
 			ringtype = "maxhealthbg"
 		},
 		segment = {
 			color = {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1},
 			framelevel = 13,
-			segmentsize = 128,
 			outer_radius = 96,
 			inner_radius = 72
 		}
@@ -451,6 +284,8 @@ local function create_ring_pretties(mainFrame)
 	mainFrame.nameFrame:SetWidth(27)
 	mainFrame.nameFrame:SetHeight(6)
 	mainFrame.nameFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+    mainFrame.nameFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
+    mainFrame.nameFrame:RegisterEvent("UNIT_OTHER_PARTY_CHANGED")
 	mainFrame.nameFrame:SetScript(
 		"OnEvent",
 		function(self, event, unit)
@@ -1084,21 +919,36 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 
 	f.Update_FrameInfo = function()
 		f.scale = KH_UI_Settings[f.settings].scale
+		for i in ipairs(f.ring_table) do
+			if (KH_UI_Settings[f.settings].orientation == "Bottom Right") then
+				f.ring_table[i].global.start_segment = 4
+				f.ring_table[i].global.fill_direction = 1
+			elseif (KH_UI_Settings[f.settings].orientation == "Top Left") then
+				f.ring_table[i].global.start_segment = 2
+				f.ring_table[i].global.fill_direction = 1
+			elseif (KH_UI_Settings[f.settings].orientation == "Top Right") then
+				f.ring_table[i].global.start_segment = 3
+				f.ring_table[i].global.fill_direction = 0
+			elseif (KH_UI_Settings[f.settings].orientation == "Bottom Left") then
+				f.ring_table[i].global.start_segment = 1
+				f.ring_table[i].global.fill_direction = 0
+			end
+		end
 		if (f.settings == "Party Frame") then
-			f.scale = f.scale / 2;
+			f.scale = f.scale / 2
 		end
-		f.healthFrame:SetScale(f.scale);
-		f.powerFrame:SetScale(f.scale);
-		f.manaFrame:SetScale(f.scale);
-		f:SetMovable(KH_UI_Settings[f.settings].movable);
-		f.nameFrame.text:SetText(UnitName(f.unit));
+		f.healthFrame:SetScale(f.scale)
+		f.powerFrame:SetScale(f.scale)
+		f.manaFrame:SetScale(f.scale)
+		f:SetMovable(KH_UI_Settings[f.settings].movable)
+		f.nameFrame.text:SetText(UnitName(f.unit))
 		if (KH_UI_Settings[f.settings].movable) then
-			f:RegisterForDrag("LeftButton");
+			f:RegisterForDrag("LeftButton")
 		else
-			f:RegisterForDrag(nil);
+			f:RegisterForDrag(nil)
 		end
-		f.Update_Health();
-		f.Update_Power();
+		f.Update_Health()
+		f.Update_Power()
 	end
 
 	f.Update_Health = function()
@@ -1133,10 +983,10 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 				f.powerToken == "MANA")
 		 then
 			f.enableMana = true
-			f.manaFrame:Show();
+			f.manaFrame:Show()
 		else
 			f.enableMana = false
-			f.manaFrame:Hide();
+			f.manaFrame:Hide()
 		end
 	end
 
@@ -1226,14 +1076,27 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 	f:SetScript("OnUpdate", Update)
 
 	for i in ipairs(f.ring_table) do
+		if (KH_UI_Settings[f.settings].orientation == "Bottom Right") then
+			f.ring_table[i].global.start_segment = 4
+			f.ring_table[i].global.fill_direction = 1
+		elseif (KH_UI_Settings[f.settings].orientation == "Top Left") then
+			f.ring_table[i].global.start_segment = 2
+			f.ring_table[i].global.fill_direction = 1
+		elseif (KH_UI_Settings[f.settings].orientation == "Top Right") then
+			f.ring_table[i].global.start_segment = 3
+			f.ring_table[i].global.fill_direction = 0
+		elseif (KH_UI_Settings[f.settings].orientation == "Bottom Left") then
+			f.ring_table[i].global.start_segment = 1
+			f.ring_table[i].global.fill_direction = 0
+		end
 		f.ring_frames[i] = KH_UI:setup_rings(i, f, f.ring_table)
 	end
 	----Ring Background
 	f.healthFrame.ring_bg = CreateFrame("Frame", nil, f.healthFrame)
 	f.healthFrame.ring_bg:SetPoint("CENTER", 0, 0)
 	f.healthFrame.ring_bg.alpha = 1
-	f.healthFrame.ring_bg:SetWidth(f.ring_table[1].global.size)
-	f.healthFrame.ring_bg:SetHeight(f.ring_table[1].global.size)
+	f.healthFrame.ring_bg:SetWidth(256)
+	f.healthFrame.ring_bg:SetHeight(256)
 	local bgtex = f.healthFrame.ring_bg:CreateTexture(nil, "BACKGROUND")
 	bgtex:SetAllPoints()
 	bgtex:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2\\ring_bg")
@@ -1265,16 +1128,16 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 			if not (event == "GROUP_ROSTER_UPDATE" or event == "UNIT_CONNECTION" or event == "UNIT_OTHER_PARTY_CHANGED") then
 				local powerType, powerToken, altR, altG, altB = UnitPowerType(f.unit)
 				if (powerToken == "MANA") then
-					f.powerFrame:Hide();
+					f.powerFrame:Hide()
 					return
 				else
-					f.powerFrame:Show();
+					f.powerFrame:Show()
 				end
 
 				if f.enableMana == false then
-					f.manaFrame:Hide();
+					f.manaFrame:Hide()
 				else
-					f.manaFrame:Show();
+					f.manaFrame:Show()
 				end
 			end
 		end
