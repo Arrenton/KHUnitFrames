@@ -9,7 +9,7 @@ local ring_table = {
         },
         segment = {
             color = {r = 32 / 255, g = 32 / 255, b = 31 / 255, a = 1},
-            framelevel = 2,
+            framelevel = 3,
             outer_radius = 95,
             inner_radius = 75
         }
@@ -24,7 +24,7 @@ local ring_table = {
         },
         segment = {
             color = {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1},
-            framelevel = 3,
+            framelevel = 4,
             outer_radius = 95,
             inner_radius = 75
         }
@@ -39,7 +39,7 @@ local ring_table = {
         },
         segment = {
             color = {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1},
-            framelevel = 3,
+            framelevel = 4,
             outer_radius = 95,
             inner_radius = 75
         }
@@ -287,22 +287,20 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
 
     f.Update_FrameInfo = function()
         f.scale = KH_UI_Settings[f.settings].scale
-        for i in ipairs(f.ring_table) do
-            if (f.settings == "Party Frame") then
-                f.scale = f.scale / 2
-            end
-            f.healthFrame:SetScale(f.scale)
-            f.powerFrame:SetScale(f.scale)
-            f:SetMovable(KH_UI_Settings[f.settings].movable)
-            f.nameFrame.text:SetText(UnitName(f.unit))
-            if (KH_UI_Settings[f.settings].movable) then
-                f:RegisterForDrag("LeftButton")
-            else
-                f:RegisterForDrag(nil)
-            end
-            f.Update_Health()
-            f.Update_Power()
+        if (f.settings == "Party Frame") then
+            f.scale = f.scale / 2
         end
+        f.healthFrame:SetScale(f.scale)
+        f.powerFrame:SetScale(f.scale)
+        f:SetMovable(KH_UI_Settings[f.settings].movable)
+        f.nameFrame.text:SetText(UnitName(f.unit))
+        if (KH_UI_Settings[f.settings].movable) then
+            f:RegisterForDrag("LeftButton")
+        else
+            f:RegisterForDrag(nil)
+        end
+        f.Update_Health()
+        f.Update_Power()
     end
 
     f.Update_Health = function()
@@ -416,7 +414,6 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
     local bgtex = f.healthFrame.ring_bg:CreateTexture(nil, "BACKGROUND")
     bgtex:SetAllPoints()
     bgtex:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2Party\\UnitFrame_BG")
-    --bgtex:SetTexCoord(1, 0, 0, 0, 1, 1, 0, 1)
 
     create_ring_pretties(f)
     KH_UI:create_portrait(f)
@@ -432,8 +429,9 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
     f.portrait.pvpIcon:SetScale(0.75)
     f.portrait.pvpIcon:SetPoint("TopLeft", -12, -42)
     f.portrait.disconnectFrame:SetFrameLevel(8)
+     --
 
-    f:RegisterEvent("UNIT_POWER_UPDATE")
+    --[[f:RegisterEvent("UNIT_POWER_UPDATE")
     f:RegisterEvent("PLAYER_ENTERING_WORLD")
 
     f:SetScript(
@@ -443,6 +441,5 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
                 local powerType, powerToken, altR, altG, altB = UnitPowerType(f.unit)
             end
         end
-    )
-    return f
+    )]] return f
 end

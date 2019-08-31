@@ -213,11 +213,8 @@ local function create_ring_pretties(mainFrame)
 	mainFrame.powerFrame.power_val.inside:SetHeight(6)
 	mainFrame.powerFrame.power_val.inside:SetPoint("center", 0, 0)
 	mainFrame.powerFrame.power_val.inside:SetFrameLevel(2)
-	mainFrame.powerFrame.power_val.inside:RegisterEvent("UNIT_POWER_UPDATE")
-	mainFrame.powerFrame.power_val.inside:RegisterEvent("UNIT_DISPLAYPOWER")
-	mainFrame.powerFrame.power_val.inside:RegisterEvent("PLAYER_ENTERING_WORLD")
 	mainFrame.powerFrame.power_val.inside:SetScript(
-		"OnEvent",
+		"OnUpdate",
 		function(self, event, unit)
 			if KH_UI_Settings[mainFrame.settings].displayPowerValue and mainFrame.powerFrame.power_val:IsVisible() == false then
 				mainFrame.powerFrame.power_val:Show()
@@ -676,12 +673,12 @@ local function Update(self, elapsed)
 		--Low HP Animation
 		if self.unitHealth <= self.unitHealthMax / 4 then
 			if self.lowHealthDirection == 0 then
-				self.lowHealthAlpha = self.lowHealthAlpha + 0.008
+				self.lowHealthAlpha = self.lowHealthAlpha + 0.009
 				if self.lowHealthAlpha >= 0.60 then
 					self.lowHealthDirection = 1
 				end
 			else
-				self.lowHealthAlpha = self.lowHealthAlpha - 0.008
+				self.lowHealthAlpha = self.lowHealthAlpha - 0.009
 				if self.lowHealthAlpha <= 0.1 then
 					self.lowHealthDirection = 0
 				end
@@ -1120,6 +1117,7 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 
 	f:RegisterEvent("UNIT_POWER_UPDATE")
 	f:RegisterEvent("UNIT_MANA")
+	f:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 	f:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 	f:SetScript(

@@ -763,28 +763,6 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
     return ring_object
 end
 
-function KH_UI:Party_Update(mainFrame)
-    if (GetDisplayedAllyFrames() ~= "party") then
-        RegisterStateDriver(mainFrame, "visibility", "[combat]hide")
-        if (mainFrame:IsVisible()) then
-            mainFrame:Hide()
-        end
-        return
-    end
-    local unit = mainFrame.unit
-    if (UnitExists(unit)) then
-        RegisterStateDriver(mainFrame, "visibility", "[combat]show")
-        if (not mainFrame:IsVisible()) then
-            mainFrame:Show()
-        end
-    else
-        RegisterStateDriver(mainFrame, "visibility", "[combat]hide")
-        if (mainFrame:IsVisible()) then
-            mainFrame:Hide()
-        end
-    end
-end
-
 function KH_UI:create_portrait(mainFrame)
     mainFrame.portrait = CreateFrame("Frame", nil, mainFrame.healthFrame)
     mainFrame.portrait:RegisterUnitEvent("UNIT_PORTRAIT_UPDATE", mainFrame.unit)
@@ -815,7 +793,7 @@ function KH_UI:create_portrait(mainFrame)
             SetPortraitTexture(self.redTexture, mainFrame.unit)
             mainFrame.Update_FrameInfo()
             if mainFrame.unit == "player" then
-                if (PlayerLeaderIcon:IsVisible()) then
+                if (UnitIsGroupLeader("player")) then
                     mainFrame.portrait.leaderFrame:Show()
                 else
                     mainFrame.portrait.leaderFrame:Hide()
@@ -873,7 +851,7 @@ function KH_UI:create_portrait(mainFrame)
                 if (not UnitIsConnected(mainFrame.unit)) then
                     -- Handle disconnected state
                     SetDesaturation(mainFrame.portrait.Texture, true)
-                    mainFrame.portrait:Show()
+                    mainFrame.portrait.disconnectFrame:Show()
                     --_G[selfName .. "PetFrame"]:Hide()
                     return
                 else
@@ -1030,7 +1008,7 @@ KH_UI:SetScript(
             KH_UI.partyFrame = {}
             for i = 1, 4, 1 do
                 KH_UI.partyFrame[i] = KH_UI:New_PartyFrame(i)
-                KH_UI:Party_Update(KH_UI.partyFrame[i])
+                RegisterStateDriver(KH_UI.partyFrame[i], "visibility", "[@party" .. i .. ",exists]show;hide")
             end
             KH_UI:UnregisterEvent("PLAYER_LOGIN")
         elseif (event == "ADDON_LOADED") then
@@ -1041,9 +1019,6 @@ KH_UI:SetScript(
                 event == "PLAYER_REGEN_ENABLED")
          then
             KH_UI:Set_BlizzardFrames()
-            for i in pairs(KH_UI.partyFrame) do
-                KH_UI:Party_Update(KH_UI.partyFrame[i])
-            end
         else
             KH_UI:Set_BlizzardFrames()
         end
