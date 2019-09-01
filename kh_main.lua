@@ -590,13 +590,13 @@ function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
 
     if (info) then
         --The PowerBarColor takes priority
-        r, g, b = info.r, info.g, info.b
+        r, g, b = info.r * 0.75, info.g * 0.75, info.b * 0.75
     elseif (not altR) then
         -- Couldn't find a power token entry. Default to indexing by power type or just mana if  we don't have that either.
         info = PowerBarColor[powerType] or PowerBarColor["MANA"]
-        r, g, b = info.r, info.g, info.b
+        r, g, b = info.r * 0.75, info.g * 0.75, info.b * 0.75
     else
-        r, g, b = altR, altG, altB
+        r, g, b = altR * 0.75, altG * 0.75, altB * 0.75
     end
 
     if (KH_UI_Settings[mainFrame.settings].style == "KH2") then
