@@ -281,8 +281,8 @@ local function create_ring_pretties(mainFrame)
 	mainFrame.nameFrame:SetWidth(27)
 	mainFrame.nameFrame:SetHeight(6)
 	mainFrame.nameFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-    mainFrame.nameFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
-    mainFrame.nameFrame:RegisterEvent("UNIT_OTHER_PARTY_CHANGED")
+	mainFrame.nameFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
+	mainFrame.nameFrame:RegisterEvent("UNIT_OTHER_PARTY_CHANGED")
 	mainFrame.nameFrame:SetScript(
 		"OnEvent",
 		function(self, event, unit)
@@ -1132,10 +1132,15 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 					f.powerFrame:Show()
 				end
 
-				if f.enableMana == false then
-					f.manaFrame:Hide()
-				else
+				if
+					(UnitClass(f.unit) == "Shaman" or UnitClass(f.unit) == "Priest" or UnitClass(f.unit) == "Druid" or
+						f.powerToken == "MANA")
+				 then
+					f.enableMana = true
 					f.manaFrame:Show()
+				else
+					f.enableMana = false
+					f.manaFrame:Hide()
 				end
 			end
 		end
