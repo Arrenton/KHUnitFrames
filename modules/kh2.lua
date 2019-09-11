@@ -1124,18 +1124,30 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 		"OnEvent",
 		function(self, event, arg1)
 			if not (event == "GROUP_ROSTER_UPDATE" or event == "UNIT_CONNECTION" or event == "UNIT_OTHER_PARTY_CHANGED") then
-				local powerType, powerToken, altR, altG, altB = UnitPowerType(f.unit)
-				if (powerToken == "MANA") then
-					f.powerFrame:Hide()
-					return
-				else
-					f.powerFrame:Show()
-				end
+			--Place holder
+			end
 
+			local powerType, powerToken, altR, altG, altB = UnitPowerType(f.unit)
+			if (powerToken == "MANA") then
+				f.powerFrame:Hide()
+				return
+			else
+				f.powerFrame:Show()
+			end
+
+			if (f.unit == "player") then
 				if
 					(UnitClass(f.unit) == "Shaman" or UnitClass(f.unit) == "Priest" or UnitClass(f.unit) == "Druid" or
 						f.powerToken == "MANA")
 				 then
+					f.enableMana = true
+					f.manaFrame:Show()
+				else
+					f.enableMana = false
+					f.manaFrame:Hide()
+				end
+			else
+				if (f.powerToken == "MANA") then
 					f.enableMana = true
 					f.manaFrame:Show()
 				else
