@@ -780,9 +780,9 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 			"OnEvent",
 			function(self, event, unit)
 				if
-					((event == "UNIT_POWER_UPDATE" or event == "UNIT_DISPLAYPOWER" or event == "UNIT_MAXPOWER") and
+					((event == "UNIT_POWER_UPDATE" or event == "UNIT_CONNECTION" or event == "UNIT_OTHER_PARTY_CHANGED" or event == "UNIT_DISPLAYPOWER" or event == "UNIT_MAXPOWER") and
 						unit == mainFrame.unit) or
-						event == "PLAYER_ENTERING_WORLD"
+						event == "PLAYER_ENTERING_WORLD" or event == "GROUP_ROSTER_UPDATE"
 				 then
 					mainFrame.unitManaMax = UnitPowerMax(mainFrame.unit, 0)
 					calc_mana_bar(mainFrame)
@@ -790,6 +790,9 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 			end
 		)
 		mainFrame.manaFrame.back:RegisterEvent("UNIT_POWER_UPDATE")
+		mainFrame.manaFrame.back:RegisterEvent("GROUP_ROSTER_UPDATE")
+		mainFrame.manaFrame.back:RegisterEvent("UNIT_CONNECTION")
+		mainFrame.manaFrame.back:RegisterEvent("UNIT_OTHER_PARTY_CHANGED")
 		mainFrame.manaFrame.back:RegisterEvent("UNIT_DISPLAYPOWER")
 		mainFrame.manaFrame.back:RegisterEvent("UNIT_MAXPOWER")
 		mainFrame.manaFrame.back:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -969,21 +972,36 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 
 	f.Update_Power = function()
 		local powerType, powerToken, altR, altG, altB = UnitPowerType(f.unit)
+		local class, _, _ = UnitClass(f.unit)
 		f.UnitPowerMax = UnitPowerMax(f.unit, powerType)
 		for i in ipairs(f.ring_table) do
 			if (f.ring_frames[i].ringtype == "power" or f.ring_frames[i].ringtype == "maxpower") then
 				KH_UI:calc_ring_power(f.ring_frames[i], f.ring_table[i], f.unit, f.ring_frames[i].ringtype, f)
 			end
 		end
-		if
-			(UnitClass(f.unit) == "Shaman" or UnitClass(f.unit) == "Priest" or UnitClass(f.unit) == "Druid" or
-				f.powerToken == "MANA")
-		 then
-			f.enableMana = true
-			f.manaFrame:Show()
+		if (f.unit == "player") then
+			if
+				(class == "Shaman" or class == "Priest" or class == "Druid" or powerToken == "MANA")
+			 then
+				f.enableMana = true
+				f.manaFrame:Show()
+			else
+				f.enableMana = false
+				f.manaFrame:Hide()
+			end
 		else
-			f.enableMana = false
-			f.manaFrame:Hide()
+			if (powerToken == "MANA") then
+				f.enableMana = true
+				f.manaFrame:Show()
+			else
+				f.enableMana = false
+				f.manaFrame:Hide()
+			end
+		end
+		if (powerToken == "MANA") then
+			f.powerFrame:Hide()
+		else
+			f.powerFrame:Show()
 		end
 	end
 
@@ -1127,40 +1145,18 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 			--Place holder
 			end
 
-			local powerType, powerToken, altR, altG, altB = UnitPowerType(f.unit)
-			if (powerToken == "MANA") then
-				f.powerFrame:Hide()
-				return
-			else
-				f.powerFrame:Show()
-			end
-
-			if (f.unit == "player") then
-				if
-					(UnitClass(f.unit) == "Shaman" or UnitClass(f.unit) == "Priest" or UnitClass(f.unit) == "Druid" or
-						f.powerToken == "MANA")
-				 then
-					f.enableMana = true
-					f.manaFrame:Show()
-				else
-					f.enableMana = false
-					f.manaFrame:Hide()
-				end
-			else
-				if (f.powerToken == "MANA") then
-					f.enableMana = true
-					f.manaFrame:Show()
-				else
-					f.enableMana = false
-					f.manaFrame:Hide()
-				end
+			if
+				(event == "GROUP_ROSTER_UPDATE" or event == "UNIT_CONNECTION" or event == "UNIT_OTHER_PARTY_CHANGED" or
+					event == "UPDATE_SHAPESHIFT_FORM" or
+					event == "UNIT_POWER_UPDATE" or
+					event == "UNIT_MANA") and arg1 == f.unit
+			 then
+				f:Update_Power()
 			end
 		end
 	)
 
-	if f.enableMana == false then
-		f.manaFrame:Hide()
-	end
+	f:Update_Power()
 
 	return f
 end
