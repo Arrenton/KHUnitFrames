@@ -480,4 +480,5 @@ function KH_UI:New_KH2TargetofTargetUnitframe(unit, setting)
             end
         end
     )
+    return f
 end
