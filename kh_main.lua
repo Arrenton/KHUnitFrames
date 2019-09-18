@@ -8,16 +8,23 @@
 ---------------------
 -- Globals
 KH_UI = CreateFrame("Frame", nil, UIParent)
+
+-- Add support for Real Mob Health
+if IsAddOnLoaded("RealMobHealth") then
+    KH_UI.GetUnitHealth = RealMobHealth.GetUnitHealth
+    KH_UI.HasUnitHealthData = RealMobHealth.HasUnitHealthData
+end
 -----------------------
 -- CONFIG
 -----------------------
 KH_UI_Settings_Defaults = {
     ["Player Frame"] = {
         ringMaxHealth = 2000,
-        longBarHealthLengthRate = 5,
+        longBarHealthLengthRate = 20,
         healthLengthMax = 5000,
         displayHealthValue = true,
-        manaLengthRate = 10,
+        maxBars = 20,
+        manaLengthRate = 100,
         manaLengthMax = 5360,
         displayManaValue = true,
         ringMaxPower = 300,
@@ -33,10 +40,11 @@ KH_UI_Settings_Defaults = {
     },
     ["Party Frame"] = {
         ringMaxHealth = 2000,
-        longBarHealthLengthRate = 5,
+        longBarHealthLengthRate = 20,
         healthLengthMax = 5000,
         displayHealthValue = true,
-        manaLengthRate = 10,
+        maxBars = 20,
+        manaLengthRate = 100,
         manaLengthMax = 5360,
         displayManaValue = true,
         ringMaxPower = 300,
@@ -65,6 +73,46 @@ KH_UI_Settings_Defaults = {
             }
         },
         orientation = "Bottom Left"
+    },
+    ["Target Frame"] = {
+        ringMaxHealth = 2000,
+        longBarHealthLengthRate = 20,
+        healthLengthMax = 5000,
+        displayHealthValue = true,
+        maxBars = 20,
+        manaLengthRate = 100,
+        manaLengthMax = 5360,
+        displayManaValue = true,
+        ringMaxPower = 300,
+        displayPowerValue = true,
+        scale = 1,
+        style = "KH2 Target",
+        enabled = true,
+        blizzardEnabled = true,
+        movable = true,
+        framex = 260,
+        framey = -40,
+        orientation = "Top Left"
+    },
+    ["ToT Frame"] = {
+        ringMaxHealth = 2000,
+        longBarHealthLengthRate = 200,
+        healthLengthMax = 2000,
+        displayHealthValue = true,
+        maxBars = 20,
+        manaLengthRate = 150,
+        manaLengthMax = 3000,
+        displayManaValue = true,
+        ringMaxPower = 300,
+        displayPowerValue = true,
+        scale = 1,
+        style = "Target of Target",
+        enabled = true,
+        blizzardEnabled = true,
+        movable = true,
+        framex = 260,
+        framey = -80,
+        orientation = "Top Left"
     }
 }
 ---------------------
@@ -1005,6 +1053,8 @@ KH_UI:SetScript(
                 end
             end
             KH_UI.playerFrame = KH_UI:New_PlayerFrame()
+            KH_UI.targetFrame = KH_UI:New_TargetFrame()
+            KH_UI.targettargetFrame = KH_UI:New_TargetofTargetFrame()
             KH_UI.partyFrame = {}
             for i = 1, 4, 1 do
                 KH_UI.partyFrame[i] = KH_UI:New_PartyFrame(i)

@@ -10,7 +10,6 @@ local ring_table = {
 		segment = {
 			color = {r = 34 / 255, g = 183 / 255, b = 1 / 255, a = 1},
 			framelevel = 14,
-			segmentsize = 128,
 			outer_radius = 96,
 			inner_radius = 72
 		}
@@ -341,8 +340,9 @@ local function create_health_stretch(mainFrame)
 		maxHealth = KH_UI_Settings[mainFrame.settings].healthLengthMax
 	end
 	mainFrame.healthFrame.long_bar.length =
-		(maxHealth - KH_UI_Settings[mainFrame.settings].ringMaxHealth) /
-		KH_UI_Settings[mainFrame.settings].longBarHealthLengthRate
+		(maxHealth - KH_UI_Settings[mainFrame.settings].ringMaxHealth) *
+		KH_UI_Settings[mainFrame.settings].longBarHealthLengthRate /
+		1000
 	if mainFrame.healthFrame.long_bar.length < 0 then
 		mainFrame.healthFrame.long_bar.length = 0
 	end
@@ -469,8 +469,8 @@ local function calc_mana_bar(mainFrame)
 		mainFrame.manaFrame.manaVal.text:SetText(format(mainFrame.unitMana))
 	end
 
-	backFrame.length = (maxMana / KH_UI_Settings[mainFrame.settings].manaLengthRate)
-	barFrame.length = (mana / KH_UI_Settings[mainFrame.settings].manaLengthRate / mult)
+	backFrame.length = (maxMana * KH_UI_Settings[mainFrame.settings].manaLengthRate / 1000)
+	barFrame.length = (mana * KH_UI_Settings[mainFrame.settings].manaLengthRate / 1000 / mult)
 
 	backFrame:SetWidth(backFrame.length)
 	if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
@@ -513,17 +513,21 @@ local function calc_health_stretch(mainFrame)
 		maxHealth = KH_UI_Settings[mainFrame.settings].healthLengthMax
 	end
 	mainFrame.healthFrame.long_bar.length =
-		((maxHealth - KH_UI_Settings[mainFrame.settings].ringMaxHealth) /
-		KH_UI_Settings[mainFrame.settings].longBarHealthLengthRate)
+		((maxHealth - KH_UI_Settings[mainFrame.settings].ringMaxHealth) *
+		KH_UI_Settings[mainFrame.settings].longBarHealthLengthRate /
+		1000)
 	mainFrame.healthFrame.long_bar.lowHealth.length =
-		((maxHealth - KH_UI_Settings[mainFrame.settings].ringMaxHealth) /
-		KH_UI_Settings[mainFrame.settings].longBarHealthLengthRate)
+		((maxHealth - KH_UI_Settings[mainFrame.settings].ringMaxHealth) *
+		KH_UI_Settings[mainFrame.settings].longBarHealthLengthRate /
+		1000)
 	mainFrame.healthFrame.long_bar.health.length =
-		((health - KH_UI_Settings[mainFrame.settings].ringMaxHealth) /
-		KH_UI_Settings[mainFrame.settings].longBarHealthLengthRate)
+		((health - KH_UI_Settings[mainFrame.settings].ringMaxHealth) *
+		KH_UI_Settings[mainFrame.settings].longBarHealthLengthRate /
+		1000)
 	mainFrame.healthFrame.long_bar.healthLast.length =
-		((lastHealth - KH_UI_Settings[mainFrame.settings].ringMaxHealth) /
-		KH_UI_Settings[mainFrame.settings].longBarHealthLengthRate)
+		((lastHealth - KH_UI_Settings[mainFrame.settings].ringMaxHealth) *
+		KH_UI_Settings[mainFrame.settings].longBarHealthLengthRate /
+		1000)
 	if mainFrame.healthFrame.long_bar.length <= 0 then
 		mainFrame.healthFrame.long_bar:Hide()
 		mainFrame.healthFrame.long_bar.edge:Hide()
@@ -780,9 +784,12 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 			"OnEvent",
 			function(self, event, unit)
 				if
-					((event == "UNIT_POWER_UPDATE" or event == "UNIT_CONNECTION" or event == "UNIT_OTHER_PARTY_CHANGED" or event == "UNIT_DISPLAYPOWER" or event == "UNIT_MAXPOWER") and
+					((event == "UNIT_POWER_UPDATE" or event == "UNIT_CONNECTION" or event == "UNIT_OTHER_PARTY_CHANGED" or
+						event == "UNIT_DISPLAYPOWER" or
+						event == "UNIT_MAXPOWER") and
 						unit == mainFrame.unit) or
-						event == "PLAYER_ENTERING_WORLD" or event == "GROUP_ROSTER_UPDATE"
+						event == "PLAYER_ENTERING_WORLD" or
+						event == "GROUP_ROSTER_UPDATE"
 				 then
 					mainFrame.unitManaMax = UnitPowerMax(mainFrame.unit, 0)
 					calc_mana_bar(mainFrame)
@@ -980,9 +987,7 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 			end
 		end
 		if (f.unit == "player") then
-			if
-				(class == "Shaman" or class == "Priest" or class == "Druid" or powerToken == "MANA")
-			 then
+			if (class == "Shaman" or class == "Priest" or class == "Druid" or powerToken == "MANA") then
 				f.enableMana = true
 				f.manaFrame:Show()
 			else
@@ -1045,16 +1050,17 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 		end
 	)
 
-	local dropdown = _G[f:GetName() .. "DropDown"]
 	local menuFunc = TargetFrameDropDown_Initialize
 
 	if f.unit == "player" then
 		menuFunc = function()
 			ToggleDropDownMenu(1, nil, PlayerFrameDropDown, f, 106, 27)
 		end
-	end
-
-	if (f.settings == "Party Frame") then
+	elseif f.unit == "target" then
+		menuFunc = function()
+			ToggleDropDownMenu(1, nil, _G["TargetFrameDropDown"], f, 106, 27)
+		end
+	elseif (f.settings == "Party Frame") then
 		local id = 1
 		if f.unit == "party2" then
 			id = 2
@@ -1149,7 +1155,8 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 				(event == "GROUP_ROSTER_UPDATE" or event == "UNIT_CONNECTION" or event == "UNIT_OTHER_PARTY_CHANGED" or
 					event == "UPDATE_SHAPESHIFT_FORM" or
 					event == "UNIT_POWER_UPDATE" or
-					event == "UNIT_MANA") and arg1 == f.unit
+					event == "UNIT_MANA") and
+					arg1 == f.unit
 			 then
 				f:Update_Power()
 			end

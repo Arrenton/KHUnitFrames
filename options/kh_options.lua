@@ -16,15 +16,40 @@ end
 function KH_UI:Set_BlizzardFrames()
 	if (not InCombatLockdown()) then
 		if (KH_UI_Settings["Player Frame"].blizzardEnabled or KH_UI_Settings["Player Frame"].enabled == false) then
-			PlayerFrame:Show();
+			PlayerFrame:Show()
 		elseif (PlayerFrame:IsVisible()) then
-			PlayerFrame:Hide();
+			PlayerFrame:Hide()
 		end
 		--Party Frame--
 		if (KH_UI_Settings["Party Frame"].blizzardEnabled or KH_UI_Settings["Party Frame"].enabled == false) then
 			ShowPartyFrame()
 		else
 			HidePartyFrame()
+		end
+		--Target Frame--
+		if
+			(KH_UI_Settings["Target Frame"].blizzardEnabled or
+				KH_UI_Settings["Target Frame"].enabled == false and not TargetFrame:IsEventRegistered("UNIT_HEALTH"))
+		 then
+			TargetFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+			TargetFrame:RegisterEvent("UNIT_HEALTH")
+			if (TargetFrame.showLevel) then
+				TargetFrame:RegisterEvent("UNIT_LEVEL")
+			end
+			TargetFrame:RegisterEvent("UNIT_FACTION")
+			if (TargetFrame.showClassification) then
+				TargetFrame:RegisterEvent("UNIT_CLASSIFICATION_CHANGED")
+			end
+			if (TargetFrame.showLeader) then
+				TargetFrame:RegisterEvent("PLAYER_FLAGS_CHANGED")
+			end
+			TargetFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
+			TargetFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
+			TargetFrame:RegisterEvent("RAID_TARGET_UPDATE")
+			TargetFrame:RegisterUnitEvent("UNIT_AURA", "target")
+		elseif (TargetFrame:IsEventRegistered("UNIT_HEALTH")) then
+			TargetFrame:UnregisterAllEvents()
+			TargetFrame:Hide()
 		end
 	end
 end
@@ -175,9 +200,11 @@ KHOptions:SetScript(
 			KH_UI:General_Options(self)
 			local playerPanel = Create_Panel("Player Frame", true)
 			local partyPanel = Create_Panel("Party Frame", true)
+			local targetPanel = Create_Panel("Target Frame", true)
 
 			KH_UI:KH_Player_Frame_Options(playerPanel)
 			KH_UI:KH_Party_Frame_Options(partyPanel)
+			KH_UI:KH_Target_Frame_Options(targetPanel)
 
 			--InterfaceOptionsFrame_Show()
 			--InterfaceOptionsFrame_OpenToCategory(playerPanel)

@@ -256,7 +256,7 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
     f.ring_table = ring_table
     f.offsety = 0
     f.posx, f.posy = 0, 0
-    if (f.settings == "Player Frame") then
+    if (f.settings == "Player Frame" or f.settings == "Target Frame") then
         f.posx, f.posy = KH_UI_Settings[f.settings].framex, KH_UI_Settings[f.settings].framey
     elseif (f.settings == "Party Frame") then
         f.posx, f.posy =
@@ -357,16 +357,17 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
         end
     )
 
-    local dropdown = _G[f:GetName() .. "DropDown"]
     local menuFunc = TargetFrameDropDown_Initialize
 
     if f.unit == "player" then
         menuFunc = function()
             ToggleDropDownMenu(1, nil, PlayerFrameDropDown, f, 106, 27)
         end
-    end
-
-    if (f.settings == "Party Frame") then
+    elseif f.unit == "target" then
+        menuFunc = function()
+            ToggleDropDownMenu(1, nil, _G["TargetFrameDropDown"], f, 106, 27)
+        end
+    elseif (f.settings == "Party Frame") then
         local id = 1
         if f.unit == "party2" then
             id = 2
@@ -429,7 +430,7 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
     f.portrait.pvpIcon:SetScale(0.75)
     f.portrait.pvpIcon:SetPoint("TopLeft", -12, -42)
     f.portrait.disconnectFrame:SetFrameLevel(8)
-     --
+    --
 
     --[[f:RegisterEvent("UNIT_POWER_UPDATE")
     f:RegisterEvent("PLAYER_ENTERING_WORLD")

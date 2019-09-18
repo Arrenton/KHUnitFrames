@@ -3,16 +3,27 @@
 ## Version: 1.0
 ## Title: Kingdom Hearts Unitframes
 ## Notes: A Kingdom Hearts unitframe mod.
+## OptionalDeps: RealMobHealth
 ## SavedVariables: KH_UI_Settings
+## X-License: GNU General Public License
+## X-Credits: Gotest (For scripting), Zork (For making this possible with the RingThing addon)
 
 kh_main.lua
 
 modules\kh2.lua
 modules\kh2_party.lua
+modules\kh2_target.lua
+modules\targetoftarget.lua
 unitframes\player.lua
 unitframes\party.lua
+unitframes\target.lua
+unitframes\targettarget.lua
 
+options\kh2_style.lua
+options\kh2_party_style.lua
+options\kh2_target_style.lua
 options\playerframe.lua
 options\partyframe.lua
+options\targetframe.lua
 options\general.lua
 options\kh_options.lua

@@ -1,4 +1,4 @@
-function KH_UI:KH_Party_Frame_Options(panel)
+function KH_UI:KH_Target_Frame_Options(panel)
 	---------------------
 	--General Container--
 	---------------------
@@ -23,7 +23,7 @@ function KH_UI:KH_Party_Frame_Options(panel)
 	--Enabled Checkbox--
 	--------------------
 	panel.generalBox.enabledCheckbox = KH_UI:createCheckbutton(panel.generalBox, 16, -16, "Enabled")
-	panel.generalBox.enabledCheckbox.tooltip = "Enables the party frame"
+	panel.generalBox.enabledCheckbox.tooltip = "Enables the target frame"
 	panel.generalBox.enabledCheckbox:SetChecked(KH_UI_Settings[panel.name].enabled)
 	panel.generalBox.enabledCheckbox:SetScript(
 		"OnClick",
@@ -46,7 +46,7 @@ function KH_UI:KH_Party_Frame_Options(panel)
 	-----------------------------------
 	panel.generalBox.blizzardEnabledCheckbox =
 		KH_UI:createCheckbutton(panel.generalBox.enabledCheckbox, 0, -24, "Blizzard Frame Enabled")
-	panel.generalBox.blizzardEnabledCheckbox.tooltip = "Enables the default blizzard party frame"
+	panel.generalBox.blizzardEnabledCheckbox.tooltip = "Enables the default blizzard target frame"
 	panel.generalBox.blizzardEnabledCheckbox:SetChecked(KH_UI_Settings[panel.name].blizzardEnabled)
 	panel.generalBox.blizzardEnabledCheckbox:SetScript(
 		"OnClick",
@@ -70,9 +70,7 @@ function KH_UI:KH_Party_Frame_Options(panel)
 		"OnClick",
 		function()
 			KH_UI_Settings[panel.name].movable = panel.generalBox.draggableCheck:GetChecked()
-			for i in pairs(KH_UI.partyFrame) do
-				KH_UI.partyFrame[i].Update_FrameInfo()
-			end
+			KH_UI.targetFrame.Update_FrameInfo()
 			if (panel.generalBox.draggableCheck:GetChecked()) then
 				PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 			else
@@ -83,7 +81,7 @@ function KH_UI:KH_Party_Frame_Options(panel)
 	----------------
 	--Scale Slider--
 	----------------
-	panel.scaleSlider = CreateFrame("Slider", "KHPartyScaleSlider", panel.generalBox, "OptionsSliderTemplate")
+	panel.scaleSlider = CreateFrame("Slider", "KHTargetScaleSlider", panel.generalBox, "OptionsSliderTemplate")
 	panel.scaleSlider:SetPoint("TOPRight", -16, -24)
 	panel.scaleSlider:SetMinMaxValues(50, 300)
 	panel.scaleSlider:SetStepsPerPage(1)
@@ -95,9 +93,7 @@ function KH_UI:KH_Party_Frame_Options(panel)
 			self:SetValue(round(self:GetValue(), 2))
 			self.inputBox:SetText(self:GetValue() / 100)
 			KH_UI_Settings[panel.name].scale = self:GetValue() / 100
-			for i in pairs(KH_UI.partyFrame) do
-				KH_UI.partyFrame[i].Update_FrameInfo()
-			end
+			KH_UI.targetFrame.Update_FrameInfo()
 			panel.scaleSlider.inputBox.button:Hide()
 		end
 	)
@@ -113,9 +109,7 @@ function KH_UI:KH_Party_Frame_Options(panel)
 			panel.scaleSlider:SetValue(panel.scaleSlider.inputBox:GetNumber() * 100)
 			panel.scaleSlider.inputBox:SetText(panel.scaleSlider:GetValue() / 100)
 			KH_UI_Settings[panel.name].scale = panel.scaleSlider:GetValue() / 100
-			for i in pairs(KH_UI.partyFrame) do
-				KH_UI.partyFrame[i].Update_FrameInfo()
-			end
+			KH_UI.targetFrame.Update_FrameInfo()
 		end
 	)
 	panel.scaleSlider.inputBox:SetNumeric(false)
@@ -125,6 +119,8 @@ function KH_UI:KH_Party_Frame_Options(panel)
 	_G[panel.scaleSlider:GetName() .. "High"]:SetText("3") -- Sets the right-side slider text (default is "High").
 	_G[panel.scaleSlider:GetName() .. "Text"]:SetText("Scale") -- Sets the "title" text (top-centre of slider).
 	if (KH_UI_Settings[panel.name].style == "KH2") then
-		KH_UI:Create_KH2_Style_Settings(panel, KH_UI.partyFrame, "party")
+		KH_UI:Create_KH2_Style_Settings(panel, KH_UI.targetFrame, "target")
+	elseif (KH_UI_Settings[panel.name].style == "KH2 Target") then
+		KH_UI:Create_KH2_Target_Style_Settings(panel, KH_UI.targetFrame, "target")
 	end
 end
