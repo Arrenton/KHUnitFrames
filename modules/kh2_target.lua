@@ -158,36 +158,58 @@ local function CreateBarPretties(mainFrame)
     mainFrame.healthFrame.base = KH_UI:CreateImageFrame(29, 14, mainFrame.healthFrame, "TOP", 38, -11, 3, {x = 98 / 128, xw = 127 / 128, y = 15 / 64, yh = 29 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
 
     -------Back Bar
-    mainFrame.healthFrame.back = KH_UI:CreateImageFrame(200, 16, mainFrame.healthFrame.base, "TOPLEFT", 27, 1, 7, {x = 82.5 / 128, xw = 82.5 / 128, y = 18 / 64, yh = 34 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+    mainFrame.healthFrame.back =
+        KH_UI:CreateImageFrame(200, 16, mainFrame.healthFrame.base, "TOPLEFT", 27, 1, 7, {x = 82.5 / 128, xw = 82.5 / 128, y = 18 / 64, yh = 34 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
 
     -------HP Last
-    mainFrame.healthFrame.healthLast = KH_UI:CreateImageFrame(200, 10, mainFrame.healthFrame.base, "TOPLEFT", 27, -2, 8, {x = 87.5 / 128, xw = 87.5 / 128, y = 49 / 64, yh = 59 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+    mainFrame.healthFrame.healthLast =
+        KH_UI:CreateImageFrame(200, 10, mainFrame.healthFrame.base, "TOPLEFT", 27, -2, 8, {x = 87.5 / 128, xw = 87.5 / 128, y = 49 / 64, yh = 59 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
     mainFrame.healthFrame.healthLast.alpha = 0
     mainFrame.healthFrame.healthLast:SetAlpha(0)
     -------HP
-    mainFrame.healthFrame.health = KH_UI:CreateImageFrame(200, 10, mainFrame.healthFrame.base, "TOPLEFT", 27, -2, 9, {x = 85.5 / 128, xw = 85.5 / 128, y = 49 / 64, yh = 59 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+    mainFrame.healthFrame.health =
+        KH_UI:CreateImageFrame(200, 10, mainFrame.healthFrame.base, "TOPLEFT", 27, -2, 9, {x = 85.5 / 128, xw = 85.5 / 128, y = 49 / 64, yh = 59 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
 
     -------Edge
-    mainFrame.healthFrame.edge = KH_UI:CreateImageFrame(3, 15, mainFrame.healthFrame.back, "TOPRight", 3, 0, 7, {x = 84.5 / 128, xw = 86.75 / 128, y = 19 / 64, yh = 33 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+    mainFrame.healthFrame.edge =
+        KH_UI:CreateImageFrame(3, 14, mainFrame.healthFrame.back, "TOPRight", 3, -1, 7, {x = 84 / 128, xw = 86.75 / 128, y = 19 / 64, yh = 33 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
 
     ------Extra bar
     mainFrame.healthFrame.extra = CreateFrame("Frame", nil, mainFrame.healthFrame.base)
     mainFrame.healthFrame.extra:SetSize(1, 1)
     mainFrame.healthFrame.extra:SetPoint("TOPLEFT", 0, 0)
     mainFrame.healthFrame.extra:SetAlpha(0.25)
+    mainFrame.healthFrame.extra:Hide()
 
     -------Back Bar
-    mainFrame.healthFrame.backExtra = KH_UI:CreateImageFrame(200, 16, mainFrame.healthFrame.extra, "TOPLEFT", 27, 1, 4, {x = 88.5 / 128, xw = 88.5 / 128, y = 18 / 64, yh = 34 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
-
-    -------HP Last
-    mainFrame.healthFrame.healthLastExtra = KH_UI:CreateImageFrame(200, 10, mainFrame.healthFrame.extra, "TOPLEFT", 27, -2, 5, {x = 87.5 / 128, xw = 87.5 / 128, y = 49 / 64, yh = 59 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+    mainFrame.healthFrame.backExtra =
+        KH_UI:CreateImageFrame(200, 16, mainFrame.healthFrame.extra, "TOPLEFT", 27, 1, 4, {x = 88.5 / 128, xw = 88.5 / 128, y = 18 / 64, yh = 34 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
 
     -------HP
-    mainFrame.healthFrame.healthExtra = KH_UI:CreateImageFrame(200, 10, mainFrame.healthFrame.extra, "TOPLEFT", 27, -2, 6, {x = 85.5 / 128, xw = 85.5 / 128, y = 49 / 64, yh = 59 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+    mainFrame.healthFrame.healthExtra =
+        KH_UI:CreateImageFrame(200, 10, mainFrame.healthFrame.extra, "TOPLEFT", 27, -2, 6, {x = 85.5 / 128, xw = 85.5 / 128, y = 49 / 64, yh = 59 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
 
     -------Edge
-    mainFrame.healthFrame.edge = KH_UI:CreateImageFrame(3, 15, mainFrame.healthFrame.backExtra, "TOPRight", 3, 0, 3, {x = 84.5 / 128, xw = 86.75 / 128, y = 19 / 64, yh = 33 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+    mainFrame.healthFrame.edge =
+        KH_UI:CreateImageFrame(3, 14, mainFrame.healthFrame.backExtra, "TOPRight", 3, -1, 3, {x = 84 / 128, xw = 86.75 / 128, y = 19 / 64, yh = 33 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
 
+    -------Bar Blobs
+    mainFrame.healthFrame.blobFrame = CreateFrame("Frame", nil, mainFrame.healthFrame.base)
+    mainFrame.healthFrame.blobFrame:SetSize(1, 1)
+    mainFrame.healthFrame.blobFrame:SetPoint("TOPLEFT", 0, 0)
+    mainFrame.healthFrame.blobFrame.full = {x = 75 / 128, xw = 84 / 128, y = 35.35 / 64, yh = 41 / 64}
+    mainFrame.healthFrame.blobFrame.damaged = {x = 65 / 128, xw = 74 / 128, y = 42.35 / 64, yh = 48 / 64}
+    mainFrame.healthFrame.blobFrame.empty = {x = 85 / 128, xw = 94 / 128, y = 35.35 / 64, yh = 41 / 64}
+    mainFrame.healthFrame.blobFrame:Hide()
+    mainFrame.healthFrame.blob = {}
+    mainFrame.healthFrame.blob[1] =
+        KH_UI:CreateImageFrame(14, 11, mainFrame.healthFrame.blobFrame, "TOPLEFT", 6, -12, 9, {x = 63 / 128, xw = 77 / 128, y = 23 / 64, yh = 34 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+    mainFrame.healthFrame.blob[1].inside = KH_UI:CreateImageFrame(9, 6, mainFrame.healthFrame.blob[1], "TOPLEFT", 2, -2, 10, mainFrame.healthFrame.blobFrame.full, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+    for i = 2, 40 do
+        mainFrame.healthFrame.blob[i] =
+            KH_UI:CreateImageFrame(14, 11, mainFrame.healthFrame.blob[i - 1], "TOPLEFT", 11, 0, 9, {x = 63 / 128, xw = 77 / 128, y = 23 / 64, yh = 34 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+        mainFrame.healthFrame.blob[i].inside = KH_UI:CreateImageFrame(9, 6, mainFrame.healthFrame.blob[i], "TOPLEFT", 2, -2, 10, mainFrame.healthFrame.blobFrame.full, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+    end
     --------------------Name----------------
     mainFrame.nameFrame = CreateFrame("Frame", nil, mainFrame.healthFrame.base)
     mainFrame.nameFrame:SetWidth(27)
@@ -294,6 +316,10 @@ local function Update(self, elapsed)
         if self.lastTimer <= 0 and self.healthFrame.healthLast.alpha > 0 then
             self.healthFrame.healthLast.alpha = self.healthFrame.healthLast.alpha - 0.01
             self.healthFrame.healthLast:SetAlpha(self.healthFrame.healthLast.alpha)
+            if (self.healthFrame.healthLast.alpha <= 0) then
+                self.damageHealth = self.unitHealth
+                self.Update_Health()
+            end
         elseif self.healthFrame.healthLast.alpha > 0.7 then
             self.healthFrame.healthLast.alpha = self.healthFrame.healthLast.alpha - 0.006
             self.healthFrame.healthLast:SetAlpha(self.healthFrame.healthLast.alpha)
@@ -437,9 +463,39 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
         end
         --Check if has health data, otherwise set to a fixed size.
         if (hasData) then
-            local extraBars = math.floor(unitCurrHP / KH_UI_Settings[f.settings].healthLengthMax)
+            local extraBars = math.floor(unitCurrHP / (KH_UI_Settings[f.settings].healthLengthMax + 1))
+            local extraDamageBars = math.floor(f.damageHealth / (KH_UI_Settings[f.settings].healthLengthMax + 1))
+            local extraMaxBars = math.floor(unitHPMax / (KH_UI_Settings[f.settings].healthLengthMax + 1))
+            if (extraMaxBars > 0) then
+                f.healthFrame.healthExtra:SetWidth(math.ceil((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax))
+                f.healthFrame.backExtra:SetWidth(math.ceil((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax))
+                for i, blob in ipairs(f.healthFrame.blob) do
+                    if (i <= extraMaxBars) then
+                        blob:Show()
+                        if i <= extraBars then
+                            texcoord = f.healthFrame.blobFrame.full
+                            blob.inside.texture:SetTexCoord(texcoord.x, texcoord.xw, texcoord.y, texcoord.yh)
+                        elseif i <= extraDamageBars then
+                            texcoord = f.healthFrame.blobFrame.damaged
+                            blob.inside.texture:SetTexCoord(texcoord.x, texcoord.xw, texcoord.y, texcoord.yh)
+                        else
+                            texcoord = f.healthFrame.blobFrame.empty
+                            blob.inside.texture:SetTexCoord(texcoord.x, texcoord.xw, texcoord.y, texcoord.yh)
+                        end
+                    else
+                        blob:Hide()
+                    end
+                end
+                if not (f.healthFrame.extra:IsVisible() or f.healthFrame.blobFrame:IsVisible()) then
+                    f.healthFrame.extra:Show()
+                    f.healthFrame.blobFrame:Show()
+                end
+            else
+                f.healthFrame.extra:Hide()
+                f.healthFrame.blobFrame:Hide()
+            end
             if (unitCurrHP > 0) then
-                local tempHP = unitCurrHP - math.floor(unitCurrHP / KH_UI_Settings[f.settings].healthLengthMax) * KH_UI_Settings[f.settings].healthLengthMax
+                local tempHP = unitCurrHP - extraBars * KH_UI_Settings[f.settings].healthLengthMax
                 local width = math.ceil(tempHP * (KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * f.healthMaxMult)
                 --Limit Length
                 if (width > math.ceil((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax)) then
@@ -454,7 +510,6 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
                 if (tempHP < 0) then
                     tempHP = 0
                 end
-                print(math.ceil(((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax)))
                 local width = math.ceil(tempHP * (KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * f.healthMaxMult)
                 --Limit Length
                 if (width > math.ceil((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax)) then
@@ -475,6 +530,8 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
             end
             f.healthFrame.back:SetWidth(width)
         else
+                f.healthFrame.extra:Hide()
+                f.healthFrame.blobFrame:Hide()
             if (unitCurrHP > 0) then
                 f.healthFrame.health:SetWidth(math.ceil(unitCurrHP * ((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax) / 100))
             else
