@@ -119,6 +119,19 @@ KH_UI_Settings_Defaults = {
 -- FUNCTIONS
 ---------------------
 
+function KH_UI:CreateImageFrame(width, height, parent, anchor, x, y, level, texCoord, texture)
+    frame = CreateFrame("Frame", nil, parent)
+    frame:SetWidth(width)
+    frame:SetHeight(height)
+    frame:SetFrameLevel(level)
+    frame:SetPoint(anchor, x, y)
+    frame.texture = frame:CreateTexture(nil, "BACKGROUND")
+    frame.texture:SetAllPoints()
+    frame.texture:SetTexture(texture)
+    frame.texture:SetTexCoord(texCoord.x, texCoord.xw, texCoord.y, texCoord.yh)
+    return frame
+end
+
 function round(num, numDecimalPlaces)
     local mult = 10 ^ (numDecimalPlaces or 0)
     return math.floor(num * mult + 0.5) / mult
