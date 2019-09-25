@@ -179,6 +179,24 @@ function KH_UI:Create_KH2_Target_Style_Settings(panel, frame, type)
             end
         end
     )
+    --------------------------
+    --Length by MaxHP Checkbox--
+    --------------------------
+    panel.healthBox.lengthMaxHealthBox =
+        KH_UI:createCheckbutton(panel.healthBox.displayHealthCheck, -4, -34, "Length by max health")
+    panel.healthBox.lengthMaxHealthBox.tooltip = "The length of the bar will be determined by max health, otherwise by level.\nBest if used with RealMobHealth."
+    panel.healthBox.lengthMaxHealthBox:SetChecked(KH_UI_Settings[panel.name].lengthByHealth)
+    panel.healthBox.lengthMaxHealthBox:SetScript(
+        "OnClick",
+        function()
+            KH_UI_Settings[panel.name].lengthByHealth = panel.healthBox.lengthMaxHealthBox:GetChecked()
+            if (panel.healthBox.lengthMaxHealthBox:GetChecked()) then
+                PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+            else
+                PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
+            end
+        end
+    )
     --------------------
     --Power Container---
     --------------------
