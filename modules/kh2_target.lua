@@ -433,8 +433,12 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
             if (unitLevel == -1) then
                 unitLevel = UnitLevel("player") + 10
             end
-            unitCurrHP = math.ceil(unitCurrHP * (0.4 + math.pow(unitLevel, 1.3 + unitLevel / 200) / 20))
-            unitHPMax = math.ceil(unitHPMax * (0.4 + math.pow(unitLevel, 1.3 + unitLevel / 200) / 20))
+            hpPow = unitLevel / 150
+            if hpPow > 0.25 then
+                hpPow = 0.25
+            end
+            unitCurrHP = math.ceil(unitCurrHP * (0.4 + math.pow(unitLevel, 1.34 + hpPow) / 20))
+            unitHPMax = math.ceil(unitHPMax * (0.4 + math.pow(unitLevel, 1.34  + hpPow) / 20))
         end
         if f.lastHealth > unitCurrHP then
             f.healthFrame.healthLast.alpha = 1.1
