@@ -6,7 +6,7 @@
 ## OptionalDeps: RealMobHealth
 ## SavedVariables: KH_UI_Settings
 ## X-License: GNU General Public License
-## X-Credits: Gotest (For scripting), Zork (For making this possible with the RingThing addon)
+## X-Credits: Zork (For making this possible with the RingThing addon)
 
 kh_main.lua
 

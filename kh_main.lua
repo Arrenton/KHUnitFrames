@@ -20,7 +20,7 @@ end
 KH_UI_Settings_Defaults = {
     ["Player Frame"] = {
         ringMaxHealth = 2000,
-        longBarHealthLengthRate = 20,
+        longBarHealthLengthRate = 200,
         healthLengthMax = 5000,
         displayHealthValue = true,
         lengthByHealth = true,
@@ -41,7 +41,7 @@ KH_UI_Settings_Defaults = {
     },
     ["Party Frame"] = {
         ringMaxHealth = 2000,
-        longBarHealthLengthRate = 20,
+        longBarHealthLengthRate = 200,
         healthLengthMax = 5000,
         displayHealthValue = true,
         lengthByHealth = true,
@@ -119,6 +119,110 @@ KH_UI_Settings_Defaults = {
         orientation = "Top Left"
     }
 }
+if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+    KH_UI_Settings_Defaults = {
+        ["Player Frame"] = {
+            ringMaxHealth = 10000,
+            longBarHealthLengthRate = 40,
+            healthLengthMax = 25000,
+            displayHealthValue = true,
+            lengthByHealth = true,
+            maxBars = 20,
+            manaLengthRate = 100,
+            manaLengthMax = 5360,
+            displayManaValue = true,
+            ringMaxPower = 300,
+            displayPowerValue = true,
+            scale = 1,
+            style = "KH2",
+            enabled = true,
+            blizzardEnabled = true,
+            movable = true,
+            framex = 50,
+            framey = -40,
+            orientation = "Top Left"
+        },
+        ["Party Frame"] = {
+            ringMaxHealth = 10000,
+            longBarHealthLengthRate = 40,
+            healthLengthMax = 25000,
+            displayHealthValue = true,
+            lengthByHealth = true,
+            maxBars = 20,
+            manaLengthRate = 100,
+            manaLengthMax = 5360,
+            displayManaValue = true,
+            ringMaxPower = 300,
+            displayPowerValue = true,
+            scale = 1,
+            style = "KH2",
+            enabled = true,
+            blizzardEnabled = true,
+            movable = true,
+            individualSettings = {
+                ["party1"] = {
+                    framex = 20,
+                    framey = -200
+                },
+                ["party2"] = {
+                    framex = 20,
+                    framey = -325
+                },
+                ["party3"] = {
+                    framex = 20,
+                    framey = -450
+                },
+                ["party4"] = {
+                    framex = 20,
+                    framey = -575
+                }
+            },
+            orientation = "Bottom Left"
+        },
+        ["Target Frame"] = {
+            ringMaxHealth = 2000,
+            longBarHealthLengthRate = 54,
+            healthLengthMax = 4500,
+            displayHealthValue = true,
+            lengthByHealth = true,
+            maxBars = 25,
+            manaLengthRate = 81,
+            manaLengthMax = 3000,
+            displayManaValue = true,
+            ringMaxPower = 300,
+            displayPowerValue = true,
+            scale = 1,
+            style = "KH2 Target",
+            enabled = true,
+            blizzardEnabled = true,
+            movable = true,
+            framex = 260,
+            framey = -40,
+            orientation = "Top Left"
+        },
+        ["ToT Frame"] = {
+            ringMaxHealth = 2000,
+            longBarHealthLengthRate = 200,
+            healthLengthMax = 2000,
+            displayHealthValue = true,
+            lengthByHealth = true,
+            maxBars = 20,
+            manaLengthRate = 150,
+            manaLengthMax = 3000,
+            displayManaValue = true,
+            ringMaxPower = 300,
+            displayPowerValue = true,
+            scale = 1,
+            style = "Target of Target",
+            enabled = true,
+            blizzardEnabled = true,
+            movable = true,
+            framex = 260,
+            framey = -80,
+            orientation = "Top Left"
+        }
+    }
+end
 ---------------------
 -- FUNCTIONS
 ---------------------
@@ -172,10 +276,7 @@ function KH_UI:calc_edge_position(self, value, mainFrame)
     end
     local radian = math.rad(value * 360)
     self:SetPoint("CENTER", edge.radius * math.cos(radian), edge.radius * math.sin(radian))
-    if
-        (KH_UI_Settings[mainFrame.settings].orientation == "Top Right") or
-            (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Left")
-     then
+    if (KH_UI_Settings[mainFrame.settings].orientation == "Top Right") or (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Left") then
         radian = radian + math.rad(180)
     end
     edge:SetRotation(radian + math.rad(90), 0.5, 0.5)
@@ -420,33 +521,18 @@ function KH_UI:cre_segment_textures(ring_config, self, mainFrame)
 
     local t0 = self:CreateTexture(nil, "BACKGROUND")
     t0:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\" .. ring_config.global.gfx_texture)
-    t0:SetVertexColor(
-        ring_config.segment.color.r,
-        ring_config.segment.color.g,
-        ring_config.segment.color.b,
-        ring_config.segment.color.a
-    )
+    t0:SetVertexColor(ring_config.segment.color.r, ring_config.segment.color.g, ring_config.segment.color.b, ring_config.segment.color.a)
     t0:SetBlendMode("blend")
     t0:Hide()
 
     local t1 = self:CreateTexture(nil, "LOW")
     t1:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\" .. ring_config.global.gfx_texture)
-    t1:SetVertexColor(
-        ring_config.segment.color.r,
-        ring_config.segment.color.g,
-        ring_config.segment.color.b,
-        ring_config.segment.color.a
-    )
+    t1:SetVertexColor(ring_config.segment.color.r, ring_config.segment.color.g, ring_config.segment.color.b, ring_config.segment.color.a)
     t1:SetBlendMode("blend")
     t1:Hide()
 
     local t2 = self:CreateTexture(nil, "BACKGROUND")
-    t2:SetVertexColor(
-        ring_config.segment.color.r,
-        ring_config.segment.color.g,
-        ring_config.segment.color.b,
-        ring_config.segment.color.a
-    )
+    t2:SetVertexColor(ring_config.segment.color.r, ring_config.segment.color.g, ring_config.segment.color.b, ring_config.segment.color.a)
     t2:SetBlendMode("blend")
     if direction == 1 then
         t2:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\slicer1")
@@ -457,12 +543,7 @@ function KH_UI:cre_segment_textures(ring_config, self, mainFrame)
 
     local t3 = self:CreateTexture(nil, "BACKGROUND")
     t3:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\" .. ring_config.global.gfx_texture)
-    t3:SetVertexColor(
-        ring_config.segment.color.r,
-        ring_config.segment.color.g,
-        ring_config.segment.color.b,
-        ring_config.segment.color.a
-    )
+    t3:SetVertexColor(ring_config.segment.color.r, ring_config.segment.color.g, ring_config.segment.color.b, ring_config.segment.color.a)
     t3:SetBlendMode("blend")
     t3:SetPoint("CENTER", 0, 0)
     t3:SetWidth(segmentsize)
@@ -567,11 +648,7 @@ function KH_UI:update_ring_segments(mainFrame)
 end
 
 function KH_UI:calc_ring_health(self, ring_config, unit, type, mainFrame)
-    local act, max, perc, perc_per_seg =
-        UnitHealth(unit),
-        UnitHealthMax(unit),
-        (UnitHealth(unit) / UnitHealthMax(unit)) * 100,
-        100 / ring_config.global.segments_used
+    local act, max, perc, perc_per_seg = UnitHealth(unit), UnitHealthMax(unit), (UnitHealth(unit) / UnitHealthMax(unit)) * 100, 100 / ring_config.global.segments_used
     local anz_seg, sum_radius = ring_config.global.segments_used, ring_config.global.segments_used * 90
 
     if type == "lasthealth" then
@@ -645,11 +722,7 @@ end
 
 function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
     local powerType, powerToken, altR, altG, altB = UnitPowerType(unit)
-    local act, max, perc, perc_per_seg =
-        UnitPower(unit, powerType),
-        UnitPowerMax(unit, powerType),
-        (UnitPower(unit, powerType) / UnitPowerMax(unit, powerType)) * 100,
-        100 / ring_config.global.segments_used
+    local act, max, perc, perc_per_seg = UnitPower(unit, powerType), UnitPowerMax(unit, powerType), (UnitPower(unit, powerType) / UnitPowerMax(unit, powerType)) * 100, 100 / ring_config.global.segments_used
     local anz_seg, sum_radius = ring_config.global.segments_used, ring_config.global.segments_used * 90
     local info, r, g, b = PowerBarColor[powerToken], 0, 0, 0
 
@@ -734,11 +807,7 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
     local ring_object
 
     local parent = mainFrame
-    if
-        ring_config.global.ringtype == "health" or ring_config.global.ringtype == "lasthealth" or
-            ring_config.global.ringtype == "maxhealth" or
-            ring_config.global.ringtype == "maxhealthbg"
-     then
+    if ring_config.global.ringtype == "health" or ring_config.global.ringtype == "lasthealth" or ring_config.global.ringtype == "maxhealth" or ring_config.global.ringtype == "maxhealthbg" then
         parent = mainFrame.healthFrame
     end
 
@@ -754,25 +823,12 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
 
     ring_object.segments = KH_UI:cre_ring_segments(ring_config, ring_object, mainFrame)
 
-    if
-        ring_config.global.ringtype == "health" or ring_config.global.ringtype == "lasthealth" or
-            ring_config.global.ringtype == "maxhealth" or
-            ring_config.global.ringtype == "maxhealthbg"
-     then
+    if ring_config.global.ringtype == "health" or ring_config.global.ringtype == "lasthealth" or ring_config.global.ringtype == "maxhealth" or ring_config.global.ringtype == "maxhealthbg" then
         ring_object:SetScript(
             "OnEvent",
             function(self, event, unit)
-                if
-                    ((event == "UNIT_HEALTH_FREQUENT" or event == "UNIT_MAXHEALTH") and unit == mainFrame.unit) or
-                        event == "PLAYER_ENTERING_WORLD"
-                 then
-                    KH_UI:calc_ring_health(
-                        ring_object,
-                        ring_config,
-                        mainFrame.unit,
-                        ring_config.global.ringtype,
-                        mainFrame
-                    )
+                if ((event == "UNIT_HEALTH_FREQUENT" or event == "UNIT_MAXHEALTH") and unit == mainFrame.unit) or event == "PLAYER_ENTERING_WORLD" then
+                    KH_UI:calc_ring_health(ring_object, ring_config, mainFrame.unit, ring_config.global.ringtype, mainFrame)
                     mainFrame.unitHealth = UnitHealth(mainFrame.unit)
                 end
             end
@@ -786,17 +842,8 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
         ring_object:SetScript(
             "OnEvent",
             function(self, event, unit)
-                if
-                    ((event == "UNIT_POWER_UPDATE" or event == "UNIT_DISPLAYPOWER") and unit == ring_config.global.unit) or
-                        event == "PLAYER_ENTERING_WORLD"
-                 then
-                    KH_UI:calc_ring_power(
-                        ring_object,
-                        ring_config,
-                        mainFrame.unit,
-                        ring_config.global.ringtype,
-                        mainFrame
-                    )
+                if ((event == "UNIT_POWER_UPDATE" or event == "UNIT_DISPLAYPOWER") and unit == ring_config.global.unit) or event == "PLAYER_ENTERING_WORLD" then
+                    KH_UI:calc_ring_power(ring_object, ring_config, mainFrame.unit, ring_config.global.ringtype, mainFrame)
                     mainFrame.unitPower = UnitPower(mainFrame.unit)
                 end
             end
@@ -812,13 +859,7 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
                 self.lastUpdate = self.lastUpdate + elapsed
                 if (self.lastUpdate >= 0.05) then
                     self.lastUpdate = self.lastUpdate - 0.05
-                    KH_UI:calc_ring_power(
-                        ring_object,
-                        ring_config,
-                        mainFrame.unit,
-                        ring_config.global.ringtype,
-                        mainFrame
-                    )
+                    KH_UI:calc_ring_power(ring_object, ring_config, mainFrame.unit, ring_config.global.ringtype, mainFrame)
                     mainFrame.unitPower = UnitPower(mainFrame.unit)
                 end
             end
@@ -956,8 +997,7 @@ function KH_UI:create_portrait(mainFrame)
     mainFrame.portrait.levelFrame.texture:SetPoint("CENTER", 16, 16)
     mainFrame.portrait.levelFrame.texture:SetAllPoints()
     mainFrame.portrait.levelFrame.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\levelRing")
-    mainFrame.portrait.levelFrame.text =
-        mainFrame.portrait.levelFrame:CreateFontString(nil, nil, "GameNormalNumberFont")
+    mainFrame.portrait.levelFrame.text = mainFrame.portrait.levelFrame:CreateFontString(nil, nil, "GameNormalNumberFont")
     mainFrame.portrait.levelFrame.text:SetText("??")
     mainFrame.portrait.levelFrame.text:SetScale(1.2)
     mainFrame.portrait.levelFrame.text:SetVertexColor(1.0, 0.82, 0.0, 1.0)
@@ -1081,10 +1121,7 @@ KH_UI:SetScript(
         elseif (event == "ADDON_LOADED") then
             KH_UI:Set_BlizzardFrames()
             KH_UI:UnregisterEvent("ADDON_LOADED")
-        elseif
-            (event == "GROUP_ROSTER_UPDATE" or event == "UNIT_CONNECTION" or event == "UNIT_OTHER_PARTY_CHANGED" or
-                event == "PLAYER_REGEN_ENABLED")
-         then
+        elseif (event == "GROUP_ROSTER_UPDATE" or event == "UNIT_CONNECTION" or event == "UNIT_OTHER_PARTY_CHANGED" or event == "PLAYER_REGEN_ENABLED") then
             KH_UI:Set_BlizzardFrames()
         else
             KH_UI:Set_BlizzardFrames()

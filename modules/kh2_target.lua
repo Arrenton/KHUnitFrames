@@ -415,30 +415,35 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
 
     f.Update_Health = function()
         local unitHPMax, unitCurrHP, hasData, unitLevel
-        if IsAddOnLoaded("RealMobHealth") then
-            unitCurrHP, unitHPMax, e1, e2 = KH_UI.GetUnitHealth(f.unit)
-            if e1 ~= nil or e2 ~= nil or RealMobHealth.UnitHasHealthData(f.unit) then
-                hasData = true
+        if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+            if IsAddOnLoaded("RealMobHealth") then
+                unitCurrHP, unitHPMax, e1, e2 = KH_UI.GetUnitHealth(f.unit)
+                if e1 ~= nil or e2 ~= nil or RealMobHealth.UnitHasHealthData(f.unit) then
+                    hasData = true
+                end
+                if (UnitInParty(f.unit) or UnitInRaid(f.unit) or UnitIsUnit(f.unit, "player")) then
+                    hasData = true
+                end
+            else
+                hasData = false
+                unitCurrHP = UnitHealth(f.unit)
+                unitHPMax = UnitHealthMax(f.unit)
             end
-            if (UnitInParty(f.unit) or UnitInRaid(f.unit) or UnitIsUnit(f.unit, "player")) then
-                hasData = true
+            unitLevel = UnitLevel(f.unit)
+            if not (hasData) or not KH_UI_Settings[f.settings].lengthByHealth then
+                if (unitLevel == -1) then
+                    unitLevel = UnitLevel("player") + 10
+                end
+                hpPow = unitLevel / 150
+                if hpPow > 0.25 then
+                    hpPow = 0.25
+                end
+                unitCurrHP = math.ceil(unitCurrHP * (0.4 + math.pow(unitLevel, 1.34 + hpPow) / 20))
+                unitHPMax = math.ceil(unitHPMax * (0.4 + math.pow(unitLevel, 1.34 + hpPow) / 20))
             end
-        else
-            hasData = false
+        elseif WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
             unitCurrHP = UnitHealth(f.unit)
             unitHPMax = UnitHealthMax(f.unit)
-        end
-        unitLevel = UnitLevel(f.unit)
-        if not (hasData) or not KH_UI_Settings[f.settings].lengthByHealth then
-            if (unitLevel == -1) then
-                unitLevel = UnitLevel("player") + 10
-            end
-            hpPow = unitLevel / 150
-            if hpPow > 0.25 then
-                hpPow = 0.25
-            end
-            unitCurrHP = math.ceil(unitCurrHP * (0.4 + math.pow(unitLevel, 1.34 + hpPow) / 20))
-            unitHPMax = math.ceil(unitHPMax * (0.4 + math.pow(unitLevel, 1.34  + hpPow) / 20))
         end
         if f.lastHealth > unitCurrHP then
             f.healthFrame.healthLast.alpha = 1.1
@@ -463,10 +468,11 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
             end
         end
         if f.unitHealthMax > KH_UI_Settings[f.settings].healthLengthMax * KH_UI_Settings[f.settings].maxBars then
-            f.healthMaxMult = 1 / (f.unitHealthMax / KH_UI_Settings[f.settings].healthLengthMax * KH_UI_Settings[f.settings].maxBars)
+            f.healthMaxMult = (KH_UI_Settings[f.settings].healthLengthMax * KH_UI_Settings[f.settings].maxBars) / f.unitHealthMax
         else
             f.healthMaxMult = 1
         end
+        print(f.healthMaxMult)
         if (KH_UI_Settings[f.settings].displayHealthValue) then
             f.healthFrame.healthVal.text:SetText(unitCurrHP .. " / " .. unitHPMax)
             if not (f.healthFrame.healthVal:IsVisible()) then
@@ -475,7 +481,9 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
         else
             f.healthFrame.healthVal:Hide()
         end
-        --Check if has health data, otherwise set to a fixed size.
+        unitCurrHP = unitCurrHP * f.healthMaxMult
+        f.damageHealth = f.damageHealth * f.healthMaxMult
+        unitHPMax = unitHPMax * f.healthMaxMult
         local extraBars = math.floor(unitCurrHP / (KH_UI_Settings[f.settings].healthLengthMax + 1))
         local extraDamageBars = math.floor(f.damageHealth / (KH_UI_Settings[f.settings].healthLengthMax + 1))
         local extraMaxBars = math.floor(unitHPMax / (KH_UI_Settings[f.settings].healthLengthMax + 1))
@@ -509,7 +517,7 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
         end
         if (unitCurrHP > 0) then
             local tempHP = unitCurrHP - extraBars * KH_UI_Settings[f.settings].healthLengthMax
-            local width = math.ceil(tempHP * (KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * f.healthMaxMult)
+            local width = math.ceil(tempHP * (KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000))
             --Limit Length
             if (width > math.ceil((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax)) then
                 width = math.ceil((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax)
@@ -523,7 +531,7 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
             if (tempHP < 0) then
                 tempHP = 0
             end
-            local width = math.ceil(tempHP * (KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * f.healthMaxMult)
+            local width = math.ceil(tempHP * (KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000))
             --Limit Length
             if (width > math.ceil((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax)) then
                 width = math.ceil((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax)
@@ -536,27 +544,12 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
         if (tempHP < 0) then
             tempHP = 0
         end
-        local width = math.ceil(tempHP * (KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * f.healthMaxMult)
+        local width = math.ceil(tempHP * (KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000))
         --Limit Length
         if (width > math.ceil((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax)) then
             width = math.ceil((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax)
         end
         f.healthFrame.back:SetWidth(width)
-        --[[else --No data
-                f.healthFrame.extra:Hide()
-                f.healthFrame.blobFrame:Hide()
-            if (unitCurrHP > 0) then
-                f.healthFrame.health:SetWidth(math.ceil(unitCurrHP * ((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax) / 100))
-            else
-                f.healthFrame.health:SetWidth(0.0001)
-            end
-            if (f.damageHealth > 0) then
-                f.healthFrame.healthLast:SetWidth(math.ceil(f.damageHealth * ((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax) / 100))
-            else
-                f.healthFrame.health:SetWidth(0.0001)
-            end
-            f.healthFrame.back:SetWidth(math.ceil(unitHPMax * ((KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000) * KH_UI_Settings[f.settings].healthLengthMax) / 100))
-        end]]
     end
 
     f.Update_Power = function()
