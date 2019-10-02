@@ -421,7 +421,7 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
                 if e1 ~= nil or e2 ~= nil or RealMobHealth.UnitHasHealthData(f.unit) then
                     hasData = true
                 end
-                if (UnitInParty(f.unit) or UnitInRaid(f.unit) or UnitIsUnit(f.unit, "player")) then
+                if (UnitHealthMax(f.unit) ~= 100) then
                     hasData = true
                 end
             else
@@ -434,12 +434,16 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
                 if (unitLevel == -1) then
                     unitLevel = UnitLevel("player") + 10
                 end
-                hpPow = unitLevel / 150
-                if hpPow > 0.25 then
-                    hpPow = 0.25
+                hpPow = unitLevel / 225
+                if hpPow > 0.23 then
+                    hpPow = 0.23
                 end
-                unitCurrHP = math.ceil(unitCurrHP * (0.4 + math.pow(unitLevel, 1.34 + hpPow) / 20))
-                unitHPMax = math.ceil(unitHPMax * (0.4 + math.pow(unitLevel, 1.34 + hpPow) / 20))
+                unitCurrHP = math.ceil(unitCurrHP * (0.4 + math.pow(unitLevel, 1.2 + hpPow) / 11))
+                unitHPMax = math.ceil(unitHPMax * (0.4 + math.pow(unitLevel, 1.2 + hpPow) / 11))
+                if ( UnitClassification(f.unit) == "elite" or UnitClassification(f.unit) == "rareelite") then
+                    unitCurrHP = unitCurrHP * 3
+                    unitHPMax = unitHPMax * 3
+                end
             end
         elseif WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
             unitCurrHP = UnitHealth(f.unit)
@@ -472,7 +476,6 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
         else
             f.healthMaxMult = 1
         end
-        print(f.healthMaxMult)
         if (KH_UI_Settings[f.settings].displayHealthValue) then
             f.healthFrame.healthVal.text:SetText(unitCurrHP .. " / " .. unitHPMax)
             if not (f.healthFrame.healthVal:IsVisible()) then
