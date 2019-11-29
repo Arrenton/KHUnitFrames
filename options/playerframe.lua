@@ -91,8 +91,8 @@ function KH_UI:KH_Player_Frame_Options(panel)
 		"OnValueChanged",
 		function(self)
 			self:SetValue(round(self:GetValue(), 2))
-			self.inputBox:SetText(self:GetValue() / 100)
 			KH_UI_Settings[panel.name].scale = self:GetValue() / 100
+			self.inputBox:SetText(KH_UI_Settings[panel.name].scale)
 			KH_UI.playerFrame.Update_FrameInfo()
 			panel.scaleSlider.inputBox.button:Hide()
 		end
@@ -107,13 +107,12 @@ function KH_UI:KH_Player_Frame_Options(panel)
 		64,
 		function()
 			panel.scaleSlider:SetValue(panel.scaleSlider.inputBox:GetNumber() * 100)
-			panel.scaleSlider.inputBox:SetText(panel.scaleSlider:GetValue() / 100)
-			KH_UI_Settings[panel.name].scale = panel.scaleSlider:GetValue() / 100
+			KH_UI_Settings[panel.name].scale = panel.scaleSlider.inputBox:GetNumber()
 			KH_UI.playerFrame.Update_FrameInfo()
 		end
 	)
 	panel.scaleSlider.inputBox:SetNumeric(false)
-	panel.scaleSlider.inputBox:SetText(panel.scaleSlider:GetValue() / 100)
+	panel.scaleSlider.inputBox:SetText(KH_UI_Settings[panel.name].scale)
 	panel.scaleSlider.tooltipText = "Sets how large the frame is."
 	_G[panel.scaleSlider:GetName() .. "Low"]:SetText("0.5") -- Sets the left-side slider text (default is "Low").
 	_G[panel.scaleSlider:GetName() .. "High"]:SetText("3") -- Sets the right-side slider text (default is "High").

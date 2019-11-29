@@ -240,6 +240,19 @@ function KH_UI:CreateImageFrame(width, height, parent, anchor, x, y, level, texC
     return frame
 end
 
+function KH_UI:CreateTextFrame(text, x, y, w, h, scale, align, parent, anchor, level, font)
+    frame = CreateFrame("Frame", nil, parent)
+    frame:SetWidth(w)
+    frame:SetHeight(h)
+    frame:SetFrameLevel(level)
+    frame:SetScale(scale)
+    frame:SetPoint(anchor, x, y)
+    frame.text = frame:CreateFontString(nil, nil, font)
+    frame.text:SetText(text)
+    frame.text:SetPoint(align, 0, 0)
+    return frame
+end
+
 function round(num, numDecimalPlaces)
     local mult = 10 ^ (numDecimalPlaces or 0)
     return math.floor(num * mult + 0.5) / mult
