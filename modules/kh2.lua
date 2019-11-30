@@ -81,7 +81,7 @@ local function Create_Power_Bar(mainFrame)
 	mainFrame.powerFrame:RegisterEvent("UNIT_MAXPOWER")
 	mainFrame.powerFrame:RegisterEvent("UNIT_DISPLAYPOWER")
 	--Create Frames
-	mainFrame.powerFrame.base = KH_UI:CreateImageFrame(55, 16, mainFrame.powerFrame, "TOPRIGHT", 140, -32, 8, {x = 4 / 256, xw = 58 / 256, y = 1.2 / 256, yh = 16 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+	mainFrame.powerFrame.base = KH_UI:CreateImageFrame(55, 16, mainFrame.powerFrame, "TOPRIGHT", 155, -32, 8, {x = 4 / 256, xw = 58 / 256, y = 1.2 / 256, yh = 16 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
 	mainFrame.powerFrame.bg = KH_UI:CreateImageFrame(107, 32, mainFrame.powerFrame.base, "BOTTOMRIGHT", -54, -0, 8, {x = 149 / 256, xw = 256 / 256, y = 18 / 256, yh = 50 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
 	mainFrame.powerFrame.power = KH_UI:CreateImageFrame(99, 26, mainFrame.powerFrame.bg, "BOTTOMRIGHT", -3, 3, 9, {x = 157 / 256, xw = 256 / 256, y = 52 / 256, yh = 78 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
 	mainFrame.powerFrame.powerVal = KH_UI:CreateTextFrame("Power", 0, 0, 1, 1, 0.45, "Right", mainFrame.powerFrame.base, "TOPLEFT", 9, "SystemFont_OutlineThick_Huge2")
@@ -100,7 +100,7 @@ local function Create_Power_Bar(mainFrame)
 	end
 	mainFrame.powerFrame.base.texture:SetVertexColor(r, g, b, 1)
 	mainFrame.powerFrame.power.texture:SetVertexColor(r, g, b, 1)
-	mainFrame.powerFrame.powerVal.text:SetText(UnitPower('player'))
+	mainFrame.powerFrame.powerVal.text:SetText(UnitPower("player"))
 	mainFrame.powerFrame:SetScript(
 		"OnEvent",
 		function(self, event, unit)
@@ -134,6 +134,111 @@ local function Create_Power_Bar(mainFrame)
 				end
 				--Set Power Val Text
 				self.powerVal.text:SetText(power)
+			end
+		end
+	)
+end
+
+local function Create_Resource_Counter(mainFrame)
+	local function UpdateOrbs(mainFrame)
+		local self = mainFrame.resourceFrame
+		local radius = 26
+		for i = 1, self.currentValue do
+			local pointx = math.cos(self.orb[i].angle * math.pi / 180) * radius * 0.8 + (math.sin(-self.orb[i].angle * math.pi / 180) * radius * 0.25)
+			local pointy = math.sin(self.orb[i].angle * math.pi / 180) * radius
+			self.orb[i].angle = self.orb[i].angle - 1.25
+			if (self.orb[i].angle <= 0) then
+				self.orb[i].angle = self.orb[i].angle + 360
+			end
+			if (self.orb[i].angle <= 520) then
+				if (self.orb[i].alpha < 1) then
+					self.orb[i].alpha = self.orb[i].alpha + 0.02
+				end
+			end
+			self.orb[i]:SetAlpha(self.orb[i].alpha)
+			self.orb[i]:SetPoint("CENTER", pointx, pointy)
+		end
+	end
+	local function SetOrbs(mainFrame)
+		local self = mainFrame.resourceFrame
+		for i = 1, 9 do
+			self.orb[i].alpha = 0
+			self.orb[i].angle = 0
+			self.orb[i]:SetAlpha(0)
+			self.orb[i]:Hide()
+		end
+		for i = 1, self.currentValue do
+			self.orb[i]:Show()
+			self.orb[i].alpha = 0
+			self.orb[i].angle = 580 + (i - 1) * (360 / self.currentValue)
+		end
+	end
+	mainFrame.resourceFrame = CreateFrame("Frame", nil, mainFrame.powerFrame.bg)
+	mainFrame.resourceFrame:SetSize(1, 1)
+	mainFrame.resourceFrame:SetPoint("topleft", 0, 0)
+	mainFrame.resourceFrame.previousValue = -1
+	mainFrame.resourceFrame.currentValue = -1
+	mainFrame.resourceFrame.orbUpdate = UpdateOrbs
+	mainFrame.resourceFrame.bg = KH_UI:CreateImageFrame(35, 32, mainFrame.resourceFrame, "TOPLEFT", -25, -0, 26, {x = 110 / 256, xw = 145 / 256, y = 47 / 256, yh = 79 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+	mainFrame.resourceFrame.orb = {}
+	for i = 1, 9 do
+		mainFrame.resourceFrame.orb[i] = KH_UI:CreateImageFrame(10, 10, mainFrame.resourceFrame.bg, "CENTER", 0, 0, 28, {x = 100 / 256, xw = 110 / 256, y = 5 / 256, yh = 15 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+		mainFrame.resourceFrame.orb[i].alpha = 0
+		mainFrame.resourceFrame.orb[i].angle = 0
+		mainFrame.resourceFrame.orb[i]:Show()
+	end
+	mainFrame.resourceFrame.number = {
+		[0] = {{x = 29 / 256, xw = 55 / 256, y = 141 / 256, yh = 169 / 256}, {x = 1 / 256, xw = 27 / 256, y = 141 / 256, yh = 169 / 256}},
+		[1] = {{x = 0 / 256, xw = 26 / 256, y = 111 / 256, yh = 139 / 256}, {x = 0 / 256, xw = 26 / 256, y = 80 / 256, yh = 108 / 256}},
+		[2] = {{x = 26 / 256, xw = 52 / 256, y = 111 / 256, yh = 139 / 256}, {x = 26 / 256, xw = 52 / 256, y = 80 / 256, yh = 108 / 256}},
+		[3] = {{x = 54 / 256, xw = 80 / 256, y = 111 / 256, yh = 139 / 256}, {x = 54 / 256, xw = 80 / 256, y = 80 / 256, yh = 108 / 256}},
+		[4] = {{x = 82 / 256, xw = 108 / 256, y = 111 / 256, yh = 139 / 256}, {x = 82 / 256, xw = 108 / 256, y = 80 / 256, yh = 108 / 256}},
+		[5] = {{x = 109 / 256, xw = 135 / 256, y = 111 / 256, yh = 139 / 256}, {x = 109 / 256, xw = 135 / 256, y = 80 / 256, yh = 108 / 256}},
+		[6] = {{x = 137 / 256, xw = 163 / 256, y = 111 / 256, yh = 139 / 256}, {x = 137 / 256, xw = 163 / 256, y = 80 / 256, yh = 108 / 256}},
+		[7] = {{x = 165 / 256, xw = 191 / 256, y = 111 / 256, yh = 139 / 256}, {x = 165 / 256, xw = 191 / 256, y = 80 / 256, yh = 108 / 256}},
+		[8] = {{x = 193 / 256, xw = 219 / 256, y = 111 / 256, yh = 139 / 256}, {x = 193 / 256, xw = 219 / 256, y = 80 / 256, yh = 108 / 256}},
+		[9] = {{x = 221 / 256, xw = 247 / 256, y = 111 / 256, yh = 139 / 256}, {x = 221 / 256, xw = 247 / 256, y = 80 / 256, yh = 108 / 256}}
+	}
+	mainFrame.resourceFrame:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
+	mainFrame.resourceFrame:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
+	mainFrame.resourceFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
+	mainFrame.resourceFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	mainFrame.resourceFrame.value = KH_UI:CreateImageFrame(26, 28, mainFrame.resourceFrame.bg, "TOPLEFT", 6, -2, 27, mainFrame.resourceFrame.number[9][1], "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+	mainFrame.resourceFrame.value.texture:SetVertexColor(1, 0.3, 0, 1)
+
+	mainFrame.resourceFrame:SetScript(
+		"OnEvent",
+		function(self, event, arg1)
+			if (mainFrame.unit == "player") then
+				self.currentValue = GetComboPoints(mainFrame.unit, "target")
+				if (self.currentValue ~= self.previousValue) then
+					self.value.texture:SetTexCoord(self.number[self.currentValue][1].x, self.number[self.currentValue][1].xw, self.number[self.currentValue][1].y, self.number[self.currentValue][1].yh)
+					SetOrbs(mainFrame)
+				end
+				self.previousValue = self.currentValue
+				local powerType, powerToken, _, _, _ = UnitPowerType(mainFrame.unit)
+				local _, class, _ = UnitClass(mainFrame.unit)
+				local maxResource = UnitPowerMax(PlayerFrame.unit, Enum.PowerType.ComboPoints)
+				if (not self:IsShown()) then
+					if (maxResource > 0) then
+						if (class == "DRUID" and powerToken == "ENERGY") then
+							self:Show()
+							self.previousValue = -1
+						elseif (class ~= "DRUID") then
+							self:Show()
+							self.previousValue = -1
+						end
+					end
+				elseif (self:IsShown()) then
+					if (class == "DRUID" and powerToken ~= "ENERGY") then
+						self:Hide()
+					elseif (maxResource <= 0) then
+						self:Hide()
+					end
+				end
+			else
+				self:Hide()
+				self:UnregisterAllEvents()
 			end
 		end
 	)
@@ -228,47 +333,14 @@ local function create_ring_pretties(mainFrame)
 			end
 		end
 	)
-	if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
-		if (mainFrame.settings == "Party Frame") then
-			mainFrame.nameFrame:SetScale(1.5)
-			mainFrame.nameFrame:SetPoint("left", -20, -20)
-		elseif (mainFrame.settings == "Player Frame") then
-			mainFrame.nameFrame:SetPoint("left", -20, -30)
-		end
-	elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
-		if (mainFrame.settings == "Party Frame") then
-			mainFrame.nameFrame:SetScale(1.5)
-			mainFrame.nameFrame:SetPoint("right", 20, 20)
-		elseif (mainFrame.settings == "Player Frame") then
-			mainFrame.nameFrame:SetPoint("right", 20, 30)
-		end
-	elseif (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Left") then
-		if (mainFrame.settings == "Party Frame") then
-			mainFrame.nameFrame:SetScale(1.5)
-			mainFrame.nameFrame:SetPoint("right", 20, -20)
-		elseif (mainFrame.settings == "Player Frame") then
-			mainFrame.nameFrame:SetPoint("right", 20, -30)
-		end
-	elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Right") then
-		if (mainFrame.settings == "Party Frame") then
-			mainFrame.nameFrame:SetScale(1.5)
-			mainFrame.nameFrame:SetPoint("left", -20, 20)
-		elseif (mainFrame.settings == "Player Frame") then
-			mainFrame.nameFrame:SetPoint("left", -20, 30)
-		end
+	mainFrame.nameFrame:SetPoint("TOP", 0, -10)
+	if (mainFrame.settings == "Party Frame") then
+		mainFrame.nameFrame:SetScale(1.5)
 	end
-	mainFrame.nameFrame:SetFrameLevel(4)
+	mainFrame.nameFrame:SetFrameLevel(25)
 	mainFrame.nameFrame.text = mainFrame.nameFrame:CreateFontString(nil, nil, "GameFontNormal")
 	mainFrame.nameFrame.text:SetText(format("NAME"))
-	if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
-		mainFrame.nameFrame.text:SetPoint("right", 0, 0)
-	elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
-		mainFrame.nameFrame.text:SetPoint("left", 0, 0)
-	elseif (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Left") then
-		mainFrame.nameFrame.text:SetPoint("left", 0, 0)
-	elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Right") then
-		mainFrame.nameFrame.text:SetPoint("right", 0, 0)
-	end
+	mainFrame.nameFrame.text:SetPoint("CENTER", 0, 0)
 end
 
 local function create_health_stretch(mainFrame)
@@ -522,6 +594,8 @@ local function Update(self, elapsed)
 			self.lowHealthAlpha = 0
 			self.lowHealthDirection = 0
 		end
+		--Resource bar orbs
+		self.resourceFrame.orbUpdate(self)
 		--Update frames
 		for i in ipairs(self.ring_frames) do
 			if self.ring_frames[i].ringtype == "lasthealth" then
@@ -815,11 +889,11 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 				f.manaFrame:Hide()
 			end
 		end
-		if (powerToken == "MANA") then
+		--[[if (powerToken == "MANA") then
 			f.powerFrame:Hide()
 		else
 			f.powerFrame:Show()
-		end
+		end]]
 	end
 
 	f.Refresh_Points = function()
@@ -948,6 +1022,7 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 	KH_UI:create_portrait(f)
 	create_mana_bar(f)
 	Create_Power_Bar(f)
+	Create_Resource_Counter(f)
 
 	f:RegisterEvent("UNIT_POWER_UPDATE")
 	f:RegisterEvent("UNIT_MANA")

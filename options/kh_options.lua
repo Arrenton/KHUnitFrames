@@ -31,6 +31,12 @@ function KH_UI:Set_BlizzardFrames()
 			(KH_UI_Settings["Target Frame"].blizzardEnabled or
 				KH_UI_Settings["Target Frame"].enabled == false and not TargetFrame:IsEventRegistered("UNIT_HEALTH"))
 		 then
+			--Combo Frame
+			ComboFrame:RegisterEvent("PLAYER_TARGET_CHANGED");
+			ComboFrame:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player");
+			ComboFrame:RegisterUnitEvent("UNIT_MAXPOWER", "player");
+			ComboFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
+			--Target Frame
 			TargetFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 			TargetFrame:RegisterEvent("UNIT_HEALTH")
 			if (TargetFrame.showLevel) then
@@ -50,6 +56,8 @@ function KH_UI:Set_BlizzardFrames()
 		elseif (TargetFrame:IsEventRegistered("UNIT_HEALTH")) then
 			TargetFrame:UnregisterAllEvents()
 			TargetFrame:Hide()
+			ComboFrame:UnregisterAllEvents()
+			ComboFrame:Hide()
 		end
 	end
 end
