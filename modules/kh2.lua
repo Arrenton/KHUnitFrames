@@ -889,11 +889,11 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 				f.manaFrame:Hide()
 			end
 		end
-		--[[if (powerToken == "MANA") then
+		if (powerToken == "MANA") then
 			f.powerFrame:Hide()
 		else
 			f.powerFrame:Show()
-		end]]
+		end
 	end
 
 	f.Refresh_Points = function()
