@@ -81,11 +81,48 @@ local function Create_Power_Bar(mainFrame)
 	mainFrame.powerFrame:RegisterEvent("UNIT_MAXPOWER")
 	mainFrame.powerFrame:RegisterEvent("UNIT_DISPLAYPOWER")
 	--Create Frames
-	mainFrame.powerFrame.base = KH_UI:CreateImageFrame(55, 16, mainFrame.powerFrame, "TOPRIGHT", 155, -32, 8, {x = 4 / 256, xw = 58 / 256, y = 1.2 / 256, yh = 16 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
-	mainFrame.powerFrame.bg = KH_UI:CreateImageFrame(107, 32, mainFrame.powerFrame.base, "BOTTOMRIGHT", -54, -0, 8, {x = 149 / 256, xw = 256 / 256, y = 18 / 256, yh = 50 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
-	mainFrame.powerFrame.power = KH_UI:CreateImageFrame(99, 26, mainFrame.powerFrame.bg, "BOTTOMRIGHT", -3, 3, 9, {x = 157 / 256, xw = 256 / 256, y = 52 / 256, yh = 78 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
-	mainFrame.powerFrame.powerVal = KH_UI:CreateTextFrame("Power", 0, 0, 1, 1, 0.45, "Right", mainFrame.powerFrame.base, "TOPLEFT", 9, "SystemFont_OutlineThick_Huge2")
-
+	if (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
+		mainFrame.powerFrame.base = KH_UI:CreateImageFrame(55, 16, mainFrame.powerFrame, "TOPRIGHT", 155, -32, 8, {x = 4 / 256, xw = 58 / 256, y = 1.2 / 256, yh = 16 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+		mainFrame.powerFrame.bg = KH_UI:CreateImageFrame(107, 32, mainFrame.powerFrame.base, "BOTTOMRIGHT", -54, -0, 8, {x = 149 / 256, xw = 256 / 256, y = 18 / 256, yh = 50 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+		mainFrame.powerFrame.power = KH_UI:CreateImageFrame(99, 26, mainFrame.powerFrame.bg, "BOTTOMRIGHT", -3, 3, 9, {x = 1 / 256, xw = 100 / 256, y = 199 / 256, yh = 225 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+		mainFrame.powerFrame.powerVal = KH_UI:CreateTextFrame("Power", 0, 0, 1, 1, 0.45, "Right", mainFrame.powerFrame.base, "TOPLEFT", 9, "SystemFont_OutlineThick_Huge2")
+		mainFrame.powerFrame.power.mask = mainFrame.powerFrame.power:CreateMaskTexture()
+		mainFrame.powerFrame.power.mask:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar_left_mask", "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
+		mainFrame.powerFrame.power.mask:SetSize(128, 32)
+		mainFrame.powerFrame.power.mask:SetPoint("TOPRIGHT", 28, 1)
+		mainFrame.powerFrame.power.texture:AddMaskTexture(mainFrame.powerFrame.power.mask)
+	elseif (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Left") then
+		mainFrame.powerFrame.base = KH_UI:CreateImageFrame(55, 16, mainFrame.powerFrame, "BOTTOMRIGHT", 155, 16, 8, {x = 4 / 256, xw = 58 / 256, y = 1.2 / 256, yh = 16 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+		mainFrame.powerFrame.bg = KH_UI:CreateImageFrame(107, 32, mainFrame.powerFrame.base, "BOTTOMRIGHT", -54, -0, 8, {x = 149 / 256, xw = 256 / 256, y = 18 / 256, yh = 50 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+		mainFrame.powerFrame.power = KH_UI:CreateImageFrame(99, 26, mainFrame.powerFrame.bg, "BOTTOMRIGHT", -3, 3, 9, {x = 1 / 256, xw = 100 / 256, y = 199 / 256, yh = 225 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+		mainFrame.powerFrame.powerVal = KH_UI:CreateTextFrame("Power", 0, 0, 1, 1, 0.45, "Right", mainFrame.powerFrame.base, "TOPLEFT", 9, "SystemFont_OutlineThick_Huge2")
+		mainFrame.powerFrame.power.mask = mainFrame.powerFrame.power:CreateMaskTexture()
+		mainFrame.powerFrame.power.mask:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar_left_mask", "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
+		mainFrame.powerFrame.power.mask:SetSize(128, 32)
+		mainFrame.powerFrame.power.mask:SetPoint("TOPRIGHT", 28, 1)
+		mainFrame.powerFrame.power.texture:AddMaskTexture(mainFrame.powerFrame.power.mask)
+	elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Right") then
+		mainFrame.powerFrame.base = KH_UI:CreateImageFrame(55, 16, mainFrame.powerFrame, "TOPLEFT", -170, -32, 8, {x = 1 / 256, xw = 55 / 256, y = 1.2 / 256, yh = 16 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+		mainFrame.powerFrame.bg = KH_UI:CreateImageFrame(107, 32, mainFrame.powerFrame.base, "BOTTOMLEFT", 54, -0, 8, {x = 1 / 256, xw = 108 / 256, y = 18 / 256, yh = 50 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+		mainFrame.powerFrame.power = KH_UI:CreateImageFrame(99, 26, mainFrame.powerFrame.bg, "BOTTOMLEFT", 3, 3, 9, {x = 1 / 256, xw = 100 / 256, y = 172 / 256, yh = 197 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+		mainFrame.powerFrame.powerVal = KH_UI:CreateTextFrame("Power", 0, 0, 1, 1, 0.45, "Left", mainFrame.powerFrame.base, "TOPRIGHT", 9, "SystemFont_OutlineThick_Huge2")
+		mainFrame.powerFrame.power.mask = mainFrame.powerFrame.power:CreateMaskTexture()
+		mainFrame.powerFrame.power.mask:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar_right_mask", "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
+		mainFrame.powerFrame.power.mask:SetSize(128, 32)
+		mainFrame.powerFrame.power.mask:SetPoint("TOPLEFT", -1, 1)
+		mainFrame.powerFrame.power.texture:AddMaskTexture(mainFrame.powerFrame.power.mask)
+	elseif(KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
+		mainFrame.powerFrame.base = KH_UI:CreateImageFrame(55, 16, mainFrame.powerFrame, "BOTTOMLEFT", -170, 16, 8, {x = 1 / 256, xw = 55 / 256, y = 1.2 / 256, yh = 16 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+		mainFrame.powerFrame.bg = KH_UI:CreateImageFrame(107, 32, mainFrame.powerFrame.base, "BOTTOMLEFT", 54, -0, 8, {x = 1 / 256, xw = 108 / 256, y = 18 / 256, yh = 50 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+		mainFrame.powerFrame.power = KH_UI:CreateImageFrame(99, 26, mainFrame.powerFrame.bg, "BOTTOMLEFT", 3, 3, 9, {x = 1 / 256, xw = 100 / 256, y = 172 / 256, yh = 197 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+		mainFrame.powerFrame.powerVal = KH_UI:CreateTextFrame("Power", 0, 0, 1, 1, 0.45, "Left", mainFrame.powerFrame.base, "TOPRIGHT", 9, "SystemFont_OutlineThick_Huge2")
+		mainFrame.powerFrame.power.mask = mainFrame.powerFrame.power:CreateMaskTexture()
+		mainFrame.powerFrame.power.mask:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar_right_mask", "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
+		mainFrame.powerFrame.power.mask:SetSize(128, 32)
+		mainFrame.powerFrame.power.mask:SetPoint("TOPLEFT", -1, 1)
+		mainFrame.powerFrame.power.texture:AddMaskTexture(mainFrame.powerFrame.power.mask)
+	end
+	
 	--Set power color
 	local powerType, powerToken, altR, altG, altB = UnitPowerType(mainFrame.unit)
 	local info, r, g, b = PowerBarColor[powerToken], 0, 0, 0
@@ -125,10 +162,16 @@ local function Create_Power_Bar(mainFrame)
 				local power = UnitPower(unit)
 				local maxPower = UnitPowerMax(unit)
 				local powerPct = power / maxPower
-				if (powerPct * 99 >= 0.5) then
+				if (powerPct * 100 >= 0.5) then
 					self.power:Show()
-					self.power:SetWidth(powerPct * 99)
-					self.power.texture:SetTexCoord((256 - powerPct * 99) / 256, 256 / 256, 52 / 256, 78 / 256)
+					self.power:SetWidth(powerPct * 100)
+					if (KH_UI_Settings[mainFrame.settings].orientation == "Top Left" or KH_UI_Settings[mainFrame.settings].orientation == "Bottom Left") then
+						--self.power.texture:SetTexCoord((256 - powerPct * 99) / 256, 256 / 256, 52 / 256, 78 / 256)
+						self.power.texture:SetTexCoord(1/256, 199/256, -6/256, 225/256, 100/256, 199/256, 100/256, 225/256)
+					elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Right" or KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
+						--self.power.texture:SetTexCoord(1 / 256, (1 + powerPct * 99) / 256, 52 / 256, 78 / 256)
+					self.power.texture:SetTexCoord(1/256, 172/256, 1/256, 198/256, 100/256, 172/256, 107/256, 198/256)
+					end
 				else
 					self.power:Hide()
 				end
@@ -144,9 +187,13 @@ local function Create_Resource_Counter(mainFrame)
 		local self = mainFrame.resourceFrame
 		local radius = 26
 		for i = 1, self.currentValue do
-			local pointx = math.cos(self.orb[i].angle * math.pi / 180) * radius * 0.8 + (math.sin(-self.orb[i].angle * math.pi / 180) * radius * 0.25)
+			local dir = -self.orb[i].angle
+			if (KH_UI_Settings[mainFrame.settings].orientation == "Top Right" or KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
+				dir = self.orb[i].angle
+			end
+			local pointx = math.cos(self.orb[i].angle * math.pi / 180) * radius * 0.8 + (math.sin(dir * math.pi / 180) * radius * 0.20)
 			local pointy = math.sin(self.orb[i].angle * math.pi / 180) * radius
-			self.orb[i].angle = self.orb[i].angle - 1.25
+			self.orb[i].angle = self.orb[i].angle - 1.5
 			if (self.orb[i].angle <= 0) then
 				self.orb[i].angle = self.orb[i].angle + 360
 			end
@@ -179,7 +226,13 @@ local function Create_Resource_Counter(mainFrame)
 	mainFrame.resourceFrame.previousValue = -1
 	mainFrame.resourceFrame.currentValue = -1
 	mainFrame.resourceFrame.orbUpdate = UpdateOrbs
-	mainFrame.resourceFrame.bg = KH_UI:CreateImageFrame(35, 32, mainFrame.resourceFrame, "TOPLEFT", -25, -0, 26, {x = 110 / 256, xw = 145 / 256, y = 47 / 256, yh = 79 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+	if (KH_UI_Settings[mainFrame.settings].orientation == "Top Left" or KH_UI_Settings[mainFrame.settings].orientation == "Bottom Left") then
+		mainFrame.resourceFrame.side = 1
+		mainFrame.resourceFrame.bg = KH_UI:CreateImageFrame(35, 32, mainFrame.resourceFrame, "TOPLEFT", -25, 0, 26, {x = 110 / 256, xw = 145 / 256, y = 47 / 256, yh = 79 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+	elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Right" or KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
+		mainFrame.resourceFrame.side = 2
+		mainFrame.resourceFrame.bg = KH_UI:CreateImageFrame(35, 32, mainFrame.resourceFrame, "TOPRIGHT", 130, 0, 26, {x = 111 / 256, xw = 146 / 256, y = 10 / 256, yh = 42 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+	end
 	mainFrame.resourceFrame.orb = {}
 	for i = 1, 9 do
 		mainFrame.resourceFrame.orb[i] = KH_UI:CreateImageFrame(10, 10, mainFrame.resourceFrame.bg, "CENTER", 0, 0, 28, {x = 100 / 256, xw = 110 / 256, y = 5 / 256, yh = 15 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
@@ -203,7 +256,11 @@ local function Create_Resource_Counter(mainFrame)
 	mainFrame.resourceFrame:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
 	mainFrame.resourceFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
 	mainFrame.resourceFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-	mainFrame.resourceFrame.value = KH_UI:CreateImageFrame(26, 28, mainFrame.resourceFrame.bg, "TOPLEFT", 6, -2, 27, mainFrame.resourceFrame.number[9][1], "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+	if (mainFrame.resourceFrame.side == 1) then
+		mainFrame.resourceFrame.value = KH_UI:CreateImageFrame(26, 28, mainFrame.resourceFrame.bg, "TOPLEFT", 6, -2, 27, mainFrame.resourceFrame.number[9][mainFrame.resourceFrame.side], "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+	elseif(mainFrame.resourceFrame.side == 2) then
+		mainFrame.resourceFrame.value = KH_UI:CreateImageFrame(26, 28, mainFrame.resourceFrame.bg, "TOPRIGHT", -6, -2, 27, mainFrame.resourceFrame.number[9][mainFrame.resourceFrame.side], "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+	end
 	mainFrame.resourceFrame.value.texture:SetVertexColor(1, 0.3, 0, 1)
 
 	mainFrame.resourceFrame:SetScript(
@@ -212,7 +269,7 @@ local function Create_Resource_Counter(mainFrame)
 			if (mainFrame.unit == "player") then
 				self.currentValue = GetComboPoints(mainFrame.unit, "target")
 				if (self.currentValue ~= self.previousValue) then
-					self.value.texture:SetTexCoord(self.number[self.currentValue][1].x, self.number[self.currentValue][1].xw, self.number[self.currentValue][1].y, self.number[self.currentValue][1].yh)
+					self.value.texture:SetTexCoord(self.number[self.currentValue][self.side].x, self.number[self.currentValue][self.side].xw, self.number[self.currentValue][self.side].y, self.number[self.currentValue][self.side].yh)
 					SetOrbs(mainFrame)
 				end
 				self.previousValue = self.currentValue
