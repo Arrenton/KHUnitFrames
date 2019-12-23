@@ -12,6 +12,7 @@ kh_main.lua
 
 modules\kh2.lua
 modules\kh2_party.lua
+modules\kh_target.lua
 modules\kh2_target.lua
 modules\targetoftarget.lua
 unitframes\player.lua
@@ -22,6 +23,7 @@ unitframes\targettarget.lua
 options\kh2_style.lua
 options\kh2_party_style.lua
 options\kh2_target_style.lua
+options\kh_target_style.lua
 options\playerframe.lua
 options\partyframe.lua
 options\targetframe.lua

@@ -113,6 +113,7 @@ function KH_UI:KH_Player_Frame_Options(panel)
 	)
 	panel.scaleSlider.inputBox:SetNumeric(false)
 	panel.scaleSlider.inputBox:SetText(KH_UI_Settings[panel.name].scale)
+	panel.scaleSlider.inputBox:SetCursorPosition(0)
 	panel.scaleSlider.tooltipText = "Sets how large the frame is."
 	_G[panel.scaleSlider:GetName() .. "Low"]:SetText("0.5") -- Sets the left-side slider text (default is "Low").
 	_G[panel.scaleSlider:GetName() .. "High"]:SetText("3") -- Sets the right-side slider text (default is "High").

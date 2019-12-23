@@ -114,12 +114,13 @@ function KH_UI:KH_Target_Frame_Options(panel)
 	)
 	panel.scaleSlider.inputBox:SetNumeric(false)
 	panel.scaleSlider.inputBox:SetText(panel.scaleSlider:GetValue() / 100)
+	panel.scaleSlider.inputBox:SetCursorPosition(0)
 	panel.scaleSlider.tooltipText = "Sets how large the frame is."
 	_G[panel.scaleSlider:GetName() .. "Low"]:SetText("0.5") -- Sets the left-side slider text (default is "Low").
 	_G[panel.scaleSlider:GetName() .. "High"]:SetText("3") -- Sets the right-side slider text (default is "High").
 	_G[panel.scaleSlider:GetName() .. "Text"]:SetText("Scale") -- Sets the "title" text (top-centre of slider).
-	if (KH_UI_Settings[panel.name].style == "KH2") then
-		KH_UI:Create_KH2_Style_Settings(panel, KH_UI.targetFrame, "target")
+	if (KH_UI_Settings[panel.name].style == "KH Target") then
+		KH_UI:Create_KH_Target_Style_Settings(panel, KH_UI.targetFrame, "target")
 	elseif (KH_UI_Settings[panel.name].style == "KH2 Target") then
 		KH_UI:Create_KH2_Target_Style_Settings(panel, KH_UI.targetFrame, "target")
 	end

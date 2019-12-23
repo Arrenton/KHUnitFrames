@@ -240,6 +240,18 @@ function KH_UI:CreateImageFrame(width, height, parent, anchor, x, y, level, texC
     return frame
 end
 
+function KH_UI:CreateColorFrame(width, height, parent, anchor, x, y, level, color)
+    frame = CreateFrame("Frame", nil, parent)
+    frame:SetWidth(width)
+    frame:SetHeight(height)
+    frame:SetFrameLevel(level)
+    frame:SetPoint(anchor, x, y)
+    frame.texture = frame:CreateTexture(nil, "BACKGROUND")
+    frame.texture:SetAllPoints()
+    frame.texture:SetColorTexture(color.r, color.g, color.b, color.a)
+    return frame
+end
+
 function KH_UI:CreateTextFrame(text, x, y, w, h, scale, align, parent, anchor, level, font)
     frame = CreateFrame("Frame", nil, parent)
     frame:SetWidth(w)

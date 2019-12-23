@@ -69,7 +69,7 @@ function KH_UI:General_Options(panel)
 		140,
 		0,
 		110,
-		{"KH2","KH2 Party","KH2 Target"},
+		{"KH Target","KH2 Target"},
 		function(value)
 			KH_UI_Settings["Target Frame"].style = value
 		end

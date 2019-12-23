@@ -133,8 +133,8 @@ local function create_portrait(mainFrame)
     --PvP Icon----------
     --------------------
     mainFrame.portrait.pvpIcon = CreateFrame("Frame", nil, mainFrame.portrait)
-    mainFrame.portrait.pvpIcon:SetSize(32, 32)
-    mainFrame.portrait.pvpIcon:SetPoint("TopLeft", -24, -24)
+    mainFrame.portrait.pvpIcon:SetSize(42, 42)
+    mainFrame.portrait.pvpIcon:SetPoint("TopLeft", -14, -12)
     mainFrame.portrait.pvpIcon.texture = mainFrame.portrait.pvpIcon:CreateTexture(nil, "BACKGROUND")
     mainFrame.portrait.pvpIcon.texture:SetPoint("CENTER", 0, 0)
     mainFrame.portrait.pvpIcon.texture:SetAllPoints()
@@ -279,16 +279,16 @@ local function CreateBarPretties(mainFrame)
     mainFrame.powerFrame.power.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
     mainFrame.powerFrame.power.texture:SetTexCoord(89.5 / 128, 89.5 / 128, 49 / 64, 59 / 64)
 
-    -------Edge
+    -------Edge{x = 84 / 128, xw = 86.75 / 128, y = 19 / 64, yh = 33 / 64}
     mainFrame.powerFrame.edge = CreateFrame("Frame", nil, mainFrame.powerFrame.back)
     mainFrame.powerFrame.edge:SetWidth(3)
-    mainFrame.powerFrame.edge:SetHeight(15)
+    mainFrame.powerFrame.edge:SetHeight(14)
     mainFrame.powerFrame.edge:SetFrameLevel(3)
-    mainFrame.powerFrame.edge:SetPoint("TOPRight", 3, 0)
+    mainFrame.powerFrame.edge:SetPoint("TOPRight", 3, -1)
     mainFrame.powerFrame.edge.texture = mainFrame.powerFrame.edge:CreateTexture(nil, "BACKGROUND")
     mainFrame.powerFrame.edge.texture:SetAllPoints()
     mainFrame.powerFrame.edge.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
-    mainFrame.powerFrame.edge.texture:SetTexCoord(84.5 / 128, 86.75 / 128, 19 / 64, 33 / 64)
+    mainFrame.powerFrame.edge.texture:SetTexCoord(84 / 128, 86.75 / 128, 19 / 64, 33 / 64)
 
     --------------------PP Value----------------
     mainFrame.powerFrame.powerVal = CreateFrame("Frame", nil, mainFrame.powerFrame.base)

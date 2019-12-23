@@ -362,7 +362,7 @@ local function create_ring_pretties(mainFrame)
 		end
 	)
 	if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
-		mainFrame.healthFrame.healthVal:SetPoint("left", -58, -18)
+		mainFrame.healthFrame.healthVal:SetPoint("left", -53, -22)
 	elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
 		mainFrame.healthFrame.healthVal:SetPoint("right", 58, 18)
 	elseif (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Left") then
@@ -635,20 +635,23 @@ local function Update(self, elapsed)
 			self.yvel = self.yvel * 0.94
 		end
 		--Low HP Animation
-		if self.unitHealth <= self.unitHealthMax / 4 then
+		if self.unitHealth <= self.unitHealthMax / 4 and not UnitIsDeadOrGhost(self.unit) then
 			if self.lowHealthDirection == 0 then
 				self.lowHealthAlpha = self.lowHealthAlpha + 0.009
-				if self.lowHealthAlpha >= 0.60 then
+				if self.lowHealthAlpha >= 0.40 then
 					self.lowHealthDirection = 1
 				end
 			else
 				self.lowHealthAlpha = self.lowHealthAlpha - 0.009
-				if self.lowHealthAlpha <= 0.1 then
+				if self.lowHealthAlpha <= 0.05 then
 					self.lowHealthDirection = 0
 				end
 			end
-		else
-			self.lowHealthAlpha = 0
+		elseif self.lowHealthAlpha > 0 then
+			self.lowHealthAlpha = self.lowHealthAlpha - 0.009
+			if self.lowHealthAlpha <= 0 then
+				self.lowHealthAlpha = 0
+			end
 			self.lowHealthDirection = 0
 		end
 		--Resource bar orbs

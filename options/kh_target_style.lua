@@ -1,4 +1,4 @@
-function KH_UI:Create_KH2_Target_Style_Settings(panel, frame, type)
+function KH_UI:Create_KH_Target_Style_Settings(panel, frame, type)
     --------------------
     --Health Container--
     --------------------
@@ -101,7 +101,7 @@ function KH_UI:Create_KH2_Target_Style_Settings(panel, frame, type)
     )
     panel.healthBox.maxLength.tooltip = CreateFrame("Button", nil, panel.healthBox, "UIPanelGoldButtonTemplate")
     panel.healthBox.maxLength.tooltip:SetAlpha(0)
-    panel.healthBox.maxLength.tooltip.tooltipText = "Sets the maximum amount of extra bars health can extend"
+    panel.healthBox.maxLength.tooltip.tooltipText = "Sets the maximum amount of extra bars health can extend. Limit 6."
     panel.healthBox.maxLength.tooltip:SetSize(80, 12)
     panel.healthBox.maxLength.tooltip:SetPoint("TOPRIGHT", panel.healthBox, "TOPRIGHT", -12, -12)
     GameTooltip_AddNewbieTip(
@@ -150,7 +150,7 @@ function KH_UI:Create_KH2_Target_Style_Settings(panel, frame, type)
         CreateFrame("Button", nil, panel.healthBox.barGrowth, "UIPanelGoldButtonTemplate")
     panel.healthBox.barGrowth.tooltip:SetAlpha(0)
     panel.healthBox.barGrowth.tooltip.tooltipText =
-        "Sets the rate at which the bar will extend. (5000 = 5 pixels every 1 HP, 1000 = 1 pixel every 1 HP, 200 = 1 pixel every 5 HP)"
+        "Sets the rate at which the stretch bar will extend. (5000 = 5 pixels every 1 HP, 1000 = 1 pixel every 1 HP, 200 = 1 pixel every 5 HP)"
     panel.healthBox.barGrowth.tooltip:SetSize(136, 12)
     panel.healthBox.barGrowth.tooltip:SetPoint("TOPLEFT", panel.healthBox.barGrowth, "TOPLEFT", -12, 4)
     GameTooltip_AddNewbieTip(
@@ -285,10 +285,10 @@ function KH_UI:Create_KH2_Target_Style_Settings(panel, frame, type)
             end
             KH_UI_Settings[panel.name].manaLengthRate = max
             if (type == "player" or type == "target") then
-                frame.Update_Health()
+                frame.Update_Power()
             elseif (type == "party") then
                 for i in pairs(frame) do
-                    frame[i].Update_Health()
+                    frame[i].Update_Power()
                 end
             end
             panel.powerBox.barGrowth.inputBox:SetText(KH_UI_Settings[panel.name].manaLengthRate)
@@ -300,7 +300,7 @@ function KH_UI:Create_KH2_Target_Style_Settings(panel, frame, type)
     panel.powerBox.barGrowth.tooltip.tooltipText =
         "Sets the rate at which the bar will extend. (5000 = 5 pixels every 1 PP, 1000 = 1 pixel every 1 PP, 200 = 1 pixel every 5 PP)"
     panel.powerBox.barGrowth.tooltip:SetSize(136, 12)
-    panel.powerBox.barGrowth.tooltip:SetPoint("TOPRight", panel.powerBox, "TOPRight", -12, -4)
+    panel.powerBox.barGrowth.tooltip:SetPoint("TOPRight", panel.powerBox, "TOPRight", -12, -8)
     GameTooltip_AddNewbieTip(
         panel.powerBox.barGrowth.tooltip,
         panel.powerBox.barGrowth.tooltip.tooltipText,
