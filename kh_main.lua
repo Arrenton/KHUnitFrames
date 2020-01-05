@@ -28,7 +28,7 @@ KH_UI_Settings_Defaults = {
         manaLengthRate = 100,
         manaLengthMax = 5360,
         displayManaValue = true,
-        ringMaxPower = 300,
+        ringMaxPower = 3000,
         displayPowerValue = true,
         scale = 1,
         style = "KH2",
@@ -49,7 +49,7 @@ KH_UI_Settings_Defaults = {
         manaLengthRate = 100,
         manaLengthMax = 5360,
         displayManaValue = true,
-        ringMaxPower = 300,
+        ringMaxPower = 3000,
         displayPowerValue = true,
         scale = 1,
         style = "KH2",
@@ -86,7 +86,7 @@ KH_UI_Settings_Defaults = {
         manaLengthRate = 80,
         manaLengthMax = 3000,
         displayManaValue = true,
-        ringMaxPower = 300,
+        ringMaxPower = 3000,
         displayPowerValue = true,
         scale = 1,
         style = "KH2 Target",
@@ -107,7 +107,7 @@ KH_UI_Settings_Defaults = {
         manaLengthRate = 150,
         manaLengthMax = 3000,
         displayManaValue = true,
-        ringMaxPower = 300,
+        ringMaxPower = 3000,
         displayPowerValue = true,
         scale = 1,
         style = "Target of Target",
@@ -131,7 +131,7 @@ if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
             manaLengthRate = 100,
             manaLengthMax = 5360,
             displayManaValue = true,
-            ringMaxPower = 300,
+            ringMaxPower = 3000,
             displayPowerValue = true,
             scale = 1,
             style = "KH2",
@@ -152,7 +152,7 @@ if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
             manaLengthRate = 100,
             manaLengthMax = 5360,
             displayManaValue = true,
-            ringMaxPower = 300,
+            ringMaxPower = 3000,
             displayPowerValue = true,
             scale = 1,
             style = "KH2",
@@ -189,7 +189,7 @@ if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
             manaLengthRate = 81,
             manaLengthMax = 3000,
             displayManaValue = true,
-            ringMaxPower = 300,
+            ringMaxPower = 3000,
             displayPowerValue = true,
             scale = 1,
             style = "KH2 Target",
@@ -210,7 +210,7 @@ if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
             manaLengthRate = 150,
             manaLengthMax = 3000,
             displayManaValue = true,
-            ringMaxPower = 300,
+            ringMaxPower = 3000,
             displayPowerValue = true,
             scale = 1,
             style = "Target of Target",
@@ -560,9 +560,9 @@ function KH_UI:cre_segment_textures(ring_config, self, mainFrame)
     t2:SetVertexColor(ring_config.segment.color.r, ring_config.segment.color.g, ring_config.segment.color.b, ring_config.segment.color.a)
     t2:SetBlendMode("blend")
     if direction == 1 then
-        t2:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\slicer1")
+        t2:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\" .. ring_config.global.gfx_slicer .. "1")
     else
-        t2:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\slicer0")
+        t2:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\" .. ring_config.global.gfx_slicer .. "0")
     end
     t2:Hide()
 
@@ -664,9 +664,9 @@ function KH_UI:update_ring_segments(mainFrame)
             end
             f[i].direction = ring_config[k].global.fill_direction
             if f[i].direction == 1 then
-                f[i].slicer:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\slicer1")
+                f[i].slicer:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\" .. ring_config.global.gfx_slicer .. "1")
             else
-                f[i].slicer:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\slicer0")
+                f[i].slicer:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\".. ring_config.global.gfx_slicer .. "0")
             end
         end
     end
@@ -678,9 +678,15 @@ function KH_UI:calc_ring_health(self, ring_config, unit, type, mainFrame)
 
     if type == "lasthealth" then
         if mainFrame.lastHealth > UnitHealth(unit) then
-            mainFrame.yvel = 2
-            mainFrame.offsety = 0
-            self.alpha = 1.2
+            if (KH_UI_Settings[mainFrame.settings].style == "KH2") then
+                mainFrame.yvel = 2
+                mainFrame.offsety = 0
+                self.alpha = 1.2
+            elseif (KH_UI_Settings[mainFrame.settings].style == "KH1") then
+                mainFrame.yvel = 0
+                mainFrame.offsety = 30
+                self.alpha = 1
+            end
             mainFrame.lastTimer = 3
             mainFrame.damageHealth = mainFrame.lastHealth
         end
@@ -689,11 +695,14 @@ function KH_UI:calc_ring_health(self, ring_config, unit, type, mainFrame)
         mainFrame.lastHealth = UnitHealth(unit)
     end
 
-    if (KH_UI_Settings[mainFrame.settings].style == "KH2") then
+    if (KH_UI_Settings[mainFrame.settings].style == "KH2" or KH_UI_Settings[mainFrame.settings].style == "KH1") then
         perc = (perc * mainFrame.healthMaxMult) * (max / KH_UI_Settings[mainFrame.settings].ringMaxHealth)
 
         if type == "maxhealth" or type == "maxhealthbg" then
             perc = (max / KH_UI_Settings[mainFrame.settings].ringMaxHealth) * 100 * mainFrame.healthMaxMult
+        end
+        if (type == "maxhealth" and KH_UI_Settings[mainFrame.settings].style == "KH1") then
+            perc = (max / KH_UI_Settings[mainFrame.settings].ringMaxHealth) * 100 * mainFrame.healthMaxMult + 1
         end
     elseif (KH_UI_Settings[mainFrame.settings].style == "KH2 Party") then
         if type == "maxhealth" or type == "maxhealthbg" then
@@ -749,7 +758,7 @@ function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
     local powerType, powerToken, altR, altG, altB = UnitPowerType(unit)
     local act, max, perc, perc_per_seg = UnitPower(unit, powerType), UnitPowerMax(unit, powerType), (UnitPower(unit, powerType) / UnitPowerMax(unit, powerType)) * 100, 100 / ring_config.global.segments_used
     local anz_seg, sum_radius = ring_config.global.segments_used, ring_config.global.segments_used * 90
-    local info, r, g, b = PowerBarColor[powerToken], 0, 0, 0
+    local info, r, g, b = PowerBarColor[powerToken], 1, 0, 0
 
     if (info) then
         --The PowerBarColor takes priority
@@ -762,23 +771,32 @@ function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
         r, g, b = altR * 0.75, altG * 0.75, altB * 0.75
     end
 
-    if (KH_UI_Settings[mainFrame.settings].style == "KH2") then
+    if (KH_UI_Settings[mainFrame.settings].style == "KH1") then
         perc = perc * (max / KH_UI_Settings[mainFrame.settings].ringMaxPower)
     end
 
     if type == "maxpower" then
-        if (KH_UI_Settings[mainFrame.settings].style == "KH2") then
+        if (KH_UI_Settings[mainFrame.settings].style == "KH1") then
+            perc = (max / KH_UI_Settings[mainFrame.settings].ringMaxPower) * 100 + 0.75
+        elseif (KH_UI_Settings[mainFrame.settings].style == "KH2 Party") then
+            perc = 100
+        end
+        mainFrame.unitPowerMax = max
+    elseif type == "maxpowerbg" then
+        if (KH_UI_Settings[mainFrame.settings].style == "KH1") then
             perc = (max / KH_UI_Settings[mainFrame.settings].ringMaxPower) * 100
         elseif (KH_UI_Settings[mainFrame.settings].style == "KH2 Party") then
             perc = 100
         end
         mainFrame.unitPowerMax = max
-    elseif type == "power" then
-        for i = 1, anz_seg do
-            self.segments[i].square1:SetVertexColor(r, g, b, 1)
-            self.segments[i].square2:SetVertexColor(r, g, b, 1)
-            self.segments[i].slicer:SetVertexColor(r, g, b, 1)
-            self.segments[i].fullsegment:SetVertexColor(r, g, b, 1)
+    elseif (type == "power") then
+        if (KH_UI_Settings[mainFrame.settings].style ~= "KH1") then
+            for i = 1, anz_seg do
+                self.segments[i].square1:SetVertexColor(r, g, b, 1)
+                self.segments[i].square2:SetVertexColor(r, g, b, 1)
+                self.segments[i].slicer:SetVertexColor(r, g, b, 1)
+                self.segments[i].fullsegment:SetVertexColor(r, g, b, 1)
+            end
         end
         mainFrame.unitPower = act
     end
@@ -836,8 +854,12 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
         parent = mainFrame.healthFrame
     end
 
-    if ring_config.global.ringtype == "power" or ring_config.global.ringtype == "maxpower" then
-        parent = mainFrame.powerFrame
+    if ring_config.global.ringtype == "power" or ring_config.global.ringtype == "maxpower" or ring_config.global.ringtype == "maxpowerbg" then
+        if (KH_UI_Settings[mainFrame.settings].style == "KH1") then
+            parent = mainFrame.manaFrame
+        elseif (KH_UI_Settings[mainFrame.settings].style == "KH2 Party") then
+            parent = mainFrame.powerFrame
+        end
     end
 
     ring_object = KH_UI:cre_ring_holder(ring_config, parent)
@@ -863,7 +885,7 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
         ring_object:RegisterEvent("PLAYER_ENTERING_WORLD")
     end
 
-    if ring_config.global.ringtype == "maxpower" then
+    if ring_config.global.ringtype == "maxpower" or ring_config.global.ringtype == "maxpowerbg" then
         ring_object:SetScript(
             "OnEvent",
             function(self, event, unit)
@@ -919,10 +941,12 @@ function KH_UI:create_portrait(mainFrame)
     SetPortraitTexture(mainFrame.portrait.redTexture, mainFrame.unit)
     mainFrame.portrait:SetScript(
         "OnEvent",
-        function(self)
+        function(self, event)
             SetPortraitTexture(self.Texture, mainFrame.unit)
             SetPortraitTexture(self.redTexture, mainFrame.unit)
-            mainFrame.Update_FrameInfo()
+            if (event ~= "PLAYER_ENTER_COMBAT" and not UnitAffectingCombat("player")) then
+                mainFrame.Update_FrameInfo()
+            end
             if mainFrame.unit == "player" then
                 if (UnitIsGroupLeader("player")) then
                     mainFrame.portrait.leaderFrame:Show()
@@ -1040,55 +1064,24 @@ function KH_UI:create_portrait(mainFrame)
     --------------------
     --State-------------
     --------------------
-    mainFrame.portrait.stateFrame = CreateFrame("Frame", nil, mainFrame.portrait.levelFrame)
-    mainFrame.portrait.stateFrame:SetSize(32, 32)
-    mainFrame.portrait.stateFrame:SetPoint("CENTER", 1, 0)
-    mainFrame.portrait.stateFrame.texture = mainFrame.portrait.stateFrame:CreateTexture(nil, "BACKGROUND")
-    mainFrame.portrait.stateFrame.texture:SetPoint("TOPLEFT", 0, 0)
-    mainFrame.portrait.stateFrame.texture:SetAllPoints()
-    mainFrame.portrait.stateFrame.texture:SetTexture("Interface\\CharacterFrame\\UI-StateIcon")
+    mainFrame.portrait.stateFrame = KH_UI:CreateImageFrame(32, 32, mainFrame.portrait.levelFrame, "CENTER", 1, 0, 0, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\CharacterFrame\\UI-StateIcon")
     --------------------
     --Party Leader------
     --------------------
-    mainFrame.portrait.leaderFrame = CreateFrame("Frame", nil, mainFrame.portrait)
-    mainFrame.portrait.leaderFrame:SetSize(24, 24)
-    mainFrame.portrait.leaderFrame:SetPoint("TopLeft", 0, 0)
-    mainFrame.portrait.leaderFrame.texture = mainFrame.portrait.leaderFrame:CreateTexture(nil, "BACKGROUND")
-    mainFrame.portrait.leaderFrame.texture:SetPoint("CENTER", 24, 24)
-    mainFrame.portrait.leaderFrame.texture:SetAllPoints()
-    mainFrame.portrait.leaderFrame.texture:SetTexture("Interface\\GROUPFRAME\\UI-Group-LeaderIcon")
+    mainFrame.portrait.leaderFrame = KH_UI:CreateImageFrame(24, 24, mainFrame.portrait, "TopLeft", 24, 24, 0, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\GROUPFRAME\\UI-Group-LeaderIcon")
     --------------------
     --Master Loot------
     --------------------
-    mainFrame.portrait.masterLootFrame = CreateFrame("Frame", nil, mainFrame.portrait)
-    mainFrame.portrait.masterLootFrame:SetSize(24, 24)
-    mainFrame.portrait.masterLootFrame:SetPoint("TopLeft", 64, -6)
-    mainFrame.portrait.masterLootFrame.texture = mainFrame.portrait.masterLootFrame:CreateTexture(nil, "BACKGROUND")
-    mainFrame.portrait.masterLootFrame.texture:SetPoint("CENTER", 16, 16)
-    mainFrame.portrait.masterLootFrame.texture:SetAllPoints()
-    mainFrame.portrait.masterLootFrame.texture:SetTexture("Interface\\GroupFrame\\UI-Group-MasterLooter")
-
+    mainFrame.portrait.masterLootFrame = KH_UI:CreateImageFrame(24, 24, mainFrame.portrait, "TopLeft", 80, 10, 0, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\GroupFrame\\UI-Group-MasterLooter")
     --------------------
     --PvP Icon----------
     --------------------
-    mainFrame.portrait.pvpIcon = CreateFrame("Frame", nil, mainFrame.portrait)
-    mainFrame.portrait.pvpIcon:SetSize(64, 64)
-    mainFrame.portrait.pvpIcon:SetPoint("TopLeft", -24, -24)
-    mainFrame.portrait.pvpIcon.texture = mainFrame.portrait.pvpIcon:CreateTexture(nil, "BACKGROUND")
-    mainFrame.portrait.pvpIcon.texture:SetPoint("CENTER", 0, 0)
-    mainFrame.portrait.pvpIcon.texture:SetAllPoints()
-    mainFrame.portrait.pvpIcon.texture:SetTexture("Interface\\TargetingFrame\\UI-PVP-HORDE")
+    mainFrame.portrait.pvpIcon = KH_UI:CreateImageFrame(64, 64, mainFrame.portrait, "TopLeft", -24, -24, 0, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\TargetingFrame\\UI-PVP-HORDE")
 
     -----------------------------
     --Disconnected Icon----------
     -----------------------------
-    mainFrame.portrait.disconnectFrame = CreateFrame("Frame", nil, mainFrame.portrait)
-    mainFrame.portrait.disconnectFrame:SetSize(100, 100)
-    mainFrame.portrait.disconnectFrame:SetPoint("left", 0, 0)
-    mainFrame.portrait.disconnectFrame.texture = mainFrame.portrait.disconnectFrame:CreateTexture(nil, "BACKGROUND")
-    mainFrame.portrait.disconnectFrame.texture:SetPoint("CENTER", 0, 0)
-    mainFrame.portrait.disconnectFrame.texture:SetAllPoints()
-    mainFrame.portrait.disconnectFrame.texture:SetTexture("Interface\\CharacterFrame\\Disconnect-Icon")
+    mainFrame.portrait.disconnectFrame = KH_UI:CreateImageFrame(100, 100, mainFrame.portrait, "left", 0, 0, 0, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\CharacterFrame\\Disconnect-Icon")
     --[[------------------
 	--Role--------------
 	--------------------

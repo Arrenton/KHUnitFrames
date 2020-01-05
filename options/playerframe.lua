@@ -120,5 +120,7 @@ function KH_UI:KH_Player_Frame_Options(panel)
 	_G[panel.scaleSlider:GetName() .. "Text"]:SetText("Scale") -- Sets the "title" text (top-centre of slider).
 	if (KH_UI_Settings[panel.name].style == "KH2") then
 		KH_UI:Create_KH2_Style_Settings(panel, KH_UI.playerFrame, "player")
+	elseif (KH_UI_Settings[panel.name].style == "KH1") then
+		KH_UI:Create_KH1_Style_Settings(panel, KH_UI.playerFrame, "player")
 	end
 end

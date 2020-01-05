@@ -2,6 +2,7 @@ local ring_table = {
 	[1] = {
 		global = {
 			gfx_texture = "KH2\\ring_segment",
+			gfx_slicer = "slicer",
 			segments_used = 3,
 			start_segment = 1,
 			fill_direction = 1,
@@ -17,6 +18,7 @@ local ring_table = {
 	[2] = {
 		global = {
 			gfx_texture = "KH2\\ring_segment",
+			gfx_slicer = "slicer",
 			segments_used = 3,
 			start_segment = 1,
 			fill_direction = 1,
@@ -32,6 +34,7 @@ local ring_table = {
 	[3] = {
 		global = {
 			gfx_texture = "KH2\\ring_segment",
+			gfx_slicer = "slicer",
 			segments_used = 3,
 			start_segment = 1,
 			fill_direction = 1,
@@ -47,6 +50,7 @@ local ring_table = {
 	[4] = {
 		global = {
 			gfx_texture = "KH2\\background_segment",
+			gfx_slicer = "slicer",
 			segments_used = 3,
 			start_segment = 1,
 			fill_direction = 1,
@@ -62,6 +66,7 @@ local ring_table = {
 	[5] = {
 		global = {
 			gfx_texture = "KH2\\ring_segment",
+			gfx_slicer = "slicer",
 			segments_used = 3,
 			start_segment = 1,
 			fill_direction = 1,
@@ -894,9 +899,7 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 		if (f.settings == "Party Frame") then
 			f.scale = f.scale / 2
 		end
-		f.healthFrame:SetScale(f.scale)
-		f.powerFrame:SetScale(f.scale)
-		f.manaFrame:SetScale(f.scale)
+		f:SetScale(f.scale)
 		f:SetMovable(KH_UI_Settings[f.settings].movable)
 		f.nameFrame.text:SetText(UnitName(f.unit))
 		if (KH_UI_Settings[f.settings].movable) then
@@ -1025,6 +1028,7 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 	f.manaFrame = CreateFrame("Frame", nil, f)
 	f:SetWidth(f.width)
 	f:SetHeight(f.height)
+	f:SetScale(f.scale)
 	f.healthFrame:SetWidth(f.width)
 	f.healthFrame:SetHeight(f.height)
 	f.powerFrame:SetWidth(f.width)
@@ -1033,9 +1037,6 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 	f.manaFrame:SetHeight(f.height)
 	f:ClearAllPoints()
 	f:SetPoint("TopLeft", f.posx, f.posy)
-	f.healthFrame:SetScale(f.scale)
-	f.powerFrame:SetScale(f.scale)
-	f.manaFrame:SetScale(f.scale)
 
 	f:SetScript("OnUpdate", Update)
 

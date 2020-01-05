@@ -6,7 +6,7 @@ local HEALTH_COLOR = {
     },
     [2] = {
         r = 0.0,
-        g = 0.4,
+        g = 0.7,
         b = 1.0
     },
     [3] = {
@@ -52,7 +52,7 @@ local PowerBarColor = {
         b = 0.16
     }
 }
-function create_bars(mainFrame)
+local function create_bars(mainFrame)
     mainFrame.healthFrame.bg = KH_UI:CreateColorFrame(71 + 25, 37, mainFrame.healthFrame, "TOPLEFT", -6, 6, 0, {r = 1, g = 1, b = 1, a = 0.1})
     mainFrame.healthFrame.base = KH_UI:CreateImageFrame(65, 25, mainFrame.healthFrame, "TOPLEFT", 0, 0, 1, {x = 1 / 128, xw = 66 / 128, y = 1 / 64, yh = 25.8 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH_Target\\targetTex")
     mainFrame.healthFrame.healthBg = KH_UI:CreateColorFrame(13, 25, mainFrame.healthFrame.base, "TOPLEFT", 71, 0, 1, {r = 0, g = 0, b = 0, a = 1})
@@ -71,12 +71,13 @@ function create_bars(mainFrame)
     mainFrame.healthFrame.health.texture:SetVertexColor(HEALTH_COLOR[1].r, HEALTH_COLOR[1].g, HEALTH_COLOR[1].b)
 end
 
-function create_infoFrames(mainFrame)
+local function create_infoFrames(mainFrame)
     mainFrame.nameFrame = KH_UI:CreateTextFrame("*NAME*", 0, 24, 1, 1, 0.75, "TOPLeft", mainFrame, "TOPLEFT", 4, "SystemFont_OutlineThick_Huge2")
     mainFrame.levelFrame = KH_UI:CreateTextFrame("??", -6, -2, 1, 1, 0.75, "RIGHT", mainFrame, "LEFT", 4, "SystemFont_OutlineThick_Huge2")
     mainFrame.classificationFrame = KH_UI:CreateTextFrame("Rare\nElite", -32, -24, 1, 1, 0.5, "TOP", mainFrame.levelFrame, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
     mainFrame.levelFrame.skull = KH_UI:CreateImageFrame(32, 32, mainFrame.levelFrame, "CENTER", -16, 3, 1, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\TargetingFrame\\UI-TargetingFrame-Skull")
-    mainFrame.powerFrame.powerVal = KH_UI:CreateTextFrame("???/???", -6, -2, 1, 1, 0.4, "LEFT", mainFrame.powerFrame.powerBg, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
+    mainFrame.powerFrame.powerVal = KH_UI:CreateTextFrame("???/???", 6, -2, 1, 1, 0.4, "LEFT", mainFrame.powerFrame.powerBg, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
+    mainFrame.healthFrame.healthVal = KH_UI:CreateTextFrame("???/???", 6, 16, 1, 1, 0.4, "LEFT", mainFrame.healthFrame.healthBg, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
     mainFrame.factionPvPFrame = KH_UI:CreateImageFrame(48, 48, mainFrame.levelFrame, "CENTER", -4, 22, 1, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\TargetingFrame\\UI-PVP-FFA")
     mainFrame.factionPvPFrame:Hide()
     mainFrame.factionPvPFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
@@ -227,14 +228,14 @@ function KH_UI:New_KHTargetUnitframe(unit, setting)
         else
             f.healthMaxMult = 1
         end
-        --[[if (KH_UI_Settings[f.settings].displayHealthValue) then
+        if (KH_UI_Settings[f.settings].displayHealthValue) then
             f.healthFrame.healthVal.text:SetText(unitCurrHP .. " / " .. unitHPMax)
             if not (f.healthFrame.healthVal:IsVisible()) then
                 f.healthFrame.healthVal:Show()
             end
         else
             f.healthFrame.healthVal:Hide()
-        end]]
+        end
         unitCurrHP = unitCurrHP * f.healthMaxMult
         unitHPMax = unitHPMax * f.healthMaxMult
         local extraBars = math.floor(unitCurrHP / (KH_UI_Settings[f.settings].healthLengthMax + 1))

@@ -3,6 +3,8 @@ function KH_UI:New_PlayerFrame()
         return KH_UI:New_KH2Unitframe("player", "Player Frame")
     elseif (KH_UI_Settings["Player Frame"].style == "KH2 Party") then
         return KH_UI:New_KH2PartyUnitframe("player", "Player Frame")
+    elseif (KH_UI_Settings["Player Frame"].style == "KH1") then
+        return KH_UI:New_KH1Unitframe("player", "Player Frame")
     else
         return nil
     end

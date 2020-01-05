@@ -10,6 +10,7 @@
 
 kh_main.lua
 
+modules\kh1.lua
 modules\kh2.lua
 modules\kh2_party.lua
 modules\kh_target.lua
@@ -20,6 +21,7 @@ unitframes\party.lua
 unitframes\target.lua
 unitframes\targettarget.lua
 
+options\kh1_style.lua
 options\kh2_style.lua
 options\kh2_party_style.lua
 options\kh2_target_style.lua

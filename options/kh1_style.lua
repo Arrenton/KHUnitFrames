@@ -1,4 +1,4 @@
-function KH_UI:Create_KH2_Style_Settings(panel, frame, type)
+function KH_UI:Create_KH1_Style_Settings(panel, frame, type)
     --------------------
     --Health Container--
     --------------------
@@ -197,18 +197,130 @@ function KH_UI:Create_KH2_Style_Settings(panel, frame, type)
     )
     panel.powerBox:SetBackdropColor(0, 0, 0, 0.25)
     panel.powerBox.text = panel.powerBox:CreateFontString(nil, nil, "GameFontNormal")
-    panel.powerBox.text:SetText("Power Settings")
+    panel.powerBox.text:SetText("Mana Ring Settings")
     panel.powerBox.text:SetPoint("TOP", 0, 16)
+    --------------------
+    --Mana Ring Max----
+    --------------------
+    panel.powerBox.fullRing = CreateFrame("Frame", nil, panel.powerBox)
+    panel.powerBox.fullRing:SetSize(1, 1)
+    panel.powerBox.fullRing:SetPoint("TOPLEFT", 16, -16)
+    panel.powerBox.fullRing.text = panel.powerBox.fullRing:CreateFontString(nil, nil, "GameFontWhite")
+    panel.powerBox.fullRing.text:SetText("Ring Max")
+    panel.powerBox.fullRing.text:SetPoint("LEFT", 0, 0)
+
+    panel.powerBox.fullRing.inputBox =
+        KH_UI:Create_InputBox(
+        KH_UI_Settings[panel.name].ringMaxPower,
+        panel.powerBox.fullRing,
+        "Left",
+        0,
+        -16,
+        112,
+        function()
+            local max = panel.powerBox.fullRing.inputBox:GetNumber()
+            if max < 1 then
+                max = 1
+            end
+            KH_UI_Settings[panel.name].ringMaxPower = max
+            if (type == "player" or type == "target") then
+                frame.Update_Health()
+                frame.Update_Power()
+            elseif (type == "party") then
+                for i in pairs(frame) do
+                    frame[i].Update_Health()
+                    frame[i].Update_Power()
+                end
+            end
+            panel.powerBox.fullRing.inputBox:SetText(KH_UI_Settings[panel.name].ringMaxPower)
+        end
+    )
+    panel.powerBox.fullRing.tooltip = CreateFrame("Button", nil, panel.powerBox, "UIPanelGoldButtonTemplate")
+    panel.powerBox.fullRing.tooltip:SetAlpha(0)
+    panel.powerBox.fullRing.tooltip.tooltipText = "Sets how much in mana will make the ring full (In maximum mana)"
+    panel.powerBox.fullRing.tooltip:SetSize(136, 12)
+    panel.powerBox.fullRing.tooltip:SetPoint("TOPLEFT", panel.powerBox, "TOPLEFT", 0, -12)
+    GameTooltip_AddNewbieTip(panel.powerBox.fullRing.tooltip, panel.powerBox.fullRing.tooltip.tooltipText, 1.0, 1.0, 0)
+    GameTooltip:Hide()
+    -------------------
+    --Mana Length Rate--
+    -------------------
+    panel.powerBox.manaRate = CreateFrame("Frame", nil, panel.powerBox)
+    panel.powerBox.manaRate:SetSize(1, 1)
+    panel.powerBox.manaRate:SetPoint("TOPRight", -16, -16)
+    panel.powerBox.manaRate.text = panel.powerBox.manaRate:CreateFontString(nil, nil, "GameFontWhite")
+    panel.powerBox.manaRate.text:SetText("Length Rate")
+    panel.powerBox.manaRate.text:SetPoint("Right", 0, 0)
+
+    panel.powerBox.manaRate.inputBox =
+        KH_UI:Create_InputBox(
+        KH_UI_Settings[panel.name].manaLengthRate,
+        panel.powerBox.manaRate,
+        "Right",
+        0,
+        -16,
+        112,
+        function()
+            panel.powerBox.manaRate.inputBox:ClearFocus()
+            local max = panel.powerBox.manaRate.inputBox:GetNumber()
+            if max < 1 then
+                max = 1
+            end
+            KH_UI_Settings[panel.name].manaLengthRate = max
+            panel.powerBox.manaRate.inputBox:SetText(KH_UI_Settings[panel.name].manaLengthRate)
+        end
+    )
+    panel.powerBox.manaRate.tooltip = CreateFrame("Button", nil, panel.powerBox, "UIPanelGoldButtonTemplate")
+    panel.powerBox.manaRate.tooltip:SetAlpha(0)
+    panel.powerBox.manaRate.tooltip.tooltipText = "Sets the rate at which the mana bar will extend after max ring. (5000 = 5 pixels every 1 MP, 1000 = 1 pixel every 1 MP, 200 = 1 pixel every 5 MP)"
+    panel.powerBox.manaRate.tooltip:SetSize(90, 12)
+    panel.powerBox.manaRate.tooltip:SetPoint("TOPRIGHT", panel.powerBox, "TOPRIGHT", -12, -12)
+    GameTooltip_AddNewbieTip(panel.powerBox.manaRate.tooltip, panel.powerBox.manaRate.tooltip.tooltipText, 1.0, 1.0, 0)
+    GameTooltip:Hide()
+    -------------------
+    --Mana Length Max--
+    -------------------
+    panel.powerBox.manaMax = CreateFrame("Frame", nil, panel.powerBox.fullRing)
+    panel.powerBox.manaMax:SetSize(1, 1)
+    panel.powerBox.manaMax:SetPoint("BOTTOMLEFT", 0, -38)
+    panel.powerBox.manaMax.text = panel.powerBox.manaMax:CreateFontString(nil, nil, "GameFontWhite")
+    panel.powerBox.manaMax.text:SetText("Mana Length Max")
+    panel.powerBox.manaMax.text:SetPoint("LEFT", 0, 0)
+
+    panel.powerBox.manaMax.inputBox =
+        KH_UI:Create_InputBox(
+        KH_UI_Settings[panel.name].manaLengthMax,
+        panel.powerBox.manaMax,
+        "Left",
+        0,
+        -16,
+        112,
+        function()
+            local max = panel.powerBox.manaMax.inputBox:GetNumber()
+            if max < 1 then
+                max = 1
+            end
+            KH_UI_Settings[panel.name].manaLengthMax = max
+            panel.powerBox.manaMax.inputBox:SetText(KH_UI_Settings[panel.name].manaLengthMax)
+        end
+    )
+    panel.powerBox.manaMax.tooltip = CreateFrame("Button", nil, panel.powerBox.manaMax, "UIPanelGoldButtonTemplate")
+    panel.powerBox.manaMax.tooltip:SetAlpha(0)
+    panel.powerBox.manaMax.tooltip.tooltipText = "Sets the maximum value of mana the bar will extend"
+    panel.powerBox.manaMax.tooltip:SetSize(110, 12)
+    panel.powerBox.manaMax.tooltip:SetPoint("TOPLEFT", panel.powerBox.manaMax, "TOPLEFT", 0, 6)
+    GameTooltip_AddNewbieTip(panel.powerBox.manaMax.tooltip, panel.powerBox.manaMax.tooltip.tooltipText, 1.0, 1.0, 0)
+    GameTooltip:Hide()
     --------------------------
     --Display Value Checkbox--
     --------------------------
-    panel.powerBox.displayPowerCheck = KH_UI:createCheckbutton(panel.powerBox, 12, -16, "Display Power Value")
-    panel.powerBox.displayPowerCheck.tooltip = "Displays the unit's current power value"
-    panel.powerBox.displayPowerCheck:SetChecked(KH_UI_Settings[panel.name].displayPowerValue)
+    panel.powerBox.displayPowerCheck = KH_UI:createCheckbutton(panel.powerBox.manaMax, -4, -32, "Display Mana Value")
+    panel.powerBox.displayPowerCheck.tooltip = "Displays the unit's current mana value"
+    panel.powerBox.displayPowerCheck:SetChecked(KH_UI_Settings[panel.name].displayManaValue)
     panel.powerBox.displayPowerCheck:SetScript(
         "OnClick",
         function()
-            KH_UI_Settings[panel.name].displayPowerValue = panel.powerBox.displayPowerCheck:GetChecked()
+            KH_UI_Settings[panel.name].displayManaValue = panel.powerBox.displayPowerCheck:GetChecked()
             if (panel.powerBox.displayPowerCheck:GetChecked()) then
                 PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
             else
@@ -217,7 +329,7 @@ function KH_UI:Create_KH2_Style_Settings(panel, frame, type)
         end
     )
     ------------------
-    --Mana Container--
+    --Power Container--
     ------------------
     panel.manaBox = CreateFrame("Frame", nil, panel.healthBox)
     panel.manaBox:SetSize(280, 150)
@@ -234,87 +346,18 @@ function KH_UI:Create_KH2_Style_Settings(panel, frame, type)
     )
     panel.manaBox:SetBackdropColor(0, 0, 0, 0.25)
     panel.manaBox.text = panel.manaBox:CreateFontString(nil, nil, "GameFontNormal")
-    panel.manaBox.text:SetText("Mana Settings")
+    panel.manaBox.text:SetText("Power Settings")
     panel.manaBox.text:SetPoint("TOP", 0, 16)
-    -------------------
-    --Mana Length Max--
-    -------------------
-    panel.manaBox.manaMax = CreateFrame("Frame", nil, panel.manaBox)
-    panel.manaBox.manaMax:SetSize(1, 1)
-    panel.manaBox.manaMax:SetPoint("TOPLEFT", 16, -16)
-    panel.manaBox.manaMax.text = panel.manaBox.manaMax:CreateFontString(nil, nil, "GameFontWhite")
-    panel.manaBox.manaMax.text:SetText("Length Max")
-    panel.manaBox.manaMax.text:SetPoint("LEFT", 0, 0)
-
-    panel.manaBox.manaMax.inputBox =
-        KH_UI:Create_InputBox(
-        KH_UI_Settings[panel.name].manaLengthMax,
-        panel.manaBox.manaMax,
-        "Left",
-        0,
-        -16,
-        112,
-        function()
-            local max = panel.manaBox.manaMax.inputBox:GetNumber()
-            if max < 1 then
-                max = 1
-            end
-            KH_UI_Settings[panel.name].manaLengthMax = max
-            panel.manaBox.manaMax.inputBox:SetText(KH_UI_Settings[panel.name].manaLengthMax)
-        end
-    )
-    panel.manaBox.manaMax.tooltip = CreateFrame("Button", nil, panel.manaBox, "UIPanelGoldButtonTemplate")
-    panel.manaBox.manaMax.tooltip:SetAlpha(0)
-    panel.manaBox.manaMax.tooltip.tooltipText = "Sets the maximum value of mana the bar will extend"
-    panel.manaBox.manaMax.tooltip:SetSize(136, 12)
-    panel.manaBox.manaMax.tooltip:SetPoint("TOPLEFT", panel.manaBox, "TOPLEFT", 0, -12)
-    GameTooltip_AddNewbieTip(panel.manaBox.manaMax.tooltip, panel.manaBox.manaMax.tooltip.tooltipText, 1.0, 1.0, 0)
-    GameTooltip:Hide()
-    -------------------
-    --Mana Length Rate--
-    -------------------
-    panel.manaBox.manaRate = CreateFrame("Frame", nil, panel.manaBox)
-    panel.manaBox.manaRate:SetSize(1, 1)
-    panel.manaBox.manaRate:SetPoint("TOPRight", -16, -16)
-    panel.manaBox.manaRate.text = panel.manaBox.manaRate:CreateFontString(nil, nil, "GameFontWhite")
-    panel.manaBox.manaRate.text:SetText("Length Rate")
-    panel.manaBox.manaRate.text:SetPoint("Right", 0, 0)
-
-    panel.manaBox.manaRate.inputBox =
-        KH_UI:Create_InputBox(
-        KH_UI_Settings[panel.name].manaLengthRate,
-        panel.manaBox.manaRate,
-        "Right",
-        0,
-        -16,
-        112,
-        function()
-            panel.manaBox.manaRate.inputBox:ClearFocus()
-            local max = panel.manaBox.manaRate.inputBox:GetNumber()
-            if max < 1 then
-                max = 1
-            end
-            KH_UI_Settings[panel.name].manaLengthRate = max
-            panel.manaBox.manaRate.inputBox:SetText(KH_UI_Settings[panel.name].manaLengthRate)
-        end
-    )
-    panel.manaBox.manaRate.tooltip = CreateFrame("Button", nil, panel.manaBox, "UIPanelGoldButtonTemplate")
-    panel.manaBox.manaRate.tooltip:SetAlpha(0)
-    panel.manaBox.manaRate.tooltip.tooltipText = "Sets the rate the mana bar will extend by mana per pixel"
-    panel.manaBox.manaRate.tooltip:SetSize(90, 12)
-    panel.manaBox.manaRate.tooltip:SetPoint("TOPRIGHT", panel.manaBox, "TOPRIGHT", -12, -12)
-    GameTooltip_AddNewbieTip(panel.manaBox.manaRate.tooltip, panel.manaBox.manaRate.tooltip.tooltipText, 1.0, 1.0, 0)
-    GameTooltip:Hide()
     --------------------------
     --Display Value Checkbox--
     --------------------------
-    panel.manaBox.displayManaCheck = KH_UI:createCheckbutton(panel.manaBox.manaMax, -4, -34, "Display Mana Value")
-    panel.manaBox.displayManaCheck.tooltip = "Displays the unit's current mana value"
-    panel.manaBox.displayManaCheck:SetChecked(KH_UI_Settings[panel.name].displayManaValue)
+    panel.manaBox.displayManaCheck = KH_UI:createCheckbutton(panel.manaBox, 12, -16, "Display Power Value")
+    panel.manaBox.displayManaCheck.tooltip = "Displays the unit's current power value"
+    panel.manaBox.displayManaCheck:SetChecked(KH_UI_Settings[panel.name].displayPowerValue)
     panel.manaBox.displayManaCheck:SetScript(
         "OnClick",
         function()
-            KH_UI_Settings[panel.name].displayManaValue = panel.manaBox.displayManaCheck:GetChecked()
+            KH_UI_Settings[panel.name].displayPowerValue = panel.manaBox.displayManaCheck:GetChecked()
             if (panel.manaBox.displayManaCheck:GetChecked()) then
                 PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
             else
