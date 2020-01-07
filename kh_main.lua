@@ -756,6 +756,10 @@ end
 
 function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
     local powerType, powerToken, altR, altG, altB = UnitPowerType(unit)
+    if type == "mana" or type == "maxmana" or type == "maxmanabg" then
+        powerType = 0
+        powerToken = "MANA"
+    end
     local act, max, perc, perc_per_seg = UnitPower(unit, powerType), UnitPowerMax(unit, powerType), (UnitPower(unit, powerType) / UnitPowerMax(unit, powerType)) * 100, 100 / ring_config.global.segments_used
     local anz_seg, sum_radius = ring_config.global.segments_used, ring_config.global.segments_used * 90
     local info, r, g, b = PowerBarColor[powerToken], 1, 0, 0
@@ -775,21 +779,19 @@ function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
         perc = perc * (max / KH_UI_Settings[mainFrame.settings].ringMaxPower)
     end
 
-    if type == "maxpower" then
+    if type == "maxpower" or type == "maxmana" then
         if (KH_UI_Settings[mainFrame.settings].style == "KH1") then
-            perc = (max / KH_UI_Settings[mainFrame.settings].ringMaxPower) * 100 + 0.75
+            perc = (max / KH_UI_Settings[mainFrame.settings].ringMaxPower) * 100 + 0.78
         elseif (KH_UI_Settings[mainFrame.settings].style == "KH2 Party") then
             perc = 100
         end
-        mainFrame.unitPowerMax = max
-    elseif type == "maxpowerbg" then
+    elseif type == "maxpowerbg" or type == "maxmanabg" then
         if (KH_UI_Settings[mainFrame.settings].style == "KH1") then
             perc = (max / KH_UI_Settings[mainFrame.settings].ringMaxPower) * 100
         elseif (KH_UI_Settings[mainFrame.settings].style == "KH2 Party") then
             perc = 100
         end
-        mainFrame.unitPowerMax = max
-    elseif (type == "power") then
+    elseif (type == "power" or type == "mana") then
         if (KH_UI_Settings[mainFrame.settings].style ~= "KH1") then
             for i = 1, anz_seg do
                 self.segments[i].square1:SetVertexColor(r, g, b, 1)
@@ -798,7 +800,6 @@ function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
                 self.segments[i].fullsegment:SetVertexColor(r, g, b, 1)
             end
         end
-        mainFrame.unitPower = act
     end
 
     perc = round(perc, 4)
@@ -854,7 +855,7 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
         parent = mainFrame.healthFrame
     end
 
-    if ring_config.global.ringtype == "power" or ring_config.global.ringtype == "maxpower" or ring_config.global.ringtype == "maxpowerbg" then
+    if (ring_config.global.ringtype == "power" or ring_config.global.ringtype == "maxpower" or ring_config.global.ringtype == "maxpowerbg" or ring_config.global.ringtype == "mana" or ring_config.global.ringtype == "maxmana" or ring_config.global.ringtype == "maxmanabg") then
         if (KH_UI_Settings[mainFrame.settings].style == "KH1") then
             parent = mainFrame.manaFrame
         elseif (KH_UI_Settings[mainFrame.settings].style == "KH2 Party") then
@@ -885,21 +886,21 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
         ring_object:RegisterEvent("PLAYER_ENTERING_WORLD")
     end
 
-    if ring_config.global.ringtype == "maxpower" or ring_config.global.ringtype == "maxpowerbg" then
+    if (ring_config.global.ringtype == "maxpower" or ring_config.global.ringtype == "maxpowerbg" or ring_config.global.ringtype == "maxmana" or ring_config.global.ringtype == "maxmanabg") then
         ring_object:SetScript(
             "OnEvent",
             function(self, event, unit)
-                if ((event == "UNIT_POWER_UPDATE" or event == "UNIT_DISPLAYPOWER") and unit == ring_config.global.unit) or event == "PLAYER_ENTERING_WORLD" then
+                if ((event == "UNIT_POWER_UPDATE" or event == "UNIT_DISPLAYPOWER" or event == "UNIT_MANA") and unit == ring_config.global.unit) or event == "PLAYER_ENTERING_WORLD" then
                     KH_UI:calc_ring_power(ring_object, ring_config, mainFrame.unit, ring_config.global.ringtype, mainFrame)
-                    mainFrame.unitPower = UnitPower(mainFrame.unit)
                 end
             end
         )
+        ring_object:RegisterEvent("UNIT_MANA")
         ring_object:RegisterEvent("UNIT_POWER_UPDATE")
         ring_object:RegisterEvent("UNIT_DISPLAYPOWER")
         ring_object:RegisterEvent("PLAYER_ENTERING_WORLD")
     end
-    if ring_config.global.ringtype == "power" then
+    if (ring_config.global.ringtype == "power" or ring_config.global.ringtype == "mana") then
         ring_object:SetScript(
             "OnUpdate",
             function(self, elapsed)
@@ -907,7 +908,6 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
                 if (self.lastUpdate >= 0.05) then
                     self.lastUpdate = self.lastUpdate - 0.05
                     KH_UI:calc_ring_power(ring_object, ring_config, mainFrame.unit, ring_config.global.ringtype, mainFrame)
-                    mainFrame.unitPower = UnitPower(mainFrame.unit)
                 end
             end
         )
@@ -1034,7 +1034,7 @@ function KH_UI:create_portrait(mainFrame)
     )
     mainFrame.portrait:SetSize(100, 100)
     mainFrame.portrait:SetPoint("CENTER", 0, 0)
-    mainFrame.portrait:SetFrameLevel(25)
+    mainFrame.portrait:SetFrameLevel(3)
     mainFrame.portrait.redTexture:SetVertexColor(1, 0, 0, 1)
     -------------------
     --Level------------
@@ -1064,24 +1064,24 @@ function KH_UI:create_portrait(mainFrame)
     --------------------
     --State-------------
     --------------------
-    mainFrame.portrait.stateFrame = KH_UI:CreateImageFrame(32, 32, mainFrame.portrait.levelFrame, "CENTER", 1, 0, 0, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\CharacterFrame\\UI-StateIcon")
+    mainFrame.portrait.stateFrame = KH_UI:CreateImageFrame(32, 32, mainFrame.portrait.levelFrame, "CENTER", 1, 0, 5, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\CharacterFrame\\UI-StateIcon")
     --------------------
     --Party Leader------
     --------------------
-    mainFrame.portrait.leaderFrame = KH_UI:CreateImageFrame(24, 24, mainFrame.portrait, "TopLeft", 24, 24, 0, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\GROUPFRAME\\UI-Group-LeaderIcon")
+    mainFrame.portrait.leaderFrame = KH_UI:CreateImageFrame(18, 18, mainFrame.portrait, "TopLeft", 16, 10, 5, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\GROUPFRAME\\UI-Group-LeaderIcon")
     --------------------
     --Master Loot------
     --------------------
-    mainFrame.portrait.masterLootFrame = KH_UI:CreateImageFrame(24, 24, mainFrame.portrait, "TopLeft", 80, 10, 0, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\GroupFrame\\UI-Group-MasterLooter")
+    mainFrame.portrait.masterLootFrame = KH_UI:CreateImageFrame(18, 18, mainFrame.portrait, "TopLeft", 64, 10, 5, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\GroupFrame\\UI-Group-MasterLooter")
     --------------------
     --PvP Icon----------
     --------------------
-    mainFrame.portrait.pvpIcon = KH_UI:CreateImageFrame(64, 64, mainFrame.portrait, "TopLeft", -24, -24, 0, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\TargetingFrame\\UI-PVP-HORDE")
+    mainFrame.portrait.pvpIcon = KH_UI:CreateImageFrame(64, 64, mainFrame.portrait, "TopLeft", -16, -28, 5, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\TargetingFrame\\UI-PVP-HORDE")
 
     -----------------------------
     --Disconnected Icon----------
     -----------------------------
-    mainFrame.portrait.disconnectFrame = KH_UI:CreateImageFrame(100, 100, mainFrame.portrait, "left", 0, 0, 0, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\CharacterFrame\\Disconnect-Icon")
+    mainFrame.portrait.disconnectFrame = KH_UI:CreateImageFrame(100, 100, mainFrame.portrait, "left", 0, 0, 5, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\CharacterFrame\\Disconnect-Icon")
     --[[------------------
 	--Role--------------
 	--------------------

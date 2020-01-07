@@ -1,157 +1,232 @@
+local ResourceColor = {
+    ["COMBO"] = {
+        r = 1,
+        g = 0.25,
+        b = 0
+    }
+}
 local ring_table = {
-	[1] = {
-		global = {
-			gfx_texture = "KH1\\health_ring_part",
-			gfx_slicer = "KH1\\health_slicer",
-			segments_used = 3,
-			start_segment = 1,
-			fill_direction = 1,
-			ringtype = "health"
-		},
-		segment = {
-			color = {r = 1, g = 1, b = 1, a = 1},
-			framelevel = 5,
-			outer_radius = 95,
-			inner_radius = 70
-		}
-	},
-	[2] = {
-		global = {
-			gfx_texture = "KH1\\health_ring_part_blank",
-			gfx_slicer = "slicer",
-			segments_used = 3,
-			start_segment = 1,
-			fill_direction = 1,
-			ringtype = "maxhealthbg"
-		},
-		segment = {
-			color = {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1},
-			framelevel = 2,
-			outer_radius = 95,
-			inner_radius = 70
-		}
-	},
-	[3] = {
-		global = {
-			gfx_texture = "KH1\\health_ring_part_blank",
-			gfx_slicer = "slicer",
-			segments_used = 3,
-			start_segment = 1,
-			fill_direction = 1,
-			ringtype = "lasthealth"
-		},
-		segment = {
-			color = {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1},
-			framelevel = 4,
-			outer_radius = 95,
-			inner_radius = 70
-		}
-	},
-	[4] = {
-		global = {
-			gfx_texture = "KH1\\health_ring_bg_part",
-			gfx_slicer = "slicer",
-			segments_used = 3,
-			start_segment = 1,
-			fill_direction = 1,
-			ringtype = "maxhealth"
-		},
-		segment = {
-			color = {r = 0 / 255, g = 0 / 255, b = 0 / 255, a = 1},
-			framelevel = 2,
-			outer_radius = 99,
-			inner_radius = 66
-		}
-	},
-	[5] = {
-		global = {
-			gfx_texture = "KH2\\ring_segment",
-			gfx_slicer = "KH1\\health_slicer",
-			segments_used = 3,
-			start_segment = 1,
-			fill_direction = 1,
-			ringtype = "maxhealthbg"
-		},
-		segment = {
-			color = {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1},
-			framelevel = 4,
-			outer_radius = 95,
-			inner_radius = 70
-		}
-	},
-	[6] = {
-		global = {
-			gfx_texture = "KH1\\mana_ring_part",
-			gfx_slicer = "KH1\\mana_slicer",
-			segments_used = 3,
-			start_segment = 1,
-			fill_direction = 1,
-			ringtype = "power"
-		},
-		segment = {
-			color = {r = 1, g = 1, b = 1, a = 1},
-			framelevel = 8,
-			outer_radius = 124,
-			inner_radius = 99
-		}
-	},
-	[7] = {
-		global = {
-			gfx_texture = "KH1\\mana_ring_bg_part",
-			gfx_slicer = "slicer",
-			segments_used = 3,
-			start_segment = 1,
-			fill_direction = 1,
-			ringtype = "maxpower"
-		},
-		segment = {
-			color = {r = 0, g = 0, b = 0, a = 1},
-			framelevel = 6,
-			outer_radius = 128,
-			inner_radius = 95
-		}
-	},
-	[8] = {
-		global = {
-			gfx_texture = "KH1\\mana_ring_part_blank",
-			gfx_slicer = "slicer",
-			segments_used = 3,
-			start_segment = 1,
-			fill_direction = 1,
-			ringtype = "maxpowerbg"
-		},
-		segment = {
-			color = {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1},
-			framelevel = 7,
-			outer_radius = 124,
-			inner_radius = 99
-		}
-	},
+    [1] = {
+        global = {
+            gfx_texture = "KH1\\health_ring_part",
+            gfx_slicer = "KH1\\health_slicer",
+            segments_used = 3,
+            start_segment = 1,
+            fill_direction = 1,
+            ringtype = "health"
+        },
+        segment = {
+            color = {r = 1, g = 1, b = 1, a = 1},
+            framelevel = 5,
+            outer_radius = 95,
+            inner_radius = 70
+        }
+    },
+    [2] = {
+        global = {
+            gfx_texture = "KH1\\health_ring_part_blank",
+            gfx_slicer = "slicer",
+            segments_used = 3,
+            start_segment = 1,
+            fill_direction = 1,
+            ringtype = "maxhealthbg"
+        },
+        segment = {
+            color = {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1},
+            framelevel = 3,
+            outer_radius = 95,
+            inner_radius = 70
+        }
+    },
+    [3] = {
+        global = {
+            gfx_texture = "KH1\\health_ring_part_blank",
+            gfx_slicer = "slicer",
+            segments_used = 3,
+            start_segment = 1,
+            fill_direction = 1,
+            ringtype = "lasthealth"
+        },
+        segment = {
+            color = {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1},
+            framelevel = 4,
+            outer_radius = 95,
+            inner_radius = 70
+        }
+    },
+    [4] = {
+        global = {
+            gfx_texture = "KH1\\health_ring_bg_part",
+            gfx_slicer = "slicer",
+            segments_used = 3,
+            start_segment = 1,
+            fill_direction = 1,
+            ringtype = "maxhealth"
+        },
+        segment = {
+            color = {r = 0, g = 0, b = 0, a = 1},
+            framelevel = 2,
+            outer_radius = 99,
+            inner_radius = 66
+        }
+    },
+    [5] = {
+        global = {
+            gfx_texture = "KH2\\ring_segment",
+            gfx_slicer = "slicer",
+            segments_used = 3,
+            start_segment = 1,
+            fill_direction = 1,
+            ringtype = "maxhealthbg"
+        },
+        segment = {
+            color = {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1},
+            framelevel = 4,
+            outer_radius = 95,
+            inner_radius = 70
+        }
+    },
+    [6] = {
+        global = {
+            gfx_texture = "KH1\\mana_ring_part",
+            gfx_slicer = "KH1\\mana_slicer",
+            segments_used = 3,
+            start_segment = 1,
+            fill_direction = 1,
+            ringtype = "mana"
+        },
+        segment = {
+            color = {r = 1, g = 1, b = 1, a = 1},
+            framelevel = 8,
+            outer_radius = 124,
+            inner_radius = 99
+        }
+    },
+    [7] = {
+        global = {
+            gfx_texture = "KH1\\mana_ring_bg_part",
+            gfx_slicer = "slicer",
+            segments_used = 3,
+            start_segment = 1,
+            fill_direction = 1,
+            ringtype = "maxmana"
+        },
+        segment = {
+            color = {r = 0, g = 0, b = 0, a = 1},
+            framelevel = 6,
+            outer_radius = 128,
+            inner_radius = 95
+        }
+    },
+    [8] = {
+        global = {
+            gfx_texture = "KH1\\mana_ring_part_blank",
+            gfx_slicer = "slicer",
+            segments_used = 3,
+            start_segment = 1,
+            fill_direction = 1,
+            ringtype = "maxmanabg"
+        },
+        segment = {
+            color = {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1},
+            framelevel = 7,
+            outer_radius = 124,
+            inner_radius = 99
+        }
+    }
 }
 
 local function create_infoFrames(mainFrame)
     mainFrame.nameFrame = KH_UI:CreateTextFrame("*NAME*", 0, -10, 1, 1, 1, "CENTER", mainFrame.portrait, "TOP", 25, "GameFontNormal")
+    mainFrame.healthFrame.healthVal = KH_UI:CreateTextFrame("??/??", 45, -8, 1, 1, 0.4, "CENTER", mainFrame.healthFrame.base, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
+    mainFrame.manaFrame.manaVal = KH_UI:CreateTextFrame("??/??", 42, -8, 1, 1, 0.4, "CENTER", mainFrame.manaFrame.base, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
 end
 
 local function create_barProps(mainFrame)
     mainFrame.healthFrame.base = KH_UI:CreateColorFrame(33, 5, mainFrame.healthFrame, "LEFT", -35, -2, 1, {r = 0, g = 0, b = 0, a = 1})
-    mainFrame.healthFrame.label = KH_UI:CreateImageFrame(44, 16, mainFrame.healthFrame, "Left", -42, -18, 2, {x = 0 / 64, xw = 43.8 / 64, y = 0 / 64, yh = 16 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+    mainFrame.healthFrame.label = KH_UI:CreateImageFrame(49, 18, mainFrame.healthFrame, "Left", -46, -19, 2, {x = 0 / 64, xw = 43.8 / 64, y = 0 / 128, yh = 16 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
     mainFrame.manaFrame.base = KH_UI:CreateColorFrame(33, 5, mainFrame.manaFrame, "LEFT", -64, -2, 1, {r = 0, g = 0, b = 0, a = 1})
-    mainFrame.manaFrame.label = KH_UI:CreateImageFrame(44, 16, mainFrame.manaFrame, "Left", -86, -18, 3, {x = 0 / 64, xw = 43.8 / 64, y = 16 / 64, yh = 32 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+    mainFrame.manaFrame.label = KH_UI:CreateImageFrame(50, 18, mainFrame.manaFrame, "Left", -96, -19, 3, {x = 0 / 64, xw = 44.8 / 64, y = 16 / 128, yh = 32 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+end
+
+local function Create_Power_Bar(mainFrame)
+    mainFrame.powerFrame.base = KH_UI:CreateImageFrame(49, 18, mainFrame.powerFrame, "Left", -145, -19, 2, {x = 0 / 64, xw = 53 / 64, y = 32 / 128, yh = 48 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+    mainFrame.powerFrame.basebg = KH_UI:CreateColorFrame(50, 18, mainFrame.powerFrame.base, "LEFT", 49, 0, 1, {r = 0, g = 0, b = 0, a = 1})
+    mainFrame.powerFrame.bg = KH_UI:CreateColorFrame(138, 20, mainFrame.powerFrame.base, "TOPLEFT", 0, -18, 1, {r = 0, g = 0, b = 0, a = 1})
+    mainFrame.powerFrame.curvebg = KH_UI:CreateImageFrame(20, 20, mainFrame.powerFrame.bg, "TOPLEFT", 138, 0, 2, {x = 0 / 64, xw = 20 / 64, y = 49 / 128, yh = 70 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+    mainFrame.powerFrame.powerbg = KH_UI:CreateColorFrame(138, 12, mainFrame.powerFrame.bg, "TOPLEFT", 4, -4, 2, {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1})
+    mainFrame.powerFrame.power = KH_UI:CreateColorFrame(138, 12, mainFrame.powerFrame.powerbg, "TOPLEFT", 0, 0, 3, {r = 1, g = 1, b = 1, a = 1})
+    mainFrame.powerFrame.powerVal = KH_UI:CreateTextFrame("??/??", 0, 0, 1, 1, 0.4, "LEFT", mainFrame.powerFrame.power, "TOPLEFT", 4, "SystemFont_OutlineThick_Huge2")
+end
+
+local function Create_Resource_Bar(mainFrame)
+    mainFrame.resourceFrame = CreateFrame("Frame", nil, mainFrame.powerFrame.bg)
+    mainFrame.resourceFrame:SetSize(1, 1)
+    mainFrame.resourceFrame:SetPoint("TOPLEFT", 1, 1)
+    mainFrame.resourceFrame.resourcebg = KH_UI:CreateColorFrame(138, 20, mainFrame.resourceFrame, "TOPLEFT", -1, -20, 1, {r = 0, g = 0, b = 0, a = 1})
+    mainFrame.resourceFrame.resourceCurveBg =
+        KH_UI:CreateImageFrame(57, 20, mainFrame.resourceFrame.resourcebg, "TOPLEFT", 138, 0, 2, {x = 0 / 64, xw = 56.8 / 64, y = 69 / 128, yh = 90 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+    mainFrame.resourceFrame.resource = {}
+    for i = 1, 9 do
+        mainFrame.resourceFrame.resource[i] = KH_UI:CreateColorFrame(12, 12, mainFrame.resourceFrame.resourcebg, "TOPLEFT", 4 + (i - 1) * 16, -4, 3, {r = 0.5, g = 0.5, b = 0.5, a = 1})
+    end
+
+    mainFrame.resourceFrame:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
+    mainFrame.resourceFrame:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
+    mainFrame.resourceFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
+    mainFrame.resourceFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+    mainFrame.resourceFrame.currentValue = 0
+    mainFrame.resourceFrame:SetScript(
+        "OnEvent",
+        function(self, event, arg1)
+            if (mainFrame.unit == "player") then
+                self.currentValue = GetComboPoints(mainFrame.unit, "target")
+                for i in ipairs(self.resource) do
+                    self.resource[i].texture:SetVertexColor(ResourceColor["COMBO"].r, ResourceColor["COMBO"].g, ResourceColor["COMBO"].b, 1)
+                    if (self.currentValue >= i) then
+                        self.resource[i]:Show()
+                    else
+                        self.resource[i]:Hide()
+                    end
+                end
+                local powerType, powerToken, _, _, _ = UnitPowerType(mainFrame.unit)
+                local _, class, _ = UnitClass(mainFrame.unit)
+                local maxResource = UnitPowerMax(PlayerFrame.unit, Enum.PowerType.ComboPoints)
+                if (not self:IsShown()) then
+                    if (maxResource > 0) then
+                        if (class == "DRUID" and powerToken == "ENERGY") then
+                            self:Show()
+                        elseif (class ~= "DRUID") then
+                            self:Show()
+                        end
+                    end
+                elseif (self:IsShown()) then
+                    if (class == "DRUID" and powerToken ~= "ENERGY") then
+                        self:Hide()
+                    elseif (maxResource <= 0) then
+                        self:Hide()
+                    end
+                end
+            else
+                self:Hide()
+                self:UnregisterAllEvents()
+            end
+        end
+    )
 end
 
 local function Update(self, elapsed)
-	self.lastUpdate = self.lastUpdate + elapsed
+    self.lastUpdate = self.lastUpdate + elapsed
 
-	if self.lastTimer > 0 then
-		self.lastTimer = self.lastTimer - elapsed
-	end
+    if self.lastTimer > 0 then
+        self.lastTimer = self.lastTimer - elapsed
+    end
 
-	if (self.lastUpdate > 0.99) then
-		self.lastUpdate = 0.99
-	end
+    if (self.lastUpdate > 0.99) then
+        self.lastUpdate = 0.99
+    end
 
-	while (self.lastUpdate > (1 / 144)) do
+    while (self.lastUpdate > (1 / 144)) do
         self.lastUpdate = self.lastUpdate - 1 / 144
         self.yvel = self.yvel + 1
         if (self.yvel > 4) then
@@ -162,49 +237,49 @@ local function Update(self, elapsed)
             end
             self.yvel = 0
         end
-		--Low HP Animation
-		if self.unitHealth <= self.unitHealthMax / 4 and not UnitIsDeadOrGhost(self.unit) then
-			if self.lowHealthDirection == 0 then
-				self.lowHealthAlpha = self.lowHealthAlpha + 0.009
-				if self.lowHealthAlpha >= 0.40 then
-					self.lowHealthDirection = 1
-				end
-			else
-				self.lowHealthAlpha = self.lowHealthAlpha - 0.009
-				if self.lowHealthAlpha <= 0.05 then
-					self.lowHealthDirection = 0
-				end
-			end
-		elseif self.lowHealthAlpha > 0 then
-			self.lowHealthAlpha = self.lowHealthAlpha - 0.009
-			if self.lowHealthAlpha <= 0 then
-				self.lowHealthAlpha = 0
-			end
-			self.lowHealthDirection = 0
-		end
-		--Update frames
+        --Low HP Animation
+        if self.unitHealth <= self.unitHealthMax / 4 and not UnitIsDeadOrGhost(self.unit) then
+            if self.lowHealthDirection == 0 then
+                self.lowHealthAlpha = self.lowHealthAlpha + 0.009
+                if self.lowHealthAlpha >= 0.40 then
+                    self.lowHealthDirection = 1
+                end
+            else
+                self.lowHealthAlpha = self.lowHealthAlpha - 0.009
+                if self.lowHealthAlpha <= 0.05 then
+                    self.lowHealthDirection = 0
+                end
+            end
+        elseif self.lowHealthAlpha > 0 then
+            self.lowHealthAlpha = self.lowHealthAlpha - 0.009
+            if self.lowHealthAlpha <= 0 then
+                self.lowHealthAlpha = 0
+            end
+            self.lowHealthDirection = 0
+        end
+        --Update frames
         for i in ipairs(self.ring_frames) do
             if self.ring_frames[i].ringtype == "lasthealth" then
-				if self.lastTimer <= 0 then
-					self.ring_frames[i].alpha = self.ring_frames[i].alpha - 0.01
-				elseif self.ring_frames[i].alpha > 0.5 then
-					self.ring_frames[i].alpha = self.ring_frames[i].alpha - 0.006
-				end
-				--self.healthFrame.long_bar.healthLast.texture:SetAlpha(self.ring_frames[i].alpha)
-				self.portrait.redTexture:SetAlpha(self.ring_frames[i].alpha)
-			end
-			self.ring_frames[i]:SetAlpha(self.ring_frames[i].alpha)
-			self.ring_frames[5]:SetAlpha(self.lowHealthAlpha)
-		end
-	end
+                if self.lastTimer <= 0 then
+                    self.ring_frames[i].alpha = self.ring_frames[i].alpha - 0.01
+                elseif self.ring_frames[i].alpha > 0.5 then
+                    self.ring_frames[i].alpha = self.ring_frames[i].alpha - 0.006
+                end
+                --self.healthFrame.long_bar.healthLast.texture:SetAlpha(self.ring_frames[i].alpha)
+                self.portrait.redTexture:SetAlpha(self.ring_frames[i].alpha)
+            end
+            self.ring_frames[i]:SetAlpha(self.ring_frames[i].alpha)
+            self.ring_frames[5]:SetAlpha(self.lowHealthAlpha)
+        end
+    end
 
-	self.healthFrame:ClearAllPoints()
-	self.healthFrame:SetPoint("CENTER", 0, self.offsety)
-	self.powerFrame:ClearAllPoints()
-	self.powerFrame:SetPoint("CENTER", 0, 0)
-	self.manaFrame:ClearAllPoints()
-	self.manaFrame:SetPoint("CENTER", 0, 0)
-	--calc_health_stretch(self)
+    self.healthFrame:ClearAllPoints()
+    self.healthFrame:SetPoint("CENTER", 0, self.offsety)
+    self.powerFrame:ClearAllPoints()
+    self.powerFrame:SetPoint("CENTER", 0, self.offsety)
+    self.manaFrame:ClearAllPoints()
+    self.manaFrame:SetPoint("CENTER", 0, self.offsety)
+    --calc_health_stretch(self)
 end
 
 function KH_UI:New_KH1Unitframe(unit, setting)
@@ -223,6 +298,7 @@ function KH_UI:New_KH1Unitframe(unit, setting)
     f.yvel = 0
     f.xvel = 0
     f.unitHealthMax = 1
+    f.unitPower = 1
     f.unitPowerMax = 1
     f.unitMana = 1
     f.unitManaMax = 1
@@ -260,9 +336,6 @@ function KH_UI:New_KH1Unitframe(unit, setting)
         if (f.settings == "Party Frame") then
             f.scale = f.scale / 2
         end
-        --f.healthFrame:SetScale(f.scale)
-        --f.powerFrame:SetScale(f.scale)
-        --f.manaFrame:SetScale(f.scale)
         f:SetScale(f.scale)
         f:SetMovable(KH_UI_Settings[f.settings].movable)
         f.nameFrame.text:SetText(UnitName(f.unit))
@@ -288,17 +361,64 @@ function KH_UI:New_KH1Unitframe(unit, setting)
                 KH_UI:calc_ring_health(f.ring_frames[i], f.ring_table[i], f.unit, f.ring_frames[i].ringtype, f)
             end
         end
+        if f.unitHealth ~= nil then
+            f.healthFrame.healthVal.text:SetText(format(f.unitHealth))
+        end
+        if KH_UI_Settings[f.settings].displayHealthValue and f.healthFrame.healthVal:IsVisible() == false then
+            f.healthFrame.healthVal:Show()
+        elseif KH_UI_Settings[f.settings].displayHealthValue == false and f.healthFrame.healthVal:IsVisible() then
+            f.healthFrame.healthVal:Hide()
+        end
     end
 
     f.Update_Power = function()
         local powerType, powerToken, altR, altG, altB = UnitPowerType(f.unit)
         local class, _, _ = UnitClass(f.unit)
-        f.UnitPowerMax = UnitPowerMax(f.unit, powerType)
+        f.unitMana = UnitPower(f.unit, 0)
+        f.unitManaMax = UnitPowerMax(f.unit, 0)
+        f.unitPower = UnitPower(f.unit, powerType)
+        f.unitPowerMax = UnitPowerMax(f.unit, powerType)
         for i in ipairs(f.ring_table) do
-            if (f.ring_frames[i].ringtype == "power" or f.ring_frames[i].ringtype == "maxpower" or f.ring_frames[i].ringtype == "maxpowerbg") then
+            if
+                (f.ring_frames[i].ringtype == "power" or f.ring_frames[i].ringtype == "maxpower" or f.ring_frames[i].ringtype == "maxpowerbg" or f.ring_frames[i].ringtype == "mana" or f.ring_frames[i].ringtype == "maxmana" or
+                    f.ring_frames[i].ringtype == "maxmanabg")
+             then
                 KH_UI:calc_ring_power(f.ring_frames[i], f.ring_table[i], f.unit, f.ring_frames[i].ringtype, f)
             end
         end
+        if f.unitMana ~= nil then
+            f.manaFrame.manaVal.text:SetText(format(f.unitMana))
+        end
+        if f.unitPower ~= nil then
+            f.powerFrame.powerVal.text:SetText(format(f.unitPower))
+        end
+        if KH_UI_Settings[f.settings].displayManaValue and f.manaFrame.manaVal:IsVisible() == false then
+            f.manaFrame.manaVal:Show()
+        elseif KH_UI_Settings[f.settings].displayManaValue == false and f.manaFrame.manaVal:IsVisible() then
+            f.manaFrame.manaVal:Hide()
+        end
+        --Set Power Bar
+        if (f.unitPowerMax ~= nil) then
+            local length = 138 * (f.unitPower / f.unitPowerMax)
+            if (length > 0) then
+                f.powerFrame.power:SetWidth(length)
+            else
+                f.powerFrame.power:SetWidth(0.0001)
+            end
+        end
+        --Set power color
+        local info, r, g, b = PowerBarColor[powerToken], 0, 0, 0
+        if (info) then
+            r = info.r
+            g = info.g
+            b = info.b
+        else
+            r = altR
+            g = altG
+            b = altB
+        end
+        f.powerFrame.base.texture:SetVertexColor(r, g, b, 1)
+        f.powerFrame.power.texture:SetVertexColor(r * 0.5, g * 0.5, b * 0.5, 1)
         if (f.unit == "player") then
             if (class == "Shaman" or class == "Priest" or class == "Druid" or powerToken == "MANA") then
                 f.enableMana = true
@@ -316,7 +436,7 @@ function KH_UI:New_KH1Unitframe(unit, setting)
                 f.manaFrame:Hide()
             end
         end
-        if (powerToken ~= "MANA") then
+        if (powerToken == "MANA") then
             f.powerFrame:Hide()
         else
             f.powerFrame:Show()
@@ -441,14 +561,12 @@ function KH_UI:New_KH1Unitframe(unit, setting)
         bgtex:SetTexCoord(0, 1, 1, 0)
     end
 
-    --create_ring_pretties(f)
     --create_health_stretch(f)
     KH_UI:create_portrait(f)
-    create_infoFrames(f)
     create_barProps(f)
-    --[[create_mana_bar(f)
+    create_infoFrames(f)
     Create_Power_Bar(f)
-    Create_Resource_Counter(f)]]
+    Create_Resource_Bar(f)
 
     f:RegisterEvent("UNIT_POWER_UPDATE")
     f:RegisterEvent("UNIT_MANA")
@@ -474,6 +592,9 @@ function KH_UI:New_KH1Unitframe(unit, setting)
                         f.healthMaxMult = 1 / (f.unitHealthMax / KH_UI_Settings[f.settings].healthLengthMax)
                     else
                         f.healthMaxMult = 1
+                    end
+                    if f.unitHealth ~= nil then
+                        f.healthFrame.healthVal.text:SetText(format(f.unitHealth))
                     end
                 end
             end
