@@ -44,10 +44,10 @@ function KH_UI:Create_KH1_Style_Settings(panel, frame, type)
             end
             KH_UI_Settings[panel.name].healthLengthMax = max
             if (type == "player" or type == "target") then
-                frame.Update_Health()
+                frame.Update_Health(true)
             elseif (type == "party") then
                 for i in pairs(frame) do
-                    frame[i].Update_Health()
+                    frame[i].Update_Health(true)
                 end
             end
         end
@@ -90,10 +90,10 @@ function KH_UI:Create_KH1_Style_Settings(panel, frame, type)
             end
             KH_UI_Settings[panel.name].ringMaxHealth = max
             if (type == "player" or type == "target") then
-                frame.Update_Health()
+                frame.Update_Health(true)
             elseif (type == "party") then
                 for i in pairs(frame) do
-                    frame[i].Update_Health()
+                    frame[i].Update_Health(true)
                 end
             end
             panel.healthBox.fullRing.inputBox:SetText(KH_UI_Settings[panel.name].ringMaxHealth)
@@ -137,10 +137,10 @@ function KH_UI:Create_KH1_Style_Settings(panel, frame, type)
             end
             KH_UI_Settings[panel.name].longBarHealthLengthRate = max
             if (type == "player" or type == "target") then
-                frame.Update_Health()
+                frame.Update_Health(true)
             elseif (type == "party") then
                 for i in pairs(frame) do
-                    frame[i].Update_Health()
+                    frame[i].Update_Health(true)
                 end
             end
             panel.healthBox.barGrowth.inputBox:SetText(KH_UI_Settings[panel.name].longBarHealthLengthRate)
@@ -224,12 +224,12 @@ function KH_UI:Create_KH1_Style_Settings(panel, frame, type)
             end
             KH_UI_Settings[panel.name].ringMaxPower = max
             if (type == "player" or type == "target") then
-                frame.Update_Health()
-                frame.Update_Power()
+                frame.Update_Health(true)
+                frame.Update_Power(true)
             elseif (type == "party") then
                 for i in pairs(frame) do
-                    frame[i].Update_Health()
-                    frame[i].Update_Power()
+                    frame[i].Update_Health(true)
+                    frame[i].Update_Power(true)
                 end
             end
             panel.powerBox.fullRing.inputBox:SetText(KH_UI_Settings[panel.name].ringMaxPower)
@@ -403,14 +403,14 @@ function KH_UI:Create_KH1_Style_Settings(panel, frame, type)
             KH_UI:update_ring_segments(frame)
             if (type == "player" or type == "target") then
                 frame.Update_FrameInfo()
-                frame.Update_Health()
-                frame.Update_Power()
+                frame.Update_Health(true)
+                frame.Update_Power(true)
                 frame.Refresh_Points()
             elseif (type == "party") then
                 for i in pairs(frame) do
                     frame[i].Update_FrameInfo()
-                    frame[i].Update_Health()
-                    frame[i].Update_Power()
+                    frame[i].Update_Health(true)
+                    frame[i].Update_Power(true)
                     frame[i].Refresh_Points()
                 end
             end

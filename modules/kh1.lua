@@ -3,6 +3,11 @@ local ResourceColor = {
         r = 1,
         g = 0.25,
         b = 0
+    },
+    ["RUNES"] = {
+        r = 0,
+        g = 1,
+        b = 1
     }
 }
 local ring_table = {
@@ -137,38 +142,76 @@ local ring_table = {
 }
 
 local function create_infoFrames(mainFrame)
-    mainFrame.nameFrame = KH_UI:CreateTextFrame("*NAME*", 0, -10, 1, 1, 1, "CENTER", mainFrame.portrait, "TOP", 25, "GameFontNormal")
-    mainFrame.healthFrame.healthVal = KH_UI:CreateTextFrame("??/??", 45, -8, 1, 1, 0.4, "CENTER", mainFrame.healthFrame.base, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
-    mainFrame.manaFrame.manaVal = KH_UI:CreateTextFrame("??/??", 42, -8, 1, 1, 0.4, "CENTER", mainFrame.manaFrame.base, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
+    if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
+        mainFrame.nameFrame = KH_UI:CreateTextFrame("*NAME*", 0, -10, 1, 1, 1, "CENTER", mainFrame.portrait, "TOP", 25, "GameFontNormal")
+        mainFrame.healthFrame.healthVal = KH_UI:CreateTextFrame("??/??", 45, -8, 1, 1, 0.4, "CENTER", mainFrame.healthFrame.base, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
+        mainFrame.manaFrame.manaVal = KH_UI:CreateTextFrame("??/??", 42, -8, 1, 1, 0.4, "CENTER", mainFrame.manaFrame.base, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
+    elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
+        mainFrame.nameFrame = KH_UI:CreateTextFrame("*NAME*", 0, -10, 1, 1, 1, "CENTER", mainFrame.portrait, "TOP", 25, "GameFontNormal")
+        mainFrame.healthFrame.healthVal = KH_UI:CreateTextFrame("??/??", 45, 18, 1, 1, 0.4, "CENTER", mainFrame.healthFrame.base, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
+        mainFrame.manaFrame.manaVal = KH_UI:CreateTextFrame("??/??", 42, 8, 1, 1, 0.4, "CENTER", mainFrame.manaFrame.base, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
+    end
 end
 
 local function create_barProps(mainFrame)
-    mainFrame.healthFrame.base = KH_UI:CreateColorFrame(33, 5, mainFrame.healthFrame, "LEFT", -35, -2, 1, {r = 0, g = 0, b = 0, a = 1})
-    mainFrame.healthFrame.label = KH_UI:CreateImageFrame(49, 18, mainFrame.healthFrame, "Left", -46, -19, 2, {x = 0 / 64, xw = 43.8 / 64, y = 0 / 128, yh = 16 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
-    mainFrame.manaFrame.base = KH_UI:CreateColorFrame(33, 5, mainFrame.manaFrame, "LEFT", -64, -2, 1, {r = 0, g = 0, b = 0, a = 1})
-    mainFrame.manaFrame.label = KH_UI:CreateImageFrame(50, 18, mainFrame.manaFrame, "Left", -96, -19, 3, {x = 0 / 64, xw = 44.8 / 64, y = 16 / 128, yh = 32 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+    if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
+        mainFrame.healthFrame.base = KH_UI:CreateColorFrame(33, 5, mainFrame.healthFrame, "LEFT", -35, -2, 1, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.healthFrame.label = KH_UI:CreateImageFrame(49, 18, mainFrame.healthFrame, "Left", -46, -19, 2, {x = 0 / 64, xw = 43.8 / 64, y = 0 / 128, yh = 16 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+        mainFrame.manaFrame.base = KH_UI:CreateColorFrame(33, 5, mainFrame.manaFrame, "LEFT", -64, -2, 1, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.manaFrame.label = KH_UI:CreateImageFrame(50, 18, mainFrame.manaFrame, "Left", -96, -19, 3, {x = 0 / 64, xw = 44.8 / 64, y = 16 / 128, yh = 32 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+    elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
+        mainFrame.healthFrame.base = KH_UI:CreateColorFrame(33, 5, mainFrame.healthFrame, "RIGHT", 35, 2, 1, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.healthFrame.label = KH_UI:CreateImageFrame(45, 18, mainFrame.healthFrame, "RIGHT", 46, 19, 2, {x = 0 / 64, xw = 39.5 / 64, y = 0 / 128, yh = 16 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+        mainFrame.manaFrame.base = KH_UI:CreateColorFrame(33, 5, mainFrame.manaFrame, "RIGHT", 64, 2, 1, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.manaFrame.label = KH_UI:CreateImageFrame(50, 18, mainFrame.manaFrame, "RIGHT", 96, 19, 3, {x = 0 / 64, xw = 44.8 / 64, y = 16 / 128, yh = 32 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+    end
 end
 
 local function Create_Power_Bar(mainFrame)
-    mainFrame.powerFrame.base = KH_UI:CreateImageFrame(49, 18, mainFrame.powerFrame, "Left", -145, -19, 2, {x = 0 / 64, xw = 53 / 64, y = 32 / 128, yh = 48 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
-    mainFrame.powerFrame.basebg = KH_UI:CreateColorFrame(50, 18, mainFrame.powerFrame.base, "LEFT", 49, 0, 1, {r = 0, g = 0, b = 0, a = 1})
-    mainFrame.powerFrame.bg = KH_UI:CreateColorFrame(138, 20, mainFrame.powerFrame.base, "TOPLEFT", 0, -18, 1, {r = 0, g = 0, b = 0, a = 1})
-    mainFrame.powerFrame.curvebg = KH_UI:CreateImageFrame(20, 20, mainFrame.powerFrame.bg, "TOPLEFT", 138, 0, 2, {x = 0 / 64, xw = 20 / 64, y = 49 / 128, yh = 70 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
-    mainFrame.powerFrame.powerbg = KH_UI:CreateColorFrame(138, 12, mainFrame.powerFrame.bg, "TOPLEFT", 4, -4, 2, {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1})
-    mainFrame.powerFrame.power = KH_UI:CreateColorFrame(138, 12, mainFrame.powerFrame.powerbg, "TOPLEFT", 0, 0, 3, {r = 1, g = 1, b = 1, a = 1})
-    mainFrame.powerFrame.powerVal = KH_UI:CreateTextFrame("??/??", 0, 0, 1, 1, 0.4, "LEFT", mainFrame.powerFrame.power, "TOPLEFT", 4, "SystemFont_OutlineThick_Huge2")
+    if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
+        mainFrame.powerFrame.base = KH_UI:CreateImageFrame(49, 18, mainFrame.powerFrame, "Left", -145, -19, 2, {x = 0 / 64, xw = 53 / 64, y = 32 / 128, yh = 48 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+        mainFrame.powerFrame.basebg = KH_UI:CreateColorFrame(50, 18, mainFrame.powerFrame.base, "LEFT", 49, 0, 1, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.powerFrame.bg = KH_UI:CreateColorFrame(139, 20, mainFrame.powerFrame.base, "TOPLEFT", 0, -18, 1, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.powerFrame.curvebg = KH_UI:CreateImageFrame(20, 20, mainFrame.powerFrame.bg, "TOPLEFT", 139, 0, 2, {x = 0 / 64, xw = 20 / 64, y = 49 / 128, yh = 70 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+        mainFrame.powerFrame.powerbg = KH_UI:CreateColorFrame(139, 12, mainFrame.powerFrame.bg, "TOPLEFT", 4, -4, 2, {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1})
+        mainFrame.powerFrame.power = KH_UI:CreateColorFrame(138, 12, mainFrame.powerFrame.powerbg, "TOPLEFT", 0, 0, 3, {r = 1, g = 1, b = 1, a = 1})
+        mainFrame.powerFrame.powerVal = KH_UI:CreateTextFrame("??/??", 0, 0, 1, 1, 0.4, "LEFT", mainFrame.powerFrame.power, "TOPLEFT", 4, "SystemFont_OutlineThick_Huge2")
+    elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
+        mainFrame.powerFrame.base = KH_UI:CreateImageFrame(49, 18, mainFrame.powerFrame, "RIGHT", 145, 19, 2, {x = 0 / 64, xw = 53 / 64, y = 32 / 128, yh = 48 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+        mainFrame.powerFrame.basebg = KH_UI:CreateColorFrame(50, 18, mainFrame.powerFrame.base, "RIGHT", -49, 0, 1, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.powerFrame.bg = KH_UI:CreateColorFrame(139, 20, mainFrame.powerFrame.base, "TOPRIGHT", 0, 18, 1, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.powerFrame.curvebg = KH_UI:CreateImageFrame(20, 20, mainFrame.powerFrame.bg, "TOPRIGHT", -139, 0, 2, {x = 0 / 64, xw = 20 / 64, y = 49 / 128, yh = 70 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+        mainFrame.powerFrame.curvebg.texture:SetRotation(math.rad(180))
+        mainFrame.powerFrame.powerbg = KH_UI:CreateColorFrame(139, 12, mainFrame.powerFrame.bg, "TOPRIGHT", -4, -5, 2, {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1})
+        mainFrame.powerFrame.power = KH_UI:CreateColorFrame(138, 12, mainFrame.powerFrame.powerbg, "TOPRIGHT", 0, 0, 3, {r = 1, g = 1, b = 1, a = 1})
+        mainFrame.powerFrame.powerVal = KH_UI:CreateTextFrame("??/??", 0, 0, 1, 1, 0.4, "RIGHT", mainFrame.powerFrame.power, "TOPRIGHT", 4, "SystemFont_OutlineThick_Huge2")
+    end        
 end
 
 local function Create_Resource_Bar(mainFrame)
-    mainFrame.resourceFrame = CreateFrame("Frame", nil, mainFrame.powerFrame.bg)
-    mainFrame.resourceFrame:SetSize(1, 1)
-    mainFrame.resourceFrame:SetPoint("TOPLEFT", 1, 1)
-    mainFrame.resourceFrame.resourcebg = KH_UI:CreateColorFrame(138, 20, mainFrame.resourceFrame, "TOPLEFT", -1, -20, 1, {r = 0, g = 0, b = 0, a = 1})
-    mainFrame.resourceFrame.resourceCurveBg =
-        KH_UI:CreateImageFrame(57, 20, mainFrame.resourceFrame.resourcebg, "TOPLEFT", 138, 0, 2, {x = 0 / 64, xw = 56.8 / 64, y = 69 / 128, yh = 90 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
-    mainFrame.resourceFrame.resource = {}
-    for i = 1, 9 do
-        mainFrame.resourceFrame.resource[i] = KH_UI:CreateColorFrame(12, 12, mainFrame.resourceFrame.resourcebg, "TOPLEFT", 4 + (i - 1) * 16, -4, 3, {r = 0.5, g = 0.5, b = 0.5, a = 1})
+    if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
+        mainFrame.resourceFrame = CreateFrame("Frame", nil, mainFrame.powerFrame.bg)
+        mainFrame.resourceFrame:SetSize(1, 1)
+        mainFrame.resourceFrame:SetPoint("TOPLEFT", 1, 1)
+        mainFrame.resourceFrame.resourcebg = KH_UI:CreateColorFrame(139, 19, mainFrame.resourceFrame, "TOPLEFT", -1, -20, 1, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.resourceFrame.resourceCurveBg =
+            KH_UI:CreateImageFrame(57, 19, mainFrame.resourceFrame.resourcebg, "TOPLEFT", 139, 0, 2, {x = 0 / 64, xw = 56.8 / 64, y = 68 / 128, yh = 90 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+        mainFrame.resourceFrame.resource = {}
+        for i = 1, 9 do
+            mainFrame.resourceFrame.resource[i] = KH_UI:CreateColorFrame(12, 12, mainFrame.resourceFrame.resourcebg, "TOPLEFT", 4 + (i - 1) * 16, -4, 3, {r = 0.5, g = 0.5, b = 0.5, a = 1})
+        end
+    elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
+        mainFrame.resourceFrame = CreateFrame("Frame", nil, mainFrame.powerFrame.bg)
+        mainFrame.resourceFrame:SetSize(1, 1)
+        mainFrame.resourceFrame:SetPoint("TOPLEFT", 1, 1)
+        mainFrame.resourceFrame.resourcebg = KH_UI:CreateColorFrame(139, 20, mainFrame.resourceFrame, "TOPRIGHT", 137, 19, 1, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.resourceFrame.resourceCurveBg =
+            KH_UI:CreateImageFrame(57, 20, mainFrame.resourceFrame.resourcebg, "TOPRIGHT", -137, 0, 2, {x = 0 / 64, xw = 56.8 / 64, y = 68 / 128, yh = 90 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+        mainFrame.resourceFrame.resourceCurveBg.texture:SetRotation(math.rad(180))
+        mainFrame.resourceFrame.resource = {}
+        for i = 1, 9 do
+            mainFrame.resourceFrame.resource[i] = KH_UI:CreateColorFrame(12, 12, mainFrame.resourceFrame.resourcebg, "TOPRIGHT", -4 - (i - 1) * 16, -4, 3, {r = 0.5, g = 0.5, b = 0.5, a = 1})
+        end
     end
 
     mainFrame.resourceFrame:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
@@ -180,9 +223,25 @@ local function Create_Resource_Bar(mainFrame)
         "OnEvent",
         function(self, event, arg1)
             if (mainFrame.unit == "player") then
-                self.currentValue = GetComboPoints(mainFrame.unit, "target")
+                local resourceType = "COMBO"
+                local _, class, _ = UnitClass(mainFrame.unit)
+                if (class == "DEATHKNIGHT") then
+                    resourceType = "RUNES"
+                end
+                if (resourceType == "COMBO") then
+                    self.currentValue = GetComboPoints(mainFrame.unit, "target")
+                elseif (resourceType == "RUNES") then
+                    local numReady = 0;
+                    for runeSlot=1,UnitPowerMax(PlayerFrame.unit, Enum.PowerType.Runes) do
+                        local start, duration, runeReady = GetRuneCooldown(runeSlot);
+                        if (runeReady) then
+                            numReady = numReady + 1;
+                        end
+                    end
+                    self.currentValue = numReady;
+                end
                 for i in ipairs(self.resource) do
-                    self.resource[i].texture:SetVertexColor(ResourceColor["COMBO"].r, ResourceColor["COMBO"].g, ResourceColor["COMBO"].b, 1)
+                    self.resource[i].texture:SetVertexColor(ResourceColor[resourceType].r, ResourceColor[resourceType].g, ResourceColor[resourceType].b, 1)
                     if (self.currentValue >= i) then
                         self.resource[i]:Show()
                     else
@@ -191,7 +250,12 @@ local function Create_Resource_Bar(mainFrame)
                 end
                 local powerType, powerToken, _, _, _ = UnitPowerType(mainFrame.unit)
                 local _, class, _ = UnitClass(mainFrame.unit)
-                local maxResource = UnitPowerMax(PlayerFrame.unit, Enum.PowerType.ComboPoints)
+                local maxResource = 0
+                if ((class == "DRUID" and powerToken == "ENERGY") or class == "ROGUE") then
+                    maxResource = UnitPowerMax(PlayerFrame.unit, Enum.PowerType.ComboPoints)
+                elseif (class == "DEATHKNIGHT") then
+                    maxResource = UnitPowerMax(PlayerFrame.unit, Enum.PowerType.Runes)
+                end
                 if (not self:IsShown()) then
                     if (maxResource > 0) then
                         if (class == "DRUID" and powerToken == "ENERGY") then
@@ -213,6 +277,23 @@ local function Create_Resource_Bar(mainFrame)
             end
         end
     )
+end
+
+local function Create_Health_Bar(mainFrame)
+    if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
+        mainFrame.healthFrame.healthBarBack = KH_UI:CreateColorFrame(250, 25, mainFrame.healthFrame, "BOTTOMRIGHT", -64, -31, 4, {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1})
+        mainFrame.healthFrame.healthBarBg = KH_UI:CreateColorFrame(254, 33, mainFrame.healthFrame.healthBarBack, "TOPRIGHT", 0, 4, 3, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.healthFrame.healthBarLowHealth = KH_UI:CreateColorFrame(250, 25, mainFrame.healthFrame.healthBarBack, "TOPRIGHT", 0, 0, 5, {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1})
+        mainFrame.healthFrame.healthBarHealth = KH_UI:CreateImageFrame(200, 25, mainFrame.healthFrame.healthBarBack, "TOPRIGHT", 0, 0, 6, {x = 59.5 / 64, xw = 59.5 / 64, y = 4 / 128, yh = 29 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+        mainFrame.healthFrame.healthBarDamage = KH_UI:CreateColorFrame(220, 25, mainFrame.healthFrame.healthBarBack, "TOPRIGHT", 0, 0, 5, {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1})
+    elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
+        mainFrame.healthFrame.healthBarBack = KH_UI:CreateColorFrame(250, 25, mainFrame.healthFrame, "TOPLEFT", 64, 31, 4, {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1})
+        mainFrame.healthFrame.healthBarBg = KH_UI:CreateColorFrame(254, 33, mainFrame.healthFrame.healthBarBack, "TOPLEFT", 0, 4, 3, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.healthFrame.healthBarLowHealth = KH_UI:CreateColorFrame(250, 25, mainFrame.healthFrame.healthBarBack, "TOPLEFT", 0, 0, 5, {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1})
+        mainFrame.healthFrame.healthBarHealth = KH_UI:CreateImageFrame(200, 25, mainFrame.healthFrame.healthBarBack, "TOPLEFT", 0, 0, 6, {x = 59.5 / 64, xw = 59.5 / 64, y = 4 / 128, yh = 29 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+        mainFrame.healthFrame.healthBarHealth.texture:SetRotation(math.rad(180))
+        mainFrame.healthFrame.healthBarDamage = KH_UI:CreateColorFrame(220, 25, mainFrame.healthFrame.healthBarBack, "TOPLEFT", 0, 0, 5, {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1})
+    end   
 end
 
 local function Update(self, elapsed)
@@ -258,6 +339,7 @@ local function Update(self, elapsed)
             self.lowHealthDirection = 0
         end
         --Update frames
+        self.healthFrame.healthBarLowHealth.texture:SetAlpha(self.lowHealthAlpha)
         for i in ipairs(self.ring_frames) do
             if self.ring_frames[i].ringtype == "lasthealth" then
                 if self.lastTimer <= 0 then
@@ -265,7 +347,7 @@ local function Update(self, elapsed)
                 elseif self.ring_frames[i].alpha > 0.5 then
                     self.ring_frames[i].alpha = self.ring_frames[i].alpha - 0.006
                 end
-                --self.healthFrame.long_bar.healthLast.texture:SetAlpha(self.ring_frames[i].alpha)
+                self.healthFrame.healthBarDamage.texture:SetAlpha(self.ring_frames[i].alpha)
                 self.portrait.redTexture:SetAlpha(self.ring_frames[i].alpha)
             end
             self.ring_frames[i]:SetAlpha(self.ring_frames[i].alpha)
@@ -279,7 +361,6 @@ local function Update(self, elapsed)
     self.powerFrame:SetPoint("CENTER", 0, self.offsety)
     self.manaFrame:ClearAllPoints()
     self.manaFrame:SetPoint("CENTER", 0, self.offsety)
-    --calc_health_stretch(self)
 end
 
 function KH_UI:New_KH1Unitframe(unit, setting)
@@ -344,8 +425,8 @@ function KH_UI:New_KH1Unitframe(unit, setting)
         else
             f:RegisterForDrag(nil)
         end
-        f.Update_Health()
-        f.Update_Power()
+        f.Update_Health(true)
+        f.Update_Power(true)
     end
 
     f.Update_Health = function()
@@ -356,11 +437,36 @@ function KH_UI:New_KH1Unitframe(unit, setting)
         else
             f.healthMaxMult = 1
         end
+        --Force update ring
         for i in ipairs(f.ring_table) do
             if f.ring_frames[i].ringtype == "health" or f.ring_frames[i].ringtype == "lasthealth" or f.ring_frames[i].ringtype == "maxhealth" or f.ring_frames[i].ringtype == "maxhealthbg" then
                 KH_UI:calc_ring_health(f.ring_frames[i], f.ring_table[i], f.unit, f.ring_frames[i].ringtype, f)
             end
         end
+        --Set bar length
+        local length = (f.unitHealthMax * f.healthMaxMult - KH_UI_Settings[f.settings].ringMaxHealth) * KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000
+        if (length >= 0) then
+            f.healthFrame.healthBarBg:SetWidth(length + 4)
+            f.healthFrame.healthBarBack:SetWidth(length)
+            f.healthFrame.healthBarLowHealth:SetWidth(length)
+        else
+            f.healthFrame.healthBarBg:SetWidth(0.00001)
+            f.healthFrame.healthBarBack:SetWidth(0.00001)
+            f.healthFrame.healthBarLowHealth:SetWidth(0.00001)
+        end
+        length = (f.unitHealth * f.healthMaxMult - KH_UI_Settings[f.settings].ringMaxHealth) * KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000
+        if (length >= 0) then
+            f.healthFrame.healthBarHealth:SetWidth(length)
+        else
+            f.healthFrame.healthBarHealth:SetWidth(0.00001)
+        end
+        length = (f.damageHealth * f.healthMaxMult - KH_UI_Settings[f.settings].ringMaxHealth) * KH_UI_Settings[f.settings].longBarHealthLengthRate / 1000
+        if (length >= 0) then
+            f.healthFrame.healthBarDamage:SetWidth(length)
+        else
+            f.healthFrame.healthBarDamage:SetWidth(0.00001)
+        end
+        --Set Text
         if f.unitHealth ~= nil then
             f.healthFrame.healthVal.text:SetText(format(f.unitHealth))
         end
@@ -371,19 +477,21 @@ function KH_UI:New_KH1Unitframe(unit, setting)
         end
     end
 
-    f.Update_Power = function()
+    f.Update_Power = function(force)
         local powerType, powerToken, altR, altG, altB = UnitPowerType(f.unit)
         local class, _, _ = UnitClass(f.unit)
         f.unitMana = UnitPower(f.unit, 0)
         f.unitManaMax = UnitPowerMax(f.unit, 0)
         f.unitPower = UnitPower(f.unit, powerType)
         f.unitPowerMax = UnitPowerMax(f.unit, powerType)
-        for i in ipairs(f.ring_table) do
-            if
-                (f.ring_frames[i].ringtype == "power" or f.ring_frames[i].ringtype == "maxpower" or f.ring_frames[i].ringtype == "maxpowerbg" or f.ring_frames[i].ringtype == "mana" or f.ring_frames[i].ringtype == "maxmana" or
-                    f.ring_frames[i].ringtype == "maxmanabg")
-             then
-                KH_UI:calc_ring_power(f.ring_frames[i], f.ring_table[i], f.unit, f.ring_frames[i].ringtype, f)
+        if (force) then
+            for i in ipairs(f.ring_table) do
+                if
+                    (f.ring_frames[i].ringtype == "power" or f.ring_frames[i].ringtype == "maxpower" or f.ring_frames[i].ringtype == "maxpowerbg" or f.ring_frames[i].ringtype == "mana" or f.ring_frames[i].ringtype == "maxmana" or
+                        f.ring_frames[i].ringtype == "maxmanabg")
+                then
+                    KH_UI:calc_ring_power(f.ring_frames[i], f.ring_table[i], f.unit, f.ring_frames[i].ringtype, f)
+                end
             end
         end
         if f.unitMana ~= nil then
@@ -561,17 +669,17 @@ function KH_UI:New_KH1Unitframe(unit, setting)
         bgtex:SetTexCoord(0, 1, 1, 0)
     end
 
-    --create_health_stretch(f)
     KH_UI:create_portrait(f)
     create_barProps(f)
     create_infoFrames(f)
     Create_Power_Bar(f)
     Create_Resource_Bar(f)
+    Create_Health_Bar(f)
 
     f:RegisterEvent("UNIT_POWER_UPDATE")
     f:RegisterEvent("UNIT_MANA")
     f:RegisterEvent("UNIT_MAXHEALTH")
-    f:RegisterEvent("UNIT_HEALTH")
+    f:RegisterEvent("UNIT_HEALTH_FREQUENT")
     f:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
     f:RegisterEvent("PLAYER_ENTERING_WORLD")
 
@@ -585,23 +693,15 @@ function KH_UI:New_KH1Unitframe(unit, setting)
             if arg1 == f.unit then
                 if (event == "UNIT_MANA" or event == "UPDATE_SHAPESHIFT_FORM" or event == "UNIT_POWER_UPDATE" or event == "GROUP_ROSTER_UPDATE") then
                     f:Update_Power()
-                elseif (event == "UNIT_MAXHEALTH" or event == "UNIT_HEALTH") then
-                    f.unitHealth = UnitHealth(f.unit)
-                    f.unitHealthMax = UnitHealthMax(f.unit)
-                    if f.unitHealthMax > KH_UI_Settings[f.settings].healthLengthMax then
-                        f.healthMaxMult = 1 / (f.unitHealthMax / KH_UI_Settings[f.settings].healthLengthMax)
-                    else
-                        f.healthMaxMult = 1
-                    end
-                    if f.unitHealth ~= nil then
-                        f.healthFrame.healthVal.text:SetText(format(f.unitHealth))
-                    end
+                elseif (event == "UNIT_MAXHEALTH" or event == "UNIT_HEALTH_FREQUENT") then
+                    f:Update_Health()
                 end
             end
         end
     )
 
     f:Update_Power()
+    f:Update_Health()
 
     return f
 end

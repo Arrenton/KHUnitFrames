@@ -81,10 +81,37 @@ local ring_table = {
 	}
 }
 
+local ORB_COLORS = {
+	["COMBO"] = {
+		r = 1,
+		g = 0.25,
+		b = 0
+	},
+	["RUNES"] = {
+		r = 0,
+		g = 0.75,
+		b = 1
+	}
+}
+
+local RESOURCE_COLORS = {
+	["COMBO"] = {
+		r = 1,
+		g = 0.3,
+		b = 0
+	},
+	["RUNES"] = {
+		r = 0,
+		g = 1,
+		b = 1
+	}
+}
+
 local function Create_Power_Bar(mainFrame)
 	mainFrame.powerFrame:RegisterEvent("UNIT_POWER_UPDATE")
 	mainFrame.powerFrame:RegisterEvent("UNIT_MAXPOWER")
 	mainFrame.powerFrame:RegisterEvent("UNIT_DISPLAYPOWER")
+	mainFrame.powerFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
 	--Create Frames
 	if (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
 		mainFrame.powerFrame.base = KH_UI:CreateImageFrame(55, 16, mainFrame.powerFrame, "TOPRIGHT", 155, -32, 8, {x = 4 / 256, xw = 58 / 256, y = 1.2 / 256, yh = 16 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
@@ -116,7 +143,7 @@ local function Create_Power_Bar(mainFrame)
 		mainFrame.powerFrame.power.mask:SetSize(128, 32)
 		mainFrame.powerFrame.power.mask:SetPoint("TOPLEFT", -1, 1)
 		mainFrame.powerFrame.power.texture:AddMaskTexture(mainFrame.powerFrame.power.mask)
-	elseif(KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
+	elseif (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
 		mainFrame.powerFrame.base = KH_UI:CreateImageFrame(55, 16, mainFrame.powerFrame, "BOTTOMLEFT", -170, 16, 8, {x = 1 / 256, xw = 55 / 256, y = 1.2 / 256, yh = 16 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
 		mainFrame.powerFrame.bg = KH_UI:CreateImageFrame(107, 32, mainFrame.powerFrame.base, "BOTTOMLEFT", 54, -0, 8, {x = 1 / 256, xw = 108 / 256, y = 18 / 256, yh = 50 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
 		mainFrame.powerFrame.power = KH_UI:CreateImageFrame(99, 26, mainFrame.powerFrame.bg, "BOTTOMLEFT", 3, 3, 9, {x = 1 / 256, xw = 100 / 256, y = 172 / 256, yh = 197 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
@@ -127,7 +154,7 @@ local function Create_Power_Bar(mainFrame)
 		mainFrame.powerFrame.power.mask:SetPoint("TOPLEFT", -1, 1)
 		mainFrame.powerFrame.power.texture:AddMaskTexture(mainFrame.powerFrame.power.mask)
 	end
-	
+
 	--Set power color
 	local powerType, powerToken, altR, altG, altB = UnitPowerType(mainFrame.unit)
 	local info, r, g, b = PowerBarColor[powerToken], 0, 0, 0
@@ -143,48 +170,41 @@ local function Create_Power_Bar(mainFrame)
 	mainFrame.powerFrame.base.texture:SetVertexColor(r, g, b, 1)
 	mainFrame.powerFrame.power.texture:SetVertexColor(r, g, b, 1)
 	mainFrame.powerFrame.powerVal.text:SetText(UnitPower("player"))
-	mainFrame.powerFrame:SetScript(
-		"OnEvent",
-		function(self, event, unit)
-			if (unit == mainFrame.unit) then
-				if (event == "UNIT_MAXPOWER" or event == "UNIT_DISPLAYPOWER") then
-					--Set power color
-					local powerType, powerToken, altR, altG, altB = UnitPowerType(mainFrame.unit)
-					local info, r, g, b = PowerBarColor[powerToken], 0, 0, 0
-					if (info) then
-						r = info.r
-						g = info.g
-						b = info.b
-					else
-						r = altR
-						g = altG
-						b = altB
-					end
-					self.base.texture:SetVertexColor(r, g, b, 1)
-					self.power.texture:SetVertexColor(r, g, b, 1)
-				end
-				--Set bar length
-				local power = UnitPower(unit)
-				local maxPower = UnitPowerMax(unit)
-				local powerPct = power / maxPower
-				if (powerPct * 100 >= 0.5) then
-					self.power:Show()
-					self.power:SetWidth(powerPct * 100)
-					if (KH_UI_Settings[mainFrame.settings].orientation == "Top Left" or KH_UI_Settings[mainFrame.settings].orientation == "Bottom Left") then
-						--self.power.texture:SetTexCoord((256 - powerPct * 99) / 256, 256 / 256, 52 / 256, 78 / 256)
-						self.power.texture:SetTexCoord(1/256, 199/256, -6/256, 225/256, 100/256, 199/256, 100/256, 225/256)
-					elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Right" or KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
-						--self.power.texture:SetTexCoord(1 / 256, (1 + powerPct * 99) / 256, 52 / 256, 78 / 256)
-					self.power.texture:SetTexCoord(1/256, 172/256, 1/256, 198/256, 100/256, 172/256, 107/256, 198/256)
-					end
-				else
-					self.power:Hide()
-				end
-				--Set Power Val Text
-				self.powerVal.text:SetText(power)
-			end
+	function mainFrame.powerFrame:Update_Power_Bar(mainFrame)
+		--Set power color
+		local powerType, powerToken, altR, altG, altB = UnitPowerType(mainFrame.unit)
+		local info, r, g, b = PowerBarColor[powerToken], 0, 0, 0
+		if (info) then
+			r = info.r
+			g = info.g
+			b = info.b
+		else
+			r = altR
+			g = altG
+			b = altB
 		end
-	)
+		self.base.texture:SetVertexColor(r, g, b, 1)
+		self.power.texture:SetVertexColor(r, g, b, 1)
+		--Set bar length
+		local power = UnitPower(mainFrame.unit)
+		local maxPower = UnitPowerMax(mainFrame.unit)
+		local powerPct = power / maxPower
+		if (powerPct * 100 >= 0.5) then
+			self.power:Show()
+			self.power:SetWidth(powerPct * 100)
+			if (KH_UI_Settings[mainFrame.settings].orientation == "Top Left" or KH_UI_Settings[mainFrame.settings].orientation == "Bottom Left") then
+				--self.power.texture:SetTexCoord((256 - powerPct * 99) / 256, 256 / 256, 52 / 256, 78 / 256)
+				self.power.texture:SetTexCoord(1 / 256, 199 / 256, -6 / 256, 225 / 256, 100 / 256, 199 / 256, 100 / 256, 225 / 256)
+			elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Right" or KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
+				--self.power.texture:SetTexCoord(1 / 256, (1 + powerPct * 99) / 256, 52 / 256, 78 / 256)
+				self.power.texture:SetTexCoord(1 / 256, 172 / 256, 1 / 256, 198 / 256, 100 / 256, 172 / 256, 107 / 256, 198 / 256)
+			end
+		else
+			self.power:Hide()
+		end
+		--Set Power Val Text
+		self.powerVal.text:SetText(power)
+	end
 end
 
 local function Create_Resource_Counter(mainFrame)
@@ -208,11 +228,16 @@ local function Create_Resource_Counter(mainFrame)
 				end
 			end
 			self.orb[i]:SetAlpha(self.orb[i].alpha)
-			self.orb[i]:SetPoint("CENTER", pointx, pointy)
+			self.orb[i]:SetPoint("CENTER", pointx + 2, pointy)
 		end
 	end
 	local function SetOrbs(mainFrame)
 		local self = mainFrame.resourceFrame
+		local resourceType = "COMBO"
+		local _, class, _ = UnitClass(mainFrame.unit)
+		if (class == "DEATHKNIGHT") then
+			resourceType = "RUNES"
+		end
 		for i = 1, 9 do
 			self.orb[i].alpha = 0
 			self.orb[i].angle = 0
@@ -223,6 +248,8 @@ local function Create_Resource_Counter(mainFrame)
 			self.orb[i]:Show()
 			self.orb[i].alpha = 0
 			self.orb[i].angle = 580 + (i - 1) * (360 / self.currentValue)
+			--Set Color
+			self.orb[i].texture:SetVertexColor(ORB_COLORS[resourceType].r, ORB_COLORS[resourceType].g, ORB_COLORS[resourceType].b, 1)
 		end
 	end
 	mainFrame.resourceFrame = CreateFrame("Frame", nil, mainFrame.powerFrame.bg)
@@ -239,10 +266,16 @@ local function Create_Resource_Counter(mainFrame)
 		mainFrame.resourceFrame.bg = KH_UI:CreateImageFrame(35, 32, mainFrame.resourceFrame, "TOPRIGHT", 130, 0, 26, {x = 111 / 256, xw = 146 / 256, y = 10 / 256, yh = 42 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
 	end
 	mainFrame.resourceFrame.orb = {}
+	local resourceType = "COMBO"
+	local _, class, _ = UnitClass(mainFrame.unit)
+	if (class == "DEATHKNIGHT") then
+		resourceType = "RUNES"
+	end
 	for i = 1, 9 do
 		mainFrame.resourceFrame.orb[i] = KH_UI:CreateImageFrame(10, 10, mainFrame.resourceFrame.bg, "CENTER", 0, 0, 28, {x = 100 / 256, xw = 110 / 256, y = 5 / 256, yh = 15 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
 		mainFrame.resourceFrame.orb[i].alpha = 0
 		mainFrame.resourceFrame.orb[i].angle = 0
+		mainFrame.resourceFrame.orb[i].texture:SetVertexColor(ORB_COLORS[resourceType].r, ORB_COLORS[resourceType].g, ORB_COLORS[resourceType].b, 1)
 		mainFrame.resourceFrame.orb[i]:Show()
 	end
 	mainFrame.resourceFrame.number = {
@@ -257,53 +290,69 @@ local function Create_Resource_Counter(mainFrame)
 		[8] = {{x = 193 / 256, xw = 219 / 256, y = 111 / 256, yh = 139 / 256}, {x = 193 / 256, xw = 219 / 256, y = 80 / 256, yh = 108 / 256}},
 		[9] = {{x = 221 / 256, xw = 247 / 256, y = 111 / 256, yh = 139 / 256}, {x = 221 / 256, xw = 247 / 256, y = 80 / 256, yh = 108 / 256}}
 	}
-	mainFrame.resourceFrame:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
-	mainFrame.resourceFrame:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
-	mainFrame.resourceFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
-	mainFrame.resourceFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	if (mainFrame.resourceFrame.side == 1) then
 		mainFrame.resourceFrame.value = KH_UI:CreateImageFrame(26, 28, mainFrame.resourceFrame.bg, "TOPLEFT", 6, -2, 27, mainFrame.resourceFrame.number[9][mainFrame.resourceFrame.side], "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
-	elseif(mainFrame.resourceFrame.side == 2) then
-		mainFrame.resourceFrame.value = KH_UI:CreateImageFrame(26, 28, mainFrame.resourceFrame.bg, "TOPRIGHT", -6, -2, 27, mainFrame.resourceFrame.number[9][mainFrame.resourceFrame.side], "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+	elseif (mainFrame.resourceFrame.side == 2) then
+		mainFrame.resourceFrame.value =
+			KH_UI:CreateImageFrame(26, 28, mainFrame.resourceFrame.bg, "TOPRIGHT", -6, -2, 27, mainFrame.resourceFrame.number[9][mainFrame.resourceFrame.side], "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
 	end
 	mainFrame.resourceFrame.value.texture:SetVertexColor(1, 0.3, 0, 1)
 
-	mainFrame.resourceFrame:SetScript(
-		"OnEvent",
-		function(self, event, arg1)
-			if (mainFrame.unit == "player") then
+	function mainFrame.resourceFrame:Update_Resource_Frame(mainFrame)
+		if (mainFrame.unit == "player") then
+			--Set Value
+			local powerType, powerToken, _, _, _ = UnitPowerType(mainFrame.unit)
+			local _, class, _ = UnitClass(mainFrame.unit)
+			local resourceType = "COMBO"
+			if (class == "ROGUE" or (class == "DRUID" and powerToken == "ENERGY")) then
 				self.currentValue = GetComboPoints(mainFrame.unit, "target")
-				if (self.currentValue ~= self.previousValue) then
-					self.value.texture:SetTexCoord(self.number[self.currentValue][self.side].x, self.number[self.currentValue][self.side].xw, self.number[self.currentValue][self.side].y, self.number[self.currentValue][self.side].yh)
-					SetOrbs(mainFrame)
-				end
-				self.previousValue = self.currentValue
-				local powerType, powerToken, _, _, _ = UnitPowerType(mainFrame.unit)
-				local _, class, _ = UnitClass(mainFrame.unit)
-				local maxResource = UnitPowerMax(PlayerFrame.unit, Enum.PowerType.ComboPoints)
-				if (not self:IsShown()) then
-					if (maxResource > 0) then
-						if (class == "DRUID" and powerToken == "ENERGY") then
-							self:Show()
-							self.previousValue = -1
-						elseif (class ~= "DRUID") then
-							self:Show()
-							self.previousValue = -1
-						end
-					end
-				elseif (self:IsShown()) then
-					if (class == "DRUID" and powerToken ~= "ENERGY") then
-						self:Hide()
-					elseif (maxResource <= 0) then
-						self:Hide()
+			elseif (class == "DEATHKNIGHT") then
+				local numReady = 0;
+				for runeSlot=1,UnitPowerMax(PlayerFrame.unit, Enum.PowerType.Runes) do
+					local start, duration, runeReady = GetRuneCooldown(runeSlot);
+					if (runeReady) then
+						numReady = numReady + 1;
 					end
 				end
-			else
-				self:Hide()
-				self:UnregisterAllEvents()
+				self.currentValue = numReady;
+				resourceType = "RUNES"
 			end
+			if (self.currentValue ~= self.previousValue) then
+				self.value.texture:SetTexCoord(self.number[self.currentValue][self.side].x, self.number[self.currentValue][self.side].xw, self.number[self.currentValue][self.side].y, self.number[self.currentValue][self.side].yh)
+				SetOrbs(mainFrame)
+			end
+			self.previousValue = self.currentValue
+			--Set Color
+			self.value.texture:SetVertexColor(RESOURCE_COLORS[resourceType].r, RESOURCE_COLORS[resourceType].g, RESOURCE_COLORS[resourceType].b, 1)
+			--Set Visible
+			local maxResource = 0
+			if ((class == "DRUID" and powerToken == "ENERGY") or class == "ROGUE") then
+				maxResource = UnitPowerMax(PlayerFrame.unit, Enum.PowerType.ComboPoints)
+			elseif (class == "DEATHKNIGHT") then
+				maxResource = UnitPowerMax(PlayerFrame.unit, Enum.PowerType.Runes)
+			end
+			if (not self:IsShown()) then
+				if (maxResource > 0) then
+					if (class == "DRUID" and powerToken == "ENERGY") then
+						self:Show()
+						self.previousValue = -1
+					elseif (class ~= "DRUID") then
+						self:Show()
+						self.previousValue = -1
+					end
+				end
+			elseif (self:IsShown()) then
+				if (class == "DRUID" and powerToken ~= "ENERGY") then
+					self:Hide()
+				elseif (maxResource <= 0) then
+					self:Hide()
+				end
+			end
+		else
+			self:Hide()
+			self:UnregisterAllEvents()
 		end
-	)
+	end
 end
 
 local function create_ring_pretties(mainFrame)
@@ -924,6 +973,10 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 				KH_UI:calc_ring_health(f.ring_frames[i], f.ring_table[i], f.unit, f.ring_frames[i].ringtype, f)
 			end
 		end
+		--Set Text
+		if f.unitHealth ~= nil then
+			f.healthFrame.healthVal.text:SetText(format(f.unitHealth))
+		end
 	end
 
 	f.Update_Power = function()
@@ -957,6 +1010,8 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 		else
 			f.powerFrame:Show()
 		end
+		f.powerFrame:Update_Power_Bar(f)
+		f.resourceFrame:Update_Resource_Frame(f)
 	end
 
 	f.Refresh_Points = function()
@@ -1087,6 +1142,8 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 
 	f:RegisterEvent("UNIT_POWER_UPDATE")
 	f:RegisterEvent("UNIT_MANA")
+	f:RegisterEvent("UNIT_MAXHEALTH")
+	f:RegisterEvent("UNIT_HEALTH_FREQUENT")
 	f:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 	f:RegisterEvent("PLAYER_ENTERING_WORLD")
 
@@ -1099,11 +1156,14 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 
 			if (event == "GROUP_ROSTER_UPDATE" or event == "UNIT_CONNECTION" or event == "UNIT_OTHER_PARTY_CHANGED" or event == "UPDATE_SHAPESHIFT_FORM" or event == "UNIT_POWER_UPDATE" or event == "UNIT_MANA") and arg1 == f.unit then
 				f:Update_Power()
+			elseif (event == "UNIT_MAXHEALTH" or event == "UNIT_HEALTH_FREQUENT") then
+				f:Update_Health()
+			elseif (event == "PLAYER_ENTERING_WORLD") then
+				f:Update_Power()
+				f:Update_Health()
 			end
 		end
 	)
-
-	f:Update_Power()
 
 	return f
 end

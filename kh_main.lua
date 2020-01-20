@@ -871,22 +871,21 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
 
     ring_object.segments = KH_UI:cre_ring_segments(ring_config, ring_object, mainFrame)
 
-    if ring_config.global.ringtype == "health" or ring_config.global.ringtype == "lasthealth" or ring_config.global.ringtype == "maxhealth" or ring_config.global.ringtype == "maxhealthbg" then
+    --[[if ring_config.global.ringtype == "health" or ring_config.global.ringtype == "lasthealth" or ring_config.global.ringtype == "maxhealth" or ring_config.global.ringtype == "maxhealthbg" and not KH_UI_Settings[mainFrame.settings].style == "KH1" then
         ring_object:SetScript(
             "OnEvent",
             function(self, event, unit)
                 if ((event == "UNIT_HEALTH_FREQUENT" or event == "UNIT_MAXHEALTH") and unit == mainFrame.unit) or event == "PLAYER_ENTERING_WORLD" then
                     KH_UI:calc_ring_health(ring_object, ring_config, mainFrame.unit, ring_config.global.ringtype, mainFrame)
-                    mainFrame.unitHealth = UnitHealth(mainFrame.unit)
                 end
             end
         )
         ring_object:RegisterEvent("UNIT_HEALTH_FREQUENT")
         ring_object:RegisterEvent("UNIT_MAXHEALTH")
         ring_object:RegisterEvent("PLAYER_ENTERING_WORLD")
-    end
+    end]]
 
-    if (ring_config.global.ringtype == "maxpower" or ring_config.global.ringtype == "maxpowerbg" or ring_config.global.ringtype == "maxmana" or ring_config.global.ringtype == "maxmanabg") then
+    --[[if (ring_config.global.ringtype == "maxpower" or ring_config.global.ringtype == "maxpowerbg" or ring_config.global.ringtype == "maxmana" or ring_config.global.ringtype == "maxmanabg") then
         ring_object:SetScript(
             "OnEvent",
             function(self, event, unit)
@@ -911,7 +910,7 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
                 end
             end
         )
-    end
+    end]]
 
     return ring_object
 end
@@ -1034,7 +1033,7 @@ function KH_UI:create_portrait(mainFrame)
     )
     mainFrame.portrait:SetSize(100, 100)
     mainFrame.portrait:SetPoint("CENTER", 0, 0)
-    mainFrame.portrait:SetFrameLevel(3)
+    mainFrame.portrait:SetFrameLevel(4)
     mainFrame.portrait.redTexture:SetVertexColor(1, 0, 0, 1)
     -------------------
     --Level------------
@@ -1064,24 +1063,24 @@ function KH_UI:create_portrait(mainFrame)
     --------------------
     --State-------------
     --------------------
-    mainFrame.portrait.stateFrame = KH_UI:CreateImageFrame(32, 32, mainFrame.portrait.levelFrame, "CENTER", 1, 0, 5, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\CharacterFrame\\UI-StateIcon")
+    mainFrame.portrait.stateFrame = KH_UI:CreateImageFrame(32, 32, mainFrame.portrait.levelFrame, "CENTER", 1, 0, 6, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\CharacterFrame\\UI-StateIcon")
     --------------------
     --Party Leader------
     --------------------
-    mainFrame.portrait.leaderFrame = KH_UI:CreateImageFrame(18, 18, mainFrame.portrait, "TopLeft", 16, 10, 5, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\GROUPFRAME\\UI-Group-LeaderIcon")
+    mainFrame.portrait.leaderFrame = KH_UI:CreateImageFrame(18, 18, mainFrame.portrait, "TopLeft", 16, 10, 6, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\GROUPFRAME\\UI-Group-LeaderIcon")
     --------------------
     --Master Loot------
     --------------------
-    mainFrame.portrait.masterLootFrame = KH_UI:CreateImageFrame(18, 18, mainFrame.portrait, "TopLeft", 64, 10, 5, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\GroupFrame\\UI-Group-MasterLooter")
+    mainFrame.portrait.masterLootFrame = KH_UI:CreateImageFrame(18, 18, mainFrame.portrait, "TopLeft", 64, 10, 6, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\GroupFrame\\UI-Group-MasterLooter")
     --------------------
     --PvP Icon----------
     --------------------
-    mainFrame.portrait.pvpIcon = KH_UI:CreateImageFrame(64, 64, mainFrame.portrait, "TopLeft", -16, -28, 5, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\TargetingFrame\\UI-PVP-HORDE")
+    mainFrame.portrait.pvpIcon = KH_UI:CreateImageFrame(64, 64, mainFrame.portrait, "TopLeft", -16, -28, 6, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\TargetingFrame\\UI-PVP-HORDE")
 
     -----------------------------
     --Disconnected Icon----------
     -----------------------------
-    mainFrame.portrait.disconnectFrame = KH_UI:CreateImageFrame(100, 100, mainFrame.portrait, "left", 0, 0, 5, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\CharacterFrame\\Disconnect-Icon")
+    mainFrame.portrait.disconnectFrame = KH_UI:CreateImageFrame(100, 100, mainFrame.portrait, "left", 0, 0, 6, {x = 0, xw = 1, y = 0, yh = 1}, "Interface\\CharacterFrame\\Disconnect-Icon")
     --[[------------------
 	--Role--------------
 	--------------------
