@@ -77,15 +77,15 @@ local ring_table = {
     },
     [5] = {
         global = {
-            gfx_texture = "KH2\\ring_segment",
-            gfx_slicer = "slicer",
+            gfx_texture = "KH1\\health_ring_part",
+            gfx_slicer = "KH1\\health_slicer",
             segments_used = 3,
             start_segment = 1,
             fill_direction = 1,
             ringtype = "maxhealthbg"
         },
         segment = {
-            color = {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1},
+            color = {r = 1, g = 0, b = 0, a = 1},
             framelevel = 4,
             outer_radius = 95,
             inner_radius = 70
@@ -149,7 +149,7 @@ local function create_infoFrames(mainFrame)
     elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
         mainFrame.nameFrame = KH_UI:CreateTextFrame("*NAME*", 0, -10, 1, 1, 1, "CENTER", mainFrame.portrait, "TOP", 25, "GameFontNormal")
         mainFrame.healthFrame.healthVal = KH_UI:CreateTextFrame("??/??", 45, 18, 1, 1, 0.4, "CENTER", mainFrame.healthFrame.base, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
-        mainFrame.manaFrame.manaVal = KH_UI:CreateTextFrame("??/??", 42, 8, 1, 1, 0.4, "CENTER", mainFrame.manaFrame.base, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
+        mainFrame.manaFrame.manaVal = KH_UI:CreateTextFrame("??/??", 42, 18, 1, 1, 0.4, "CENTER", mainFrame.manaFrame.base, "BOTTOMLEFT", 4, "SystemFont_OutlineThick_Huge2")
     end
 end
 
@@ -296,6 +296,19 @@ local function Create_Health_Bar(mainFrame)
     end   
 end
 
+local function Create_Mana_Bar(mainFrame)
+    if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
+        mainFrame.manaFrame.manaBarBack = KH_UI:CreateColorFrame(250, 25, mainFrame.manaFrame, "BOTTOMRIGHT", -64, -31, 4, {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1})
+        mainFrame.manaFrame.manaBarBg = KH_UI:CreateColorFrame(254, 33, mainFrame.manaFrame.manaBarBack, "TOPRIGHT", 0, 4, 3, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.manaFrame.manaBarMana = KH_UI:CreateImageFrame(200, 25, mainFrame.manaFrame.manaBarBack, "TOPRIGHT", 0, 0, 6, {x = 58.5 / 64, xw = 58.5 / 64, y = 4 / 128, yh = 29 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+    elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
+        mainFrame.manaFrame.manaBarBack = KH_UI:CreateColorFrame(250, 25, mainFrame.manaFrame, "TOPLEFT", 64, 60, 4, {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1})
+        mainFrame.manaFrame.manaBarBg = KH_UI:CreateColorFrame(254, 33, mainFrame.manaFrame.manaBarBack, "TOPLEFT", 0, 4, 3, {r = 0, g = 0, b = 0, a = 1})
+        mainFrame.manaFrame.manaBarMana = KH_UI:CreateImageFrame(200, 25, mainFrame.manaFrame.manaBarBack, "TOPLEFT", 0, 0, 6, {x = 58.5 / 64, xw = 58.5 / 64, y = 4 / 128, yh = 29 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+        mainFrame.manaFrame.manaBarMana.texture:SetRotation(math.rad(180))
+    end   
+end
+
 local function Update(self, elapsed)
     self.lastUpdate = self.lastUpdate + elapsed
 
@@ -396,6 +409,7 @@ function KH_UI:New_KH1Unitframe(unit, setting)
         f.scale = f.scale / 2
     end
     f.healthMaxMult = 1
+    f.manaMaxMult = 1
 
     f.Update_FrameInfo = function()
         f.scale = KH_UI_Settings[f.settings].scale
@@ -484,6 +498,11 @@ function KH_UI:New_KH1Unitframe(unit, setting)
         f.unitManaMax = UnitPowerMax(f.unit, 0)
         f.unitPower = UnitPower(f.unit, powerType)
         f.unitPowerMax = UnitPowerMax(f.unit, powerType)
+        if f.unitManaMax > KH_UI_Settings[f.settings].manaLengthMax then
+            f.manaMaxMult = 1 / (f.unitManaMax / KH_UI_Settings[f.settings].manaLengthMax)
+        else
+            f.manaMaxMult = 1
+        end
         if (force) then
             for i in ipairs(f.ring_table) do
                 if
@@ -504,6 +523,21 @@ function KH_UI:New_KH1Unitframe(unit, setting)
             f.manaFrame.manaVal:Show()
         elseif KH_UI_Settings[f.settings].displayManaValue == false and f.manaFrame.manaVal:IsVisible() then
             f.manaFrame.manaVal:Hide()
+        end
+        --Set Mana Bar
+        local length = (f.unitManaMax * f.manaMaxMult - KH_UI_Settings[f.settings].ringMaxPower) * KH_UI_Settings[f.settings].manaLengthRate / 1000
+        if (length >= 0) then
+            f.manaFrame.manaBarBg:SetWidth(length + 4)
+            f.manaFrame.manaBarBack:SetWidth(length)
+        else
+            f.manaFrame.manaBarBg:SetWidth(0.00001)
+            f.manaFrame.manaBarBack:SetWidth(0.00001)
+        end
+        length = (f.unitMana * f.manaMaxMult - KH_UI_Settings[f.settings].ringMaxPower) * KH_UI_Settings[f.settings].manaLengthRate / 1000
+        if (length >= 0) then
+            f.manaFrame.manaBarMana:SetWidth(length)
+        else
+            f.manaFrame.manaBarMana:SetWidth(0.00001)
         end
         --Set Power Bar
         if (f.unitPowerMax ~= nil) then
@@ -675,6 +709,7 @@ function KH_UI:New_KH1Unitframe(unit, setting)
     Create_Power_Bar(f)
     Create_Resource_Bar(f)
     Create_Health_Bar(f)
+    Create_Mana_Bar(f)
 
     f:RegisterEvent("UNIT_POWER_UPDATE")
     f:RegisterEvent("UNIT_MANA")
