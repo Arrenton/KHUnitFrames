@@ -1,5 +1,19 @@
 local KHOptions
 
+StaticPopupDialogs["KH_UI_Set_Default"] = {
+	text = "Are you sure you wish to set the default values? (Will reload)",
+	button1 = "Yes",
+	button2 = "No",
+	OnAccept = function()
+		KH_UI_Settings = KH_UI_Settings_Defaults
+		C_UI.Reload()
+	end,
+	timeout = 0,
+	whileDead = true,
+	hideOnEscape = true,
+	preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+  }
+
 local uniquealyzer = 1
 local uniqueTextBox = 1
 function KH_UI:createCheckbutton(parent, x_loc, y_loc, displayname)
@@ -188,6 +202,19 @@ local function Options_Panel_Template(name, top)
 		"OnClick",
 		function()
 			C_UI.Reload()
+		end
+	)
+
+	f.setDefaults = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+	f.setDefaults:SetPoint("BOTTOMLEFT", 16, 16)
+	f.setDefaults:SetWidth(100)
+	f.setDefaults.text = f.setDefaults:CreateFontString(nil, nil, "GameFontNormal")
+	f.setDefaults.text:SetText("Set Defaults")
+	f.setDefaults.text:SetPoint("CENTER", 0, 0)
+	f.setDefaults:SetScript(
+		"OnClick",
+		function()
+			StaticPopup_Show ("KH_UI_Set_Default")
 		end
 	)
 

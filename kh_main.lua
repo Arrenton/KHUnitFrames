@@ -51,27 +51,28 @@ KH_UI_Settings_Defaults = {
         displayManaValue = true,
         ringMaxPower = 3000,
         displayPowerValue = true,
-        scale = 1,
-        style = "KH2",
+        scale = 0.5,
+        style = "KH2 Party",
         enabled = true,
+        hideNotInParty = false,
         blizzardEnabled = true,
         movable = true,
         individualSettings = {
             ["party1"] = {
-                framex = 20,
-                framey = -200
-            },
-            ["party2"] = {
-                framex = 20,
-                framey = -325
-            },
-            ["party3"] = {
-                framex = 20,
+                framex = 50,
                 framey = -450
             },
+            ["party2"] = {
+                framex = 50,
+                framey = -625
+            },
+            ["party3"] = {
+                framex = 50,
+                framey = -800
+            },
             ["party4"] = {
-                framex = 20,
-                framey = -575
+                framex = 50,
+                framey = -975
             }
         },
         orientation = "Bottom Left"
@@ -666,7 +667,7 @@ function KH_UI:update_ring_segments(mainFrame)
             if f[i].direction == 1 then
                 f[i].slicer:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\" .. ring_config.global.gfx_slicer .. "1")
             else
-                f[i].slicer:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\".. ring_config.global.gfx_slicer .. "0")
+                f[i].slicer:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\" .. ring_config.global.gfx_slicer .. "0")
             end
         end
     end
@@ -855,7 +856,10 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
         parent = mainFrame.healthFrame
     end
 
-    if (ring_config.global.ringtype == "power" or ring_config.global.ringtype == "maxpower" or ring_config.global.ringtype == "maxpowerbg" or ring_config.global.ringtype == "mana" or ring_config.global.ringtype == "maxmana" or ring_config.global.ringtype == "maxmanabg") then
+    if
+        (ring_config.global.ringtype == "power" or ring_config.global.ringtype == "maxpower" or ring_config.global.ringtype == "maxpowerbg" or ring_config.global.ringtype == "mana" or ring_config.global.ringtype == "maxmana" or
+            ring_config.global.ringtype == "maxmanabg")
+     then
         if (KH_UI_Settings[mainFrame.settings].style == "KH1") then
             parent = mainFrame.manaFrame
         elseif (KH_UI_Settings[mainFrame.settings].style == "KH2 Party") then
@@ -884,7 +888,6 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
         ring_object:RegisterEvent("UNIT_MAXHEALTH")
         ring_object:RegisterEvent("PLAYER_ENTERING_WORLD")
     end]]
-
     --[[if (ring_config.global.ringtype == "maxpower" or ring_config.global.ringtype == "maxpowerbg" or ring_config.global.ringtype == "maxmana" or ring_config.global.ringtype == "maxmanabg") then
         ring_object:SetScript(
             "OnEvent",
@@ -911,7 +914,6 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
             end
         )
     end]]
-
     return ring_object
 end
 
@@ -943,7 +945,7 @@ function KH_UI:create_portrait(mainFrame)
         function(self, event)
             SetPortraitTexture(self.Texture, mainFrame.unit)
             SetPortraitTexture(self.redTexture, mainFrame.unit)
-            if (event ~= "PLAYER_ENTER_COMBAT" and not UnitAffectingCombat("player")) then
+            if (event ~= "PLAYER_ENTER_COMBAT" and event ~= "PLAYER_REGEN_DISABLED" and not UnitAffectingCombat("player")) then
                 mainFrame.Update_FrameInfo()
             end
             if mainFrame.unit == "player" then
@@ -1132,7 +1134,9 @@ KH_UI:SetScript(
             KH_UI.partyFrame = {}
             for i = 1, 4, 1 do
                 KH_UI.partyFrame[i] = KH_UI:New_PartyFrame(i)
-                RegisterStateDriver(KH_UI.partyFrame[i], "visibility", "[@party" .. i .. ",exists]show;hide")
+                if (KH_UI_Settings["Party Frame"].hideNotInParty) then
+                    RegisterStateDriver(KH_UI.partyFrame[i], "visibility", "[@raid1, exists]hide;[@party" .. i .. ",exists]show;hide")
+                end
             end
             KH_UI:UnregisterEvent("PLAYER_LOGIN")
         elseif (event == "ADDON_LOADED") then

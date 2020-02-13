@@ -345,6 +345,7 @@ function KH_UI:New_KHTargetUnitframe(unit, setting)
     end
 
     f:EnableMouse(true)
+    f:SetClampedToScreen(true)
     f:RegisterForClicks("AnyUp")
     f:SetMovable(KH_UI_Settings[f.settings].movable)
     f:RegisterForDrag("LeftButton")

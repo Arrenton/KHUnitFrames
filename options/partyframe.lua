@@ -80,12 +80,37 @@ function KH_UI:KH_Party_Frame_Options(panel)
 			end
 		end
 	)
+	-----------------------------------
+	--Blizzard frame enabled Checkbox--
+	-----------------------------------
+	panel.generalBox.hideNotInPartyCheckbox = KH_UI:createCheckbutton(panel.generalBox.draggableCheck, 0, -24, "Hide when not in party")
+	panel.generalBox.hideNotInPartyCheckbox.tooltip = "Hides the party frames when not in a party\nDisable to help with positioning"
+	panel.generalBox.hideNotInPartyCheckbox:SetChecked(KH_UI_Settings[panel.name].hideNotInParty)
+	panel.generalBox.hideNotInPartyCheckbox:SetScript(
+		"OnClick",
+		function()
+			if (panel.generalBox.hideNotInPartyCheckbox:GetChecked()) then
+				PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+				for i = 1, 4, 1 do
+					RegisterStateDriver(KH_UI.partyFrame[i], "visibility", "[@raid1, exists]hide;[@party" .. i .. ",exists]show;hide")
+					KH_UI_Settings[panel.name].hideNotInParty = true
+				end
+			else
+				PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
+				for i = 1, 4, 1 do
+					UnregisterStateDriver(KH_UI.partyFrame[i], "visibility")
+					KH_UI.partyFrame[i]:Show()
+					KH_UI_Settings[panel.name].hideNotInParty = false
+				end
+			end
+		end
+	)
 	----------------
 	--Scale Slider--
 	----------------
 	panel.scaleSlider = CreateFrame("Slider", "KHPartyScaleSlider", panel.generalBox, "OptionsSliderTemplate")
 	panel.scaleSlider:SetPoint("TOPRight", -16, -24)
-	panel.scaleSlider:SetMinMaxValues(50, 300)
+	panel.scaleSlider:SetMinMaxValues(25, 150)
 	panel.scaleSlider:SetStepsPerPage(1)
 	panel.scaleSlider:SetValueStep(1)
 	panel.scaleSlider:SetValue(KH_UI_Settings[panel.name].scale * 100)
@@ -96,7 +121,7 @@ function KH_UI:KH_Party_Frame_Options(panel)
 			self.inputBox:SetText(self:GetValue() / 100)
 			KH_UI_Settings[panel.name].scale = self:GetValue() / 100
 			for i in pairs(KH_UI.partyFrame) do
-				KH_UI.partyFrame[i].Update_FrameInfo()
+				KH_UI.partyFrame[i]:SetScale(KH_UI_Settings[panel.name].scale)
 			end
 			panel.scaleSlider.inputBox.button:Hide()
 		end
@@ -114,7 +139,7 @@ function KH_UI:KH_Party_Frame_Options(panel)
 			panel.scaleSlider.inputBox:SetText(panel.scaleSlider:GetValue() / 100)
 			KH_UI_Settings[panel.name].scale = panel.scaleSlider:GetValue() / 100
 			for i in pairs(KH_UI.partyFrame) do
-				KH_UI.partyFrame[i].Update_FrameInfo()
+				KH_UI.partyFrame[i]:SetScale(KH_UI_Settings[panel.name].scale)
 			end
 		end
 	)
@@ -122,10 +147,12 @@ function KH_UI:KH_Party_Frame_Options(panel)
 	panel.scaleSlider.inputBox:SetText(panel.scaleSlider:GetValue() / 100)
 	panel.scaleSlider.inputBox:SetCursorPosition(0)
 	panel.scaleSlider.tooltipText = "Sets how large the frame is."
-	_G[panel.scaleSlider:GetName() .. "Low"]:SetText("0.5") -- Sets the left-side slider text (default is "Low").
-	_G[panel.scaleSlider:GetName() .. "High"]:SetText("3") -- Sets the right-side slider text (default is "High").
+	_G[panel.scaleSlider:GetName() .. "Low"]:SetText("0.25") -- Sets the left-side slider text (default is "Low").
+	_G[panel.scaleSlider:GetName() .. "High"]:SetText("1.5") -- Sets the right-side slider text (default is "High").
 	_G[panel.scaleSlider:GetName() .. "Text"]:SetText("Scale") -- Sets the "title" text (top-centre of slider).
 	if (KH_UI_Settings[panel.name].style == "KH2") then
 		KH_UI:Create_KH2_Style_Settings(panel, KH_UI.partyFrame, "party")
+	elseif (KH_UI_Settings[panel.name].style == "KH1") then
+		KH_UI:Create_KH1_Style_Settings(panel, KH_UI.partyFrame, "party")
 	end
 end

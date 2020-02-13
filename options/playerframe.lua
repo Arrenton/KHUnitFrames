@@ -44,8 +44,7 @@ function KH_UI:KH_Player_Frame_Options(panel)
 	-----------------------------------
 	--Blizzard frame enabled Checkbox--
 	-----------------------------------
-	panel.generalBox.blizzardEnabledCheckbox =
-		KH_UI:createCheckbutton(panel.generalBox.enabledCheckbox, 0, -24, "Blizzard Frame Enabled")
+	panel.generalBox.blizzardEnabledCheckbox = KH_UI:createCheckbutton(panel.generalBox.enabledCheckbox, 0, -24, "Blizzard Frame Enabled")
 	panel.generalBox.blizzardEnabledCheckbox.tooltip = "Enables the default blizzard player frame"
 	panel.generalBox.blizzardEnabledCheckbox:SetChecked(KH_UI_Settings[panel.name].blizzardEnabled)
 	panel.generalBox.blizzardEnabledCheckbox:SetScript(
@@ -93,7 +92,7 @@ function KH_UI:KH_Player_Frame_Options(panel)
 			self:SetValue(round(self:GetValue(), 2))
 			KH_UI_Settings[panel.name].scale = self:GetValue() / 100
 			self.inputBox:SetText(KH_UI_Settings[panel.name].scale)
-			KH_UI.playerFrame.Update_FrameInfo()
+			KH_UI.playerFrame:SetScale(KH_UI_Settings[panel.name].scale)
 			panel.scaleSlider.inputBox.button:Hide()
 		end
 	)
@@ -108,7 +107,7 @@ function KH_UI:KH_Player_Frame_Options(panel)
 		function()
 			panel.scaleSlider:SetValue(panel.scaleSlider.inputBox:GetNumber() * 100)
 			KH_UI_Settings[panel.name].scale = panel.scaleSlider.inputBox:GetNumber()
-			KH_UI.playerFrame.Update_FrameInfo()
+			KH_UI.playerFrame:SetScale(KH_UI_Settings[panel.name].scale)
 		end
 	)
 	panel.scaleSlider.inputBox:SetNumeric(false)

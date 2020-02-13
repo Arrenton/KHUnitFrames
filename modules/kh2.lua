@@ -895,8 +895,7 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 	---------------------
 	----Frame Variables--
 	---------------------
-
-	local f = CreateFrame("Button", "KH_UI " .. unit, UIParent, "SecureUnitButtonTemplate")
+	local f = CreateFrame("Button", "KH_UI " .. unit, m, "SecureUnitButtonTemplate")
 	f.settings = setting
 	f.ring_table = ring_table
 	f.offsety = 0
@@ -923,13 +922,9 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 	f.lowHealthAlpha = 0
 	f.lowHealthDirection = 0
 	f.scale = KH_UI_Settings[f.settings].scale
-	if (f.settings == "Party Frame") then
-		f.scale = f.scale / 2
-	end
 	f.healthMaxMult = 1
 
 	f.Update_FrameInfo = function()
-		f.scale = KH_UI_Settings[f.settings].scale
 		for i in ipairs(f.ring_table) do
 			if (KH_UI_Settings[f.settings].orientation == "Bottom Right") then
 				f.ring_table[i].global.start_segment = 4
@@ -945,10 +940,6 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 				f.ring_table[i].global.fill_direction = 0
 			end
 		end
-		if (f.settings == "Party Frame") then
-			f.scale = f.scale / 2
-		end
-		f:SetScale(f.scale)
 		f:SetMovable(KH_UI_Settings[f.settings].movable)
 		f.nameFrame.text:SetText(UnitName(f.unit))
 		if (KH_UI_Settings[f.settings].movable) then
@@ -1028,28 +1019,29 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 		f.enableMana = true
 	end
 	f:EnableMouse(true)
+    f:SetClampedToScreen(true)
 	f:RegisterForClicks("AnyUp")
 	f:SetMovable(KH_UI_Settings[f.settings].movable)
 	f:RegisterForDrag("LeftButton")
 	f:SetScript("OnDragStart", f.StartMoving)
-	f:SetScript(
-		"OnDragStop",
-		function()
-			local _, _, _, xOfs, yOfs = f:GetPoint(1)
-			f:ClearAllPoints()
-			f.posx = xOfs
-			f.posy = yOfs
-			if (f.settings == "Player Frame") then
-				KH_UI_Settings[f.settings].framex = f.posx
-				KH_UI_Settings[f.settings].framey = f.posy
-			elseif (f.settings == "Party Frame") then
-				KH_UI_Settings[f.settings].individualSettings[f.unit].framex = f.posx
-				KH_UI_Settings[f.settings].individualSettings[f.unit].framey = f.posy
-			end
-			f:StopMovingOrSizing()
-			f:SetPoint("TopLeft", f.posx, f.posy)
-		end
-	)
+    f:SetScript(
+        "OnDragStop",
+        function()
+            local _, _, _, xOfs, yOfs = f:GetPoint(1)
+            f.posx = xOfs
+            f.posy = yOfs
+            if (f.settings == "Player Frame") then
+                KH_UI_Settings[f.settings].framex = f.posx + f.width / 2
+                KH_UI_Settings[f.settings].framey = f.posy - f.height / 2
+            elseif (f.settings == "Party Frame") then
+                KH_UI_Settings[f.settings].individualSettings[f.unit].framex = f.posx + f.width / 2
+                KH_UI_Settings[f.settings].individualSettings[f.unit].framey = f.posy - f.height / 2
+            end
+            f:StopMovingOrSizing()
+            f:ClearAllPoints()
+            f:SetPoint("TOPLEFT", f.posx, f.posy)
+        end
+    )
 
 	local menuFunc = TargetFrameDropDown_Initialize
 
@@ -1091,7 +1083,7 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 	f.manaFrame:SetWidth(f.width)
 	f.manaFrame:SetHeight(f.height)
 	f:ClearAllPoints()
-	f:SetPoint("TopLeft", f.posx, f.posy)
+    f:SetPoint("TOPLEFT", f.posx, f.posy)
 
 	f:SetScript("OnUpdate", Update)
 
@@ -1156,9 +1148,9 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 
 			if (event == "GROUP_ROSTER_UPDATE" or event == "UNIT_CONNECTION" or event == "UNIT_OTHER_PARTY_CHANGED" or event == "UPDATE_SHAPESHIFT_FORM" or event == "UNIT_POWER_UPDATE" or event == "UNIT_MANA") and arg1 == f.unit then
 				f:Update_Power()
-			elseif (event == "UNIT_MAXHEALTH" or event == "UNIT_HEALTH_FREQUENT") then
+			elseif (event == "UNIT_MAXHEALTH" or event == "UNIT_HEALTH_FREQUENT" and arg1 == f.unit) then
 				f:Update_Health()
-			elseif (event == "PLAYER_ENTERING_WORLD") then
+			elseif (event == "PLAYER_ENTERING_WORLD" and arg1 == f.unit) then
 				f:Update_Power()
 				f:Update_Health()
 			end

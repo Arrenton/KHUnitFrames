@@ -118,9 +118,6 @@ local function create_ring_pretties(mainFrame)
              then
                 mainFrame.healthFrame.healthVal:Hide()
             end
-            if mainFrame.unitHealth ~= nil then
-                mainFrame.healthFrame.healthVal.text:SetText(format(mainFrame.unitHealth))
-            end
         end
     )
     mainFrame.healthFrame.healthVal:SetPoint("center", -20, -77)
@@ -149,9 +146,6 @@ local function create_ring_pretties(mainFrame)
                     mainFrame.powerFrame.power_val:IsVisible()
              then
                 mainFrame.powerFrame.power_val:Hide()
-            end
-            if mainFrame.unitPower ~= nil then
-                mainFrame.powerFrame.power_val.text:SetText(format(mainFrame.unitPower))
             end
         end
     )
@@ -257,7 +251,7 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
     ----Frame Variables--
     ---------------------
 
-    local f = CreateFrame("Button", "KH_UI " .. unit, UIParent, "SecureUnitButtonTemplate")
+    local f = CreateFrame("Button", "KH_UI " .. unit, m, "SecureUnitButtonTemplate")
     f.settings = setting
     f.ring_table = ring_table
     f.offsety = 0
@@ -286,17 +280,9 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
     f.lowHealthAlpha = 0
     f.lowHealthDirection = 0
     f.scale = KH_UI_Settings[f.settings].scale
-    if (f.settings == "Party Frame") then
-        f.scale = f.scale / 2
-    end
     f.healthMaxMult = 1
 
     f.Update_FrameInfo = function()
-        f.scale = KH_UI_Settings[f.settings].scale
-        if (f.settings == "Party Frame") then
-            f.scale = f.scale / 2
-        end
-        f:SetScale(f.scale)
         f:SetMovable(KH_UI_Settings[f.settings].movable)
         f.nameFrame.text:SetText(UnitName(f.unit))
         if (KH_UI_Settings[f.settings].movable) then
@@ -321,6 +307,10 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
                 KH_UI:calc_ring_health(f.ring_frames[i], f.ring_table[i], f.unit, f.ring_frames[i].ringtype, f)
             end
         end
+        --Health text
+        if f.unitHealth ~= nil then
+            f.healthFrame.healthVal.text:SetText(format(f.unitHealth))
+        end
     end
 
     f.Update_Power = function()
@@ -332,6 +322,10 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
                 KH_UI:calc_ring_power(f.ring_frames[i], f.ring_table[i], f.unit, f.ring_frames[i].ringtype, f)
             end
         end
+        --Power Text
+        if f.unitPower ~= nil then
+            f.powerFrame.power_val.text:SetText(format(f.unitPower))
+        end
     end
 
     f.Refresh_Points = function()
@@ -339,6 +333,7 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
 
     f.unit = unit
     f:EnableMouse(true)
+    f:SetClampedToScreen(true)
     f:RegisterForClicks("AnyUp")
     f:SetMovable(KH_UI_Settings[f.settings].movable)
     f:RegisterForDrag("LeftButton")
@@ -347,17 +342,17 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
         "OnDragStop",
         function()
             local _, _, _, xOfs, yOfs = f:GetPoint(1)
-            f:ClearAllPoints()
             f.posx = xOfs
             f.posy = yOfs
             if (f.settings == "Player Frame") then
-                KH_UI_Settings[f.settings].framex = f.posx
-                KH_UI_Settings[f.settings].framey = f.posy
+                KH_UI_Settings[f.settings].framex = f.posx + f.width / 2
+                KH_UI_Settings[f.settings].framey = f.posy - f.height / 2
             elseif (f.settings == "Party Frame") then
-                KH_UI_Settings[f.settings].individualSettings[f.unit].framex = f.posx
-                KH_UI_Settings[f.settings].individualSettings[f.unit].framey = f.posy
+                KH_UI_Settings[f.settings].individualSettings[f.unit].framex = f.posx + f.width / 2
+                KH_UI_Settings[f.settings].individualSettings[f.unit].framey = f.posy - f.height / 2
             end
             f:StopMovingOrSizing()
+            f:ClearAllPoints()
             f:SetPoint("TopLeft", f.posx, f.posy)
         end
     )
@@ -434,15 +429,28 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
     f.portrait.disconnectFrame:SetFrameLevel(8)
     --
 
-    --[[f:RegisterEvent("UNIT_POWER_UPDATE")
+    f:RegisterEvent("UNIT_POWER_UPDATE")
+    f:RegisterEvent("UNIT_MANA")
+    f:RegisterEvent("UNIT_MAXHEALTH")
+    f:RegisterEvent("UNIT_HEALTH_FREQUENT")
+    f:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
     f:RegisterEvent("PLAYER_ENTERING_WORLD")
 
     f:SetScript(
         "OnEvent",
         function(self, event, arg1)
             if not (event == "GROUP_ROSTER_UPDATE" or event == "UNIT_CONNECTION" or event == "UNIT_OTHER_PARTY_CHANGED") then
-                local powerType, powerToken, altR, altG, altB = UnitPowerType(f.unit)
+            --Place holder
+            end
+
+            if arg1 == f.unit then
+                if (event == "UNIT_MANA" or event == "UPDATE_SHAPESHIFT_FORM" or event == "UNIT_POWER_UPDATE" or event == "GROUP_ROSTER_UPDATE") then
+                    f:Update_Power()
+                elseif (event == "UNIT_MAXHEALTH" or event == "UNIT_HEALTH_FREQUENT") then
+                    f:Update_Health()
+                end
             end
         end
-    )]] return f
+    )
+    return f
 end
