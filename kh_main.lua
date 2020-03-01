@@ -9,11 +9,6 @@
 -- Globals
 KH_UI = CreateFrame("Frame", nil, UIParent)
 
--- Add support for Real Mob Health
-if IsAddOnLoaded("RealMobHealth") then
-    KH_UI.GetUnitHealth = RealMobHealth.GetUnitHealth
-    KH_UI.HasUnitHealthData = RealMobHealth.HasUnitHealthData
-end
 -----------------------
 -- CONFIG
 -----------------------
@@ -23,7 +18,6 @@ KH_UI_Settings_Defaults = {
         longBarHealthLengthRate = 200,
         healthLengthMax = 5000,
         displayHealthValue = true,
-        lengthByHealth = true,
         maxBars = 20,
         manaLengthRate = 100,
         manaLengthMax = 5360,
@@ -44,7 +38,6 @@ KH_UI_Settings_Defaults = {
         longBarHealthLengthRate = 200,
         healthLengthMax = 5000,
         displayHealthValue = true,
-        lengthByHealth = true,
         maxBars = 20,
         manaLengthRate = 100,
         manaLengthMax = 5360,
@@ -82,7 +75,6 @@ KH_UI_Settings_Defaults = {
         longBarHealthLengthRate = 100,
         healthLengthMax = 2000,
         displayHealthValue = true,
-        lengthByHealth = true,
         maxBars = 20,
         manaLengthRate = 80,
         manaLengthMax = 3000,
@@ -103,7 +95,6 @@ KH_UI_Settings_Defaults = {
         longBarHealthLengthRate = 200,
         healthLengthMax = 2000,
         displayHealthValue = true,
-        lengthByHealth = true,
         maxBars = 20,
         manaLengthRate = 150,
         manaLengthMax = 3000,
@@ -127,7 +118,6 @@ if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
             longBarHealthLengthRate = 40,
             healthLengthMax = 25000,
             displayHealthValue = true,
-            lengthByHealth = true,
             maxBars = 20,
             manaLengthRate = 100,
             manaLengthMax = 5360,
@@ -148,7 +138,6 @@ if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
             longBarHealthLengthRate = 40,
             healthLengthMax = 25000,
             displayHealthValue = true,
-            lengthByHealth = true,
             maxBars = 20,
             manaLengthRate = 100,
             manaLengthMax = 5360,
@@ -185,7 +174,6 @@ if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
             longBarHealthLengthRate = 54,
             healthLengthMax = 4500,
             displayHealthValue = true,
-            lengthByHealth = true,
             maxBars = 25,
             manaLengthRate = 81,
             manaLengthMax = 3000,
@@ -206,7 +194,6 @@ if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
             longBarHealthLengthRate = 200,
             healthLengthMax = 2000,
             displayHealthValue = true,
-            lengthByHealth = true,
             maxBars = 20,
             manaLengthRate = 150,
             manaLengthMax = 3000,

@@ -185,41 +185,9 @@ function KH_UI:New_KHTargetUnitframe(unit, setting)
     end
 
     f.Update_Health = function()
-        local unitHPMax, unitCurrHP, hasData, unitLevel
-        if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
-            if IsAddOnLoaded("RealMobHealth") then
-                unitCurrHP, unitHPMax, e1, e2 = KH_UI.GetUnitHealth(f.unit)
-                if e1 ~= nil or e2 ~= nil or RealMobHealth.UnitHasHealthData(f.unit) then
-                    hasData = true
-                end
-                if (UnitHealthMax(f.unit) ~= 100) then
-                    hasData = true
-                end
-            else
-                hasData = false
-                unitCurrHP = UnitHealth(f.unit)
-                unitHPMax = UnitHealthMax(f.unit)
-            end
-            unitLevel = UnitLevel(f.unit)
-            if not (hasData) or not KH_UI_Settings[f.settings].lengthByHealth then
-                if (unitLevel == -1) then
-                    unitLevel = UnitLevel("player") + 10
-                end
-                hpPow = unitLevel / 225
-                if hpPow > 0.23 then
-                    hpPow = 0.23
-                end
-                unitCurrHP = math.ceil(unitCurrHP * (0.4 + math.pow(unitLevel, 1.2 + hpPow) / 11))
-                unitHPMax = math.ceil(unitHPMax * (0.4 + math.pow(unitLevel, 1.2 + hpPow) / 11))
-                if (UnitClassification(f.unit) == "elite" or UnitClassification(f.unit) == "rareelite") then
-                    unitCurrHP = unitCurrHP * 3
-                    unitHPMax = unitHPMax * 3
-                end
-            end
-        elseif WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-            unitCurrHP = UnitHealth(f.unit)
-            unitHPMax = UnitHealthMax(f.unit)
-        end
+        local unitHPMax, unitCurrHP, unitLevel
+        unitCurrHP = UnitHealth(f.unit)
+        unitHPMax = UnitHealthMax(f.unit)
         f.unitHPPercent = unitCurrHP / unitHPMax
         f.unitHealth = unitCurrHP
         f.unitHealthMax = unitHPMax

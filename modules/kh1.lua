@@ -283,14 +283,18 @@ local function Create_Health_Bar(mainFrame)
     if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
         mainFrame.healthFrame.healthBarBack = KH_UI:CreateColorFrame(250, 25, mainFrame.healthFrame, "BOTTOMRIGHT", -64, -31, 4, {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1})
         mainFrame.healthFrame.healthBarBg = KH_UI:CreateColorFrame(254, 33, mainFrame.healthFrame.healthBarBack, "TOPRIGHT", 0, 4, 3, {r = 0, g = 0, b = 0, a = 1})
-        mainFrame.healthFrame.healthBarLowHealth = KH_UI:CreateColorFrame(250, 25, mainFrame.healthFrame.healthBarBack, "TOPRIGHT", 0, 0, 5, {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1})
+        mainFrame.healthFrame.healthBarLowHealth = 
+            KH_UI:CreateImageFrame(200, 25, mainFrame.healthFrame.healthBarBack, "TOPRIGHT", 0, 0, 5, {x = 59.5 / 64, xw = 59.5 / 64, y = 4 / 128, yh = 29 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+            mainFrame.healthFrame.healthBarLowHealth.texture:SetVertexColor(1,0,0,1);
         mainFrame.healthFrame.healthBarHealth =
             KH_UI:CreateImageFrame(200, 25, mainFrame.healthFrame.healthBarBack, "TOPRIGHT", 0, 0, 6, {x = 59.5 / 64, xw = 59.5 / 64, y = 4 / 128, yh = 29 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
         mainFrame.healthFrame.healthBarDamage = KH_UI:CreateColorFrame(220, 25, mainFrame.healthFrame.healthBarBack, "TOPRIGHT", 0, 0, 5, {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1})
     elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
         mainFrame.healthFrame.healthBarBack = KH_UI:CreateColorFrame(250, 25, mainFrame.healthFrame, "TOPLEFT", 64, 31, 4, {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1})
         mainFrame.healthFrame.healthBarBg = KH_UI:CreateColorFrame(254, 33, mainFrame.healthFrame.healthBarBack, "TOPLEFT", 0, 4, 3, {r = 0, g = 0, b = 0, a = 1})
-        mainFrame.healthFrame.healthBarLowHealth = KH_UI:CreateColorFrame(250, 25, mainFrame.healthFrame.healthBarBack, "TOPLEFT", 0, 0, 5, {r = 227 / 255, g = 1 / 255, b = 38 / 255, a = 1})
+        mainFrame.healthFrame.healthBarLowHealth = 
+        KH_UI:CreateImageFrame(200, 25, mainFrame.healthFrame.healthBarBack, "TOPLEFT", 0, 0, 5, {x = 59.5 / 64, xw = 59.5 / 64, y = 4 / 128, yh = 29 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
+        mainFrame.healthFrame.healthBarLowHealth.texture:SetVertexColor(1,0,0,1);
         mainFrame.healthFrame.healthBarHealth =
             KH_UI:CreateImageFrame(200, 25, mainFrame.healthFrame.healthBarBack, "TOPLEFT", 0, 0, 6, {x = 59.5 / 64, xw = 59.5 / 64, y = 4 / 128, yh = 29 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
         mainFrame.healthFrame.healthBarHealth.texture:SetRotation(math.rad(180))
@@ -336,7 +340,7 @@ local function Update(self, elapsed)
             self.yvel = 0
         end
         --Low HP Animation
-        if self.unitHealth <= self.unitHealthMax / 4 and not UnitIsDeadOrGhost(self.unit) then
+        if self.unitHealth <= self.unitHealthMax / 3.5 and not UnitIsDeadOrGhost(self.unit) then
             if self.lowHealthDirection == 0 then
                 self.lowHealthAlpha = self.lowHealthAlpha + 0.009
                 if self.lowHealthAlpha >= 0.40 then
