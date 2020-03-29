@@ -102,12 +102,28 @@ local ring_table = {
         },
         segment = {
             color = {r = 1, g = 1, b = 1, a = 1},
-            framelevel = 8,
+            framelevel = 9,
             outer_radius = 124,
             inner_radius = 99
         }
     },
     [7] = {
+        global = {
+            gfx_texture = "KH1\\mana_ring_part",
+            gfx_slicer = "KH1\\mana_slicer",
+            segments_used = 3,
+            start_segment = 1,
+            fill_direction = 1,
+            ringtype = "lastmana"
+        },
+        segment = {
+            color = {r = 1, g = 1, b = 1, a = 1},
+            framelevel = 8,
+            outer_radius = 124,
+            inner_radius = 99
+        }
+    },
+    [8] = {
         global = {
             gfx_texture = "KH1\\mana_ring_bg_part",
             gfx_slicer = "slicer",
@@ -123,7 +139,7 @@ local ring_table = {
             inner_radius = 95
         }
     },
-    [8] = {
+    [9] = {
         global = {
             gfx_texture = "KH1\\mana_ring_part_blank",
             gfx_slicer = "slicer",
@@ -371,6 +387,13 @@ local function Update(self, elapsed)
                 self.healthFrame.healthBarDamage.texture:SetAlpha(self.ring_frames[i].alpha)
                 self.portrait.redTexture:SetAlpha(self.ring_frames[i].alpha)
             end
+            
+            if self.ring_frames[i].ringtype == "lastmana" then
+                if (self.lastManaAlpha > 0) then
+                    self.lastManaAlpha = self.lastManaAlpha - 0.02
+            end
+                self.ring_frames[i].alpha = self.lastManaAlpha
+            end
             self.ring_frames[i]:SetAlpha(self.ring_frames[i].alpha)
             self.ring_frames[5]:SetAlpha(self.lowHealthAlpha)
         end
@@ -403,6 +426,8 @@ function KH_UI:New_KH1Unitframe(unit, setting)
     f.unitPower = 1
     f.unitPowerMax = 1
     f.unitMana = 1
+    f.lastMana = 1
+    f.fadeMana = 1
     f.unitManaMax = 1
     f.unitHealth = 1
     f.lastHealth = 1
@@ -410,6 +435,7 @@ function KH_UI:New_KH1Unitframe(unit, setting)
     f.ring_frames = {}
     f.lastTimer = 0
     f.lastUpdate = 0
+    f.lastManaAlpha = 0
     f.lowHealthAlpha = 0
     f.lowHealthDirection = 0
     f.scale = KH_UI_Settings[f.settings].scale
@@ -505,7 +531,7 @@ function KH_UI:New_KH1Unitframe(unit, setting)
         end
         for i in ipairs(f.ring_table) do
             if
-                (f.ring_frames[i].ringtype == "power" or f.ring_frames[i].ringtype == "maxpower" or f.ring_frames[i].ringtype == "maxpowerbg" or f.ring_frames[i].ringtype == "mana" or f.ring_frames[i].ringtype == "maxmana" or
+                (f.ring_frames[i].ringtype == "power" or f.ring_frames[i].ringtype == "maxpower" or f.ring_frames[i].ringtype == "maxpowerbg" or f.ring_frames[i].ringtype == "mana" or f.ring_frames[i].ringtype == "lastmana" or f.ring_frames[i].ringtype == "maxmana" or
                     f.ring_frames[i].ringtype == "maxmanabg")
              then
                 KH_UI:calc_ring_power(f.ring_frames[i], f.ring_table[i], f.unit, f.ring_frames[i].ringtype, f)
@@ -516,6 +542,11 @@ function KH_UI:New_KH1Unitframe(unit, setting)
         end
         if f.unitPower ~= nil then
             f.powerFrame.powerVal.text:SetText(format(f.unitPower))
+        end
+        if KH_UI_Settings[f.settings].displayPowerValue and f.powerFrame.powerVal:IsVisible() == false then
+            f.powerFrame.powerVal:Show()
+        elseif KH_UI_Settings[f.settings].displayPowerValue == false and f.powerFrame.powerVal:IsVisible() then
+            f.powerFrame.powerVal:Hide()
         end
         if KH_UI_Settings[f.settings].displayManaValue and f.manaFrame.manaVal:IsVisible() == false then
             f.manaFrame.manaVal:Show()

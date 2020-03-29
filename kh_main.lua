@@ -744,7 +744,7 @@ end
 
 function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
     local powerType, powerToken, altR, altG, altB = UnitPowerType(unit)
-    if type == "mana" or type == "maxmana" or type == "maxmanabg" then
+    if type == "mana" or type == "lastmana" or type == "maxmana" or type == "maxmanabg" then
         powerType = 0
         powerToken = "MANA"
     end
@@ -763,6 +763,18 @@ function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
         r, g, b = altR * 0.75, altG * 0.75, altB * 0.75
     end
 
+    if type == "lastmana" then
+        if (KH_UI_Settings[mainFrame.settings].style == "KH1") then
+            if mainFrame.lastMana > act then
+                mainFrame.lastManaAlpha = 1
+                mainFrame.fadeMana = mainFrame.lastMana
+            end
+        end
+        mainFrame.lastMana = act
+        act = mainFrame.fadeMana
+        perc = (mainFrame.fadeMana / max) * 100
+    end
+
     if (KH_UI_Settings[mainFrame.settings].style == "KH1") then
         perc = perc * (max / KH_UI_Settings[mainFrame.settings].ringMaxPower)
     end
@@ -779,7 +791,7 @@ function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
         elseif (KH_UI_Settings[mainFrame.settings].style == "KH2 Party") then
             perc = 100
         end
-    elseif (type == "power" or type == "mana") then
+    elseif (type == "power" or type == "mana" or type == "lastmana") then
         if (KH_UI_Settings[mainFrame.settings].style ~= "KH1") then
             for i = 1, anz_seg do
                 self.segments[i].square1:SetVertexColor(r, g, b, 1)

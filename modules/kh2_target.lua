@@ -161,20 +161,20 @@ local function CreateBarPretties(mainFrame)
 
     -------Back Bar
     mainFrame.healthFrame.back =
-        KH_UI:CreateImageFrame(200, 16, mainFrame.healthFrame.base, "TOPLEFT", 27, 1, 7, {x = 82.5 / 128, xw = 82.5 / 128, y = 18 / 64, yh = 34 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+        KH_UI:CreateImageFrame(200, 16, mainFrame.healthFrame.base, "TOPLEFT", 27, 1, 7, {x = 67.5 / 128, xw = 67.5 / 128, y = 48 / 64, yh = 64 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
 
     -------HP Last
     mainFrame.healthFrame.healthLast =
-        KH_UI:CreateImageFrame(200, 10, mainFrame.healthFrame.base, "TOPLEFT", 27, -2, 8, {x = 87.5 / 128, xw = 87.5 / 128, y = 49 / 64, yh = 59 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+        KH_UI:CreateImageFrame(200, 10, mainFrame.healthFrame.base, "TOPLEFT", 27, -2, 8, {x = 77.5 / 128, xw = 77.5 / 128, y = 54 / 64, yh = 64 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
     mainFrame.healthFrame.healthLast.alpha = 0
     mainFrame.healthFrame.healthLast:SetAlpha(0)
     -------HP
     mainFrame.healthFrame.health =
-        KH_UI:CreateImageFrame(200, 10, mainFrame.healthFrame.base, "TOPLEFT", 27, -2, 9, {x = 85.5 / 128, xw = 85.5 / 128, y = 49 / 64, yh = 59 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+        KH_UI:CreateImageFrame(200, 10, mainFrame.healthFrame.base, "TOPLEFT", 27, -2, 9, {x = 75.5 / 128, xw = 75.5 / 128, y = 54 / 64, yh = 64 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
 
     -------Edge
     mainFrame.healthFrame.edge =
-        KH_UI:CreateImageFrame(3, 14, mainFrame.healthFrame.back, "TOPRight", 3, -1, 7, {x = 84 / 128, xw = 86.75 / 128, y = 19 / 64, yh = 33 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+        KH_UI:CreateImageFrame(3, 14, mainFrame.healthFrame.back, "TOPRight", 3, -1, 7, {x = 69 / 128, xw = 71.75 / 128, y = 49 / 64, yh = 63 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
 
     ------Extra bar
     mainFrame.healthFrame.extra = CreateFrame("Frame", nil, mainFrame.healthFrame.base)
@@ -185,32 +185,32 @@ local function CreateBarPretties(mainFrame)
 
     -------Back Bar
     mainFrame.healthFrame.backExtra =
-        KH_UI:CreateImageFrame(200, 16, mainFrame.healthFrame.extra, "TOPLEFT", 27, 1, 4, {x = 88.5 / 128, xw = 88.5 / 128, y = 18 / 64, yh = 34 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+        KH_UI:CreateImageFrame(200, 16, mainFrame.healthFrame.extra, "TOPLEFT", 27, 1, 4, {x = 67.5 / 128, xw = 67.5 / 128, y = 48 / 64, yh = 64 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
 
     -------HP
     mainFrame.healthFrame.healthExtra =
-        KH_UI:CreateImageFrame(200, 10, mainFrame.healthFrame.extra, "TOPLEFT", 27, -2, 6, {x = 85.5 / 128, xw = 85.5 / 128, y = 49 / 64, yh = 59 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+        KH_UI:CreateImageFrame(200, 10, mainFrame.healthFrame.extra, "TOPLEFT", 27, -2, 6, {x = 75.5 / 128, xw = 75.5 / 128, y = 54 / 64, yh = 64 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
 
     -------Edge
-    mainFrame.healthFrame.edge =
-        KH_UI:CreateImageFrame(3, 14, mainFrame.healthFrame.backExtra, "TOPRight", 3, -1, 3, {x = 84 / 128, xw = 86.75 / 128, y = 19 / 64, yh = 33 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+    mainFrame.healthFrame.edgeExtra =
+        KH_UI:CreateImageFrame(3, 14, mainFrame.healthFrame.backExtra, "TOPRight", 3, -1, 3, {x = 69 / 128, xw = 71.75 / 128, y = 49 / 64, yh = 63 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
 
     -------Bar Blobs
     mainFrame.healthFrame.blobFrame = CreateFrame("Frame", nil, mainFrame.healthFrame.base)
     mainFrame.healthFrame.blobFrame:SetSize(1, 1)
     mainFrame.healthFrame.blobFrame:SetPoint("TOPLEFT", 0, 0)
-    mainFrame.healthFrame.blobFrame.full = {x = 75 / 128, xw = 84 / 128, y = 35.35 / 64, yh = 41 / 64}
-    mainFrame.healthFrame.blobFrame.damaged = {x = 65 / 128, xw = 74 / 128, y = 42.35 / 64, yh = 48 / 64}
-    mainFrame.healthFrame.blobFrame.empty = {x = 85 / 128, xw = 94 / 128, y = 35.35 / 64, yh = 41 / 64}
+    mainFrame.healthFrame.blobFrame.full = {x = 63 / 128, xw = 81 / 128, y = 28.35 / 64, yh = 38 / 64}
+    mainFrame.healthFrame.blobFrame.damaged = {x = 63 / 128, xw = 81 / 128, y = 17.35 / 64, yh = 27 / 64}
+    mainFrame.healthFrame.blobFrame.empty = {x = 76 / 128, xw = 94 / 128, y = 39.35 / 64, yh = 49 / 64}
     mainFrame.healthFrame.blobFrame:Hide()
     mainFrame.healthFrame.blob = {}
     mainFrame.healthFrame.blob[1] =
-        KH_UI:CreateImageFrame(14, 11, mainFrame.healthFrame.blobFrame, "TOPLEFT", 6, -12, 9, {x = 63 / 128, xw = 77 / 128, y = 23 / 64, yh = 34 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
-    mainFrame.healthFrame.blob[1].inside = KH_UI:CreateImageFrame(9, 6, mainFrame.healthFrame.blob[1], "TOPLEFT", 2, -2, 10, mainFrame.healthFrame.blobFrame.full, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
-    for i = 2, 40 do
+        KH_UI:CreateImageFrame(23, 15, mainFrame.healthFrame.blobFrame, "TOPLEFT", 6, -12, 9, {x = 63 / 128, xw = 86 / 128, y = 1 / 64, yh = 16 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+    mainFrame.healthFrame.blob[1].inside = KH_UI:CreateImageFrame(18, 10, mainFrame.healthFrame.blob[1], "TOPLEFT", 2, -2, 10, mainFrame.healthFrame.blobFrame.full, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+    for i = 2, 100 do
         mainFrame.healthFrame.blob[i] =
-            KH_UI:CreateImageFrame(14, 11, mainFrame.healthFrame.blob[i - 1], "TOPLEFT", 11, 0, 9, {x = 63 / 128, xw = 77 / 128, y = 23 / 64, yh = 34 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
-        mainFrame.healthFrame.blob[i].inside = KH_UI:CreateImageFrame(9, 6, mainFrame.healthFrame.blob[i], "TOPLEFT", 2, -2, 10, mainFrame.healthFrame.blobFrame.full, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+            KH_UI:CreateImageFrame(23, 15, mainFrame.healthFrame.blob[i - 1], "TOPLEFT", 21, 0, 9+i, {x = 63 / 128, xw = 86 / 128, y = 1 / 64, yh = 16 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+        mainFrame.healthFrame.blob[i].inside = KH_UI:CreateImageFrame(18, 10, mainFrame.healthFrame.blob[i], "TOPLEFT", 2, -2, 10, mainFrame.healthFrame.blobFrame.full, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
     end
     --------------------Name----------------
     mainFrame.nameFrame = CreateFrame("Frame", nil, mainFrame.healthFrame.base)
@@ -266,7 +266,7 @@ local function CreateBarPretties(mainFrame)
     mainFrame.powerFrame.back.texture = mainFrame.powerFrame.back:CreateTexture(nil, "BACKGROUND")
     mainFrame.powerFrame.back.texture:SetAllPoints()
     mainFrame.powerFrame.back.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
-    mainFrame.powerFrame.back.texture:SetTexCoord(82.5 / 128, 82.5 / 128, 18 / 64, 34 / 64)
+    mainFrame.powerFrame.back.texture:SetTexCoord(67.5 / 128, 67.5 / 128, 48 / 64, 64 / 64)
 
     -------PP
     mainFrame.powerFrame.power = CreateFrame("Frame", nil, mainFrame.powerFrame.base)
@@ -277,7 +277,7 @@ local function CreateBarPretties(mainFrame)
     mainFrame.powerFrame.power.texture = mainFrame.powerFrame.power:CreateTexture(nil, "BACKGROUND")
     mainFrame.powerFrame.power.texture:SetAllPoints()
     mainFrame.powerFrame.power.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
-    mainFrame.powerFrame.power.texture:SetTexCoord(89.5 / 128, 89.5 / 128, 49 / 64, 59 / 64)
+    mainFrame.powerFrame.power.texture:SetTexCoord(79.5 / 128, 79.5 / 128, 54 / 64, 64 / 64)
 
     -------Edge{x = 84 / 128, xw = 86.75 / 128, y = 19 / 64, yh = 33 / 64}
     mainFrame.powerFrame.edge = CreateFrame("Frame", nil, mainFrame.powerFrame.back)
@@ -288,7 +288,7 @@ local function CreateBarPretties(mainFrame)
     mainFrame.powerFrame.edge.texture = mainFrame.powerFrame.edge:CreateTexture(nil, "BACKGROUND")
     mainFrame.powerFrame.edge.texture:SetAllPoints()
     mainFrame.powerFrame.edge.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
-    mainFrame.powerFrame.edge.texture:SetTexCoord(84 / 128, 86.75 / 128, 19 / 64, 33 / 64)
+    mainFrame.powerFrame.edge.texture:SetTexCoord(69 / 128, 71.75 / 128, 49 / 64, 63 / 64)
 
     --------------------PP Value----------------
     mainFrame.powerFrame.powerVal = CreateFrame("Frame", nil, mainFrame.powerFrame.base)
