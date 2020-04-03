@@ -88,7 +88,7 @@ local function CreateBarPretties(mainFrame)
     mainFrame.healthFrame.back.texture = mainFrame.healthFrame.back:CreateTexture(nil, "BACKGROUND")
     mainFrame.healthFrame.back.texture:SetAllPoints()
     mainFrame.healthFrame.back.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
-    mainFrame.healthFrame.back.texture:SetTexCoord(82.5 / 128, 82.5 / 128, 20 / 64, 34 / 64)
+    mainFrame.healthFrame.back.texture:SetTexCoord(67.5 / 128, 67.5 / 128, 48 / 64,  64 / 64)
 
     -------HP Last
     mainFrame.healthFrame.healthLast = CreateFrame("Frame", nil, mainFrame.healthFrame.base)
@@ -102,7 +102,7 @@ local function CreateBarPretties(mainFrame)
     mainFrame.healthFrame.healthLast.texture:SetTexture(
         "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame"
     )
-    mainFrame.healthFrame.healthLast.texture:SetTexCoord(87.5 / 128, 87.5 / 128, 49 / 64, 59 / 64)
+    mainFrame.healthFrame.healthLast.texture:SetTexCoord(77.5 / 128, 77.5 / 128, 54 / 64, 64 / 64)
 
     -------HP
     mainFrame.healthFrame.health = CreateFrame("Frame", nil, mainFrame.healthFrame.base)
@@ -115,7 +115,7 @@ local function CreateBarPretties(mainFrame)
     mainFrame.healthFrame.health.texture:SetTexture(
         "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame"
     )
-    mainFrame.healthFrame.health.texture:SetTexCoord(85.5 / 128, 85.5 / 128, 49 / 64, 59 / 64)
+    mainFrame.healthFrame.health.texture:SetTexCoord(75.5 / 128, 75.5 / 128, 54 / 64, 64 / 64)
 
     -------Edge
     mainFrame.healthFrame.edge = CreateFrame("Frame", nil, mainFrame.healthFrame.back)
@@ -126,7 +126,7 @@ local function CreateBarPretties(mainFrame)
     mainFrame.healthFrame.edge.texture = mainFrame.healthFrame.edge:CreateTexture(nil, "BACKGROUND")
     mainFrame.healthFrame.edge.texture:SetAllPoints()
     mainFrame.healthFrame.edge.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
-    mainFrame.healthFrame.edge.texture:SetTexCoord(84.5 / 128, 85.75 / 128, 21 / 64, 33 / 64)
+    mainFrame.healthFrame.edge.texture:SetTexCoord(69 / 128, 71.75 / 128, 49 / 64, 63 / 64)
 
     --------------------Name----------------
     mainFrame.nameFrame = CreateFrame("Frame", nil, mainFrame.healthFrame.base)
@@ -162,7 +162,7 @@ local function CreateBarPretties(mainFrame)
     mainFrame.powerFrame.back.texture = mainFrame.powerFrame.back:CreateTexture(nil, "BACKGROUND")
     mainFrame.powerFrame.back.texture:SetAllPoints()
     mainFrame.powerFrame.back.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
-    mainFrame.powerFrame.back.texture:SetTexCoord(82.5 / 128, 82.5 / 128, 20 / 64, 34 / 64)
+    mainFrame.powerFrame.back.texture:SetTexCoord(67.5 / 128, 67.5 / 128, 48 / 64,  64 / 64)
 
     -------PP
     mainFrame.powerFrame.power = CreateFrame("Frame", nil, mainFrame.powerFrame)
@@ -173,7 +173,7 @@ local function CreateBarPretties(mainFrame)
     mainFrame.powerFrame.power.texture = mainFrame.powerFrame.power:CreateTexture(nil, "BACKGROUND")
     mainFrame.powerFrame.power.texture:SetAllPoints()
     mainFrame.powerFrame.power.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
-    mainFrame.powerFrame.power.texture:SetTexCoord(89.5 / 128, 89.5 / 128, 49 / 64, 59 / 64)
+    mainFrame.powerFrame.power.texture:SetTexCoord(79.5 / 128, 79.5 / 128, 54 / 64, 64 / 64)
 
     -------Edge
     mainFrame.powerFrame.edge = CreateFrame("Frame", nil, mainFrame.powerFrame.back)
@@ -184,7 +184,7 @@ local function CreateBarPretties(mainFrame)
     mainFrame.powerFrame.edge.texture = mainFrame.powerFrame.edge:CreateTexture(nil, "BACKGROUND")
     mainFrame.powerFrame.edge.texture:SetAllPoints()
     mainFrame.powerFrame.edge.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
-    mainFrame.powerFrame.edge.texture:SetTexCoord(84.5 / 128, 85.75 / 128, 21 / 64, 33 / 64)
+    mainFrame.powerFrame.edge.texture:SetTexCoord(69 / 128, 71.75 / 128, 49 / 64, 63 / 64)
 end
 
 local function Update(self, elapsed)

@@ -209,7 +209,7 @@ local function CreateBarPretties(mainFrame)
     mainFrame.healthFrame.blob[1].inside = KH_UI:CreateImageFrame(18, 10, mainFrame.healthFrame.blob[1], "TOPLEFT", 2, -2, 10, mainFrame.healthFrame.blobFrame.full, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
     for i = 2, 100 do
         mainFrame.healthFrame.blob[i] =
-            KH_UI:CreateImageFrame(23, 15, mainFrame.healthFrame.blob[i - 1], "TOPLEFT", 21, 0, 9+i, {x = 63 / 128, xw = 86 / 128, y = 1 / 64, yh = 16 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
+            KH_UI:CreateImageFrame(23, 15, mainFrame.healthFrame.blob[i - 1], "TOPLEFT", 20, 0, 9+i*0.05, {x = 63 / 128, xw = 86 / 128, y = 1 / 64, yh = 16 / 64}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
         mainFrame.healthFrame.blob[i].inside = KH_UI:CreateImageFrame(18, 10, mainFrame.healthFrame.blob[i], "TOPLEFT", 2, -2, 10, mainFrame.healthFrame.blobFrame.full, "Interface\\AddOns\\KHUnitframes\\textures\\KH2Target\\target_frame")
     end
     --------------------Name----------------
@@ -419,7 +419,7 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
         unitHPMax = UnitHealthMax(f.unit)
         if f.lastHealth > unitCurrHP then
             f.healthFrame.healthLast.alpha = 1.1
-            f.lastTimer = 3
+            f.lastTimer = 2
             f.damageHealth = f.lastHealth
         end
         f.lastHealth = unitCurrHP
