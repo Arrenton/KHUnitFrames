@@ -485,13 +485,8 @@ local function create_health_stretch(mainFrame)
 	mainFrame.healthFrame.long_bar.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2\\longbars")
 	mainFrame.healthFrame.long_bar.texture:SetTexCoord(1 / 64, 1 / 64, 1 / 64, 34 / 64)
 	------Low HP
-	mainFrame.healthFrame.long_bar.lowHealth = CreateFrame("Frame", nil, mainFrame.healthFrame)
-	mainFrame.healthFrame.long_bar.lowHealth:SetFrameLevel(19)
-	mainFrame.healthFrame.long_bar.lowHealth.texture = mainFrame.healthFrame.long_bar.lowHealth:CreateTexture(nil, "BACKGROUND")
-	mainFrame.healthFrame.long_bar.lowHealth.texture:SetAllPoints()
-	mainFrame.healthFrame.long_bar.lowHealth.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2\\longbars")
-	mainFrame.healthFrame.long_bar.lowHealth.texture:SetVertexColor(mainFrame.ring_table[5].segment.color.r, mainFrame.ring_table[5].segment.color.g, mainFrame.ring_table[5].segment.color.b, mainFrame.ring_table[5].segment.color.a)
-	mainFrame.healthFrame.long_bar.lowHealth.texture:SetTexCoord(13 / 64, 13 / 64, 1 / 64, 25 / 64)
+	mainFrame.healthFrame.long_bar.lowHealth = KH_UI:CreateColorFrame(0, 0, mainFrame.healthFrame, "BOTTOMLEFT", 0, 0, 19, {r = mainFrame.ring_table[5].segment.color.r, g = mainFrame.ring_table[5].segment.color.g, b = mainFrame.ring_table[5].segment.color.b, a = mainFrame.ring_table[5].segment.color.a})
+	mainFrame.healthFrame.long_bar.lowHealth:ClearAllPoints();
 
 	------HP
 	mainFrame.healthFrame.long_bar.health = CreateFrame("Frame", nil, mainFrame.healthFrame)
@@ -501,14 +496,12 @@ local function create_health_stretch(mainFrame)
 	mainFrame.healthFrame.long_bar.health.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2\\longbars")
 	mainFrame.healthFrame.long_bar.health.texture:SetVertexColor(mainFrame.ring_table[1].segment.color.r, mainFrame.ring_table[1].segment.color.g, mainFrame.ring_table[1].segment.color.b, mainFrame.ring_table[1].segment.color.a)
 	mainFrame.healthFrame.long_bar.health.texture:SetTexCoord(13 / 64, 13 / 64, 1 / 64, 25 / 64)
+	if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right" or KH_UI_Settings[mainFrame.settings].orientation == "Bottom Left") then
+		mainFrame.healthFrame.long_bar.health.texture:SetRotation(math.rad(180))
+	end
 	------LAST HP
-	mainFrame.healthFrame.long_bar.healthLast = CreateFrame("Frame", nil, mainFrame.healthFrame)
-	mainFrame.healthFrame.long_bar.healthLast:SetFrameLevel(19)
-	mainFrame.healthFrame.long_bar.healthLast.texture = mainFrame.healthFrame.long_bar.healthLast:CreateTexture(nil, "BACKGROUND")
-	mainFrame.healthFrame.long_bar.healthLast.texture:SetAllPoints()
-	mainFrame.healthFrame.long_bar.healthLast.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2\\longbars")
-	mainFrame.healthFrame.long_bar.healthLast.texture:SetVertexColor(mainFrame.ring_table[3].segment.color.r, mainFrame.ring_table[3].segment.color.g, mainFrame.ring_table[3].segment.color.b, mainFrame.ring_table[3].segment.color.a)
-	mainFrame.healthFrame.long_bar.healthLast.texture:SetTexCoord(13 / 64, 13 / 64, 1 / 64, 25 / 64)
+	mainFrame.healthFrame.long_bar.healthLast = KH_UI:CreateColorFrame(0, 0, mainFrame.healthFrame, "TOPLEFT", 0, 0, 19, {r = mainFrame.ring_table[3].segment.color.r, g = mainFrame.ring_table[3].segment.color.g, b = mainFrame.ring_table[3].segment.color.b, a = mainFrame.ring_table[3].segment.color.a})
+	mainFrame.healthFrame.long_bar.healthLast:ClearAllPoints();
 	------EDGE
 	mainFrame.healthFrame.long_bar.edge = CreateFrame("Frame", nil, mainFrame.healthFrame)
 	mainFrame.healthFrame.long_bar.edge:SetSize(5, 33)
