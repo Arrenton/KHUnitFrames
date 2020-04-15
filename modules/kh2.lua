@@ -1,15 +1,15 @@
 local ring_table = {
 	[1] = {
 		global = {
-			gfx_texture = "KH2\\ring_segment",
-			gfx_slicer = "slicer",
+            gfx_texture = "KH2\\health_ring_segment",
+            gfx_slicer = "KH2\\health_slicer",
 			segments_used = 3,
 			start_segment = 1,
 			fill_direction = 1,
 			ringtype = "health"
 		},
 		segment = {
-			color = {r = 34 / 255, g = 183 / 255, b = 1 / 255, a = 1},
+			color = {r = 1, g = 1, b = 1, a = 1},
 			framelevel = 14,
 			outer_radius = 96,
 			inner_radius = 72
@@ -228,7 +228,11 @@ local function Create_Resource_Counter(mainFrame)
 				end
 			end
 			self.orb[i]:SetAlpha(self.orb[i].alpha)
-			self.orb[i]:SetPoint("CENTER", pointx + 2, pointy)
+			if (KH_UI_Settings[mainFrame.settings].orientation == "Top Right" or KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
+				self.orb[i]:SetPoint("CENTER", pointx - 1, pointy)
+			else
+				self.orb[i]:SetPoint("CENTER", pointx + 2, pointy)
+			end
 		end
 	end
 	local function SetOrbs(mainFrame)
@@ -294,7 +298,7 @@ local function Create_Resource_Counter(mainFrame)
 		mainFrame.resourceFrame.value = KH_UI:CreateImageFrame(26, 28, mainFrame.resourceFrame.bg, "TOPLEFT", 6, -2, 27, mainFrame.resourceFrame.number[9][mainFrame.resourceFrame.side], "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
 	elseif (mainFrame.resourceFrame.side == 2) then
 		mainFrame.resourceFrame.value =
-			KH_UI:CreateImageFrame(26, 28, mainFrame.resourceFrame.bg, "TOPRIGHT", -6, -2, 27, mainFrame.resourceFrame.number[9][mainFrame.resourceFrame.side], "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
+			KH_UI:CreateImageFrame(26, 28, mainFrame.resourceFrame.bg, "TOPRIGHT", -5, -2, 27, mainFrame.resourceFrame.number[9][mainFrame.resourceFrame.side], "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
 	end
 	mainFrame.resourceFrame.value.texture:SetVertexColor(1, 0.3, 0, 1)
 
@@ -444,7 +448,7 @@ local function create_ring_pretties(mainFrame)
 			end
 		end
 	)
-	mainFrame.nameFrame:SetPoint("TOP", 0, -10)
+	mainFrame.nameFrame:SetPoint("TOP", 0, -20)
 	if (mainFrame.settings == "Party Frame") then
 		mainFrame.nameFrame:SetScale(1.5)
 	end
@@ -895,7 +899,7 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 	---------------------
 	----Frame Variables--
 	---------------------
-	local f = CreateFrame("Button", "KH_UI " .. unit, m, "SecureUnitButtonTemplate")
+	local f = CreateFrame("Button", "KH_UI " .. unit, UIParent, "SecureUnitButtonTemplate")
 	f.settings = setting
 	f.ring_table = ring_table
 	f.offsety = 0
