@@ -665,7 +665,7 @@ function KH_UI:calc_ring_health(self, ring_config, unit, type, mainFrame)
     local anz_seg, sum_radius = ring_config.global.segments_used, ring_config.global.segments_used * 90
 
     if type == "lasthealth" then
-        if mainFrame.lastHealth > UnitHealth(unit) then
+        if mainFrame.lastHealth > UnitHealth(unit) and mainFrame.lastHealth <= mainFrame.unitHealthMax then
             if (KH_UI_Settings[mainFrame.settings].style == "KH2") then
                 mainFrame.yvel = 2
                 mainFrame.offsety = 0

@@ -459,6 +459,9 @@ function KH_UI:New_KH1Unitframe(unit, setting)
             end
         end
         f:SetMovable(KH_UI_Settings[f.settings].movable)
+        if (f.settings == "Party Frame") then
+            f.nameFrame:SetScale(1.75)
+        end
         f.nameFrame.text:SetText(UnitName(f.unit))
         if (KH_UI_Settings[f.settings].movable) then
             f:RegisterForDrag("LeftButton")
