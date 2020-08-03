@@ -320,7 +320,7 @@ end
 
 local function Create_Mana_Bar(mainFrame)
     if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
-        mainFrame.manaFrame.manaBarBack = KH_UI:CreateColorFrame(250, 25, mainFrame.manaFrame, "BOTTOMRIGHT", -64, -31, 4, {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1})
+        mainFrame.manaFrame.manaBarBack = KH_UI:CreateColorFrame(250, 25, mainFrame.manaFrame, "BOTTOMRIGHT", -64, -60, 4, {r = 24 / 255, g = 28 / 255, b = 42 / 255, a = 1})
         mainFrame.manaFrame.manaBarBg = KH_UI:CreateColorFrame(254, 33, mainFrame.manaFrame.manaBarBack, "TOPRIGHT", 0, 4, 3, {r = 0, g = 0, b = 0, a = 1})
         mainFrame.manaFrame.manaBarMana =
             KH_UI:CreateImageFrame(200, 25, mainFrame.manaFrame.manaBarBack, "TOPRIGHT", 0, 0, 6, {x = 58.5 / 64, xw = 58.5 / 64, y = 4 / 128, yh = 29 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")

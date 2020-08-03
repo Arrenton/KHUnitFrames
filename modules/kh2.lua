@@ -547,6 +547,12 @@ local function calc_mana_bar(mainFrame)
 	backFrame.length = (maxMana * KH_UI_Settings[mainFrame.settings].manaLengthRate / 1000)
 	barFrame.length = (mana * KH_UI_Settings[mainFrame.settings].manaLengthRate / 1000 / mult)
 
+	if (barFrame.length <= 0) then
+		barFrame:SetAlpha(0);
+	else
+		barFrame:SetAlpha(1);
+	end
+
 	backFrame:SetWidth(backFrame.length)
 	if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
 		backFrame:SetPoint("topright", -58, -0)
@@ -876,7 +882,8 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 			mainFrame.manaFrame.manaVal:SetPoint("bottomleft", -25, -5)
 		end
 		mainFrame.manaFrame.manaVal:SetFrameLevel(27)
-		mainFrame.manaFrame.manaVal.text = mainFrame.manaFrame.manaVal:CreateFontString(nil, nil, "SpellFont_Small")
+		mainFrame.manaFrame.manaVal:SetScale(0.45);
+		mainFrame.manaFrame.manaVal.text = mainFrame.manaFrame.manaVal:CreateFontString(nil, nil, "SystemFont_OutlineThick_Huge2")
 		mainFrame.manaFrame.manaVal.text:SetText(format("MP"))
 		if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
 			mainFrame.manaFrame.manaVal.text:SetPoint("right", 0, 0)
