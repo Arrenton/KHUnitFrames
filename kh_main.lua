@@ -215,6 +215,28 @@ end
 -- FUNCTIONS
 ---------------------
 
+function KH_UI:FormatNumber(val)
+    formattedVal = ""
+
+    if val >= 1000000000 then
+        formattedVal = format("%.2fb", val / 1000000000)
+    elseif val >= 100000000 then
+        formattedVal = format("%.0fm", val / 1000000)
+    elseif val >= 10000000 then
+        formattedVal = format("%.1fm", val / 1000000)
+    elseif val >= 1000000 then
+        formattedVal = format("%.2fm", val / 1000000)
+    elseif val >= 100000 then
+        formattedVal = format("%.0fk", val / 1000)
+    elseif val >= 10000 then
+        formattedVal = format("%.1fk", val / 1000)
+    else
+        formattedVal = format(val)
+    end
+
+    return formattedVal
+end
+
 function KH_UI:CreateImageFrame(width, height, parent, anchor, x, y, level, texCoord, texture)
     frame = CreateFrame("Frame", nil, parent)
     frame:SetWidth(width)

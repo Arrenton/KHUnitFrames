@@ -169,7 +169,7 @@ local function Create_Power_Bar(mainFrame)
 	end
 	mainFrame.powerFrame.base.texture:SetVertexColor(r, g, b, 1)
 	mainFrame.powerFrame.power.texture:SetVertexColor(r, g, b, 1)
-	mainFrame.powerFrame.powerVal.text:SetText(UnitPower("player"))
+	mainFrame.powerFrame.powerVal.text:SetText(KH_UI:FormatNumber(UnitPower("player")))
 	function mainFrame.powerFrame:Update_Power_Bar(mainFrame)
 		--Set power color
 		local powerType, powerToken, altR, altG, altB = UnitPowerType(mainFrame.unit)
@@ -186,7 +186,7 @@ local function Create_Power_Bar(mainFrame)
 		self.base.texture:SetVertexColor(r, g, b, 1)
 		self.power.texture:SetVertexColor(r, g, b, 1)
 		--Set bar length
-		local power = UnitPower(mainFrame.unit)
+		local power = mainFrame.unitPowerTemp
 		local maxPower = UnitPowerMax(mainFrame.unit)
 		local powerPct = power / maxPower
 		if (powerPct * 100 >= 0.5) then
@@ -203,7 +203,7 @@ local function Create_Power_Bar(mainFrame)
 			self.power:Hide()
 		end
 		--Set Power Val Text
-		self.powerVal.text:SetText(power)
+		self.powerVal.text:SetText(KH_UI:FormatNumber(math.floor(mainFrame.UnitPower)))
 	end
 end
 
@@ -410,7 +410,7 @@ local function create_ring_pretties(mainFrame)
 				mainFrame.healthFrame.healthVal:Hide()
 			end
 			if mainFrame.unitHealth ~= nil then
-				mainFrame.healthFrame.healthVal.text:SetText(format(mainFrame.unitHealth))
+				mainFrame.healthFrame.healthVal.text:SetText(KH_UI:FormatNumber(mainFrame.unitHealth))
 			end
 			if UnitClass(mainFrame.unit) == "Shaman" or UnitClass(mainFrame.unit) == "Priest" or UnitClass(mainFrame.unit) == "Druid" or mainFrame.powerToken == "MANA" then
 				mainFrame.enableMana = true
@@ -541,7 +541,7 @@ local function calc_mana_bar(mainFrame)
 	end
 
 	if mainFrame.unitMana ~= nil then
-		mainFrame.manaFrame.manaVal.text:SetText(format(mainFrame.unitMana))
+		mainFrame.manaFrame.manaVal.text:SetText(KH_UI:FormatNumber(mainFrame.unitMana))
 	end
 
 	backFrame.length = (maxMana * KH_UI_Settings[mainFrame.settings].manaLengthRate / 1000)
@@ -667,6 +667,12 @@ local function calc_health_stretch(mainFrame)
 end
 
 local function Update(self, elapsed)
+
+	--Faster update for power and mana for Retail
+	if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+		self.Update_Power()
+	end
+
 	self.lastUpdate = self.lastUpdate + elapsed
 
 	if self.lastTimer > 0 then
@@ -711,6 +717,20 @@ local function Update(self, elapsed)
 			end
 			self.lowHealthDirection = 0
 		end
+
+		if self.unitPowerTemp < self.UnitPower then
+			self.unitPowerTemp = self.unitPowerTemp + self.UnitPowerMax / (144 * 20) + (self.UnitPower - self.unitPowerTemp) / 50
+			if self.unitPowerTemp > self.UnitPower then
+				self.unitPowerTemp = self.UnitPower
+			end
+		
+		elseif self.unitPowerTemp > self.UnitPower then
+			self.unitPowerTemp = self.unitPowerTemp - self.UnitPowerMax / (144 * 20) + (self.UnitPower - self.unitPowerTemp) / 50
+			if self.unitPowerTemp < self.UnitPower then
+				self.unitPowerTemp = self.UnitPower
+			end
+		end
+
 		--Resource bar orbs
 		self.resourceFrame.orbUpdate(self)
 		--Update frames
@@ -913,6 +933,8 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 	f.height = 128
 	f.yvel = 4
 	f.xvel = 0
+	f.unitPowerTemp = 1;
+	f.unitPower = 1;
 	f.unitHealthMax = 1
 	f.unitPowerMax = 1
 	f.unitMana = 1
@@ -970,7 +992,7 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 		end
 		--Set Text
 		if f.unitHealth ~= nil then
-			f.healthFrame.healthVal.text:SetText(format(f.unitHealth))
+			f.healthFrame.healthVal.text:SetText(KH_UI:FormatNumber(f.unitHealth))
 		end
 	end
 
@@ -978,6 +1000,7 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 		local powerType, powerToken, altR, altG, altB = UnitPowerType(f.unit)
 		local class, _, _ = UnitClass(f.unit)
 		f.UnitPowerMax = UnitPowerMax(f.unit, powerType)
+		f.UnitPower = UnitPower(f.unit, powerType)
 		for i in ipairs(f.ring_table) do
 			if (f.ring_frames[i].ringtype == "power" or f.ring_frames[i].ringtype == "maxpower") then
 				KH_UI:calc_ring_power(f.ring_frames[i], f.ring_table[i], f.unit, f.ring_frames[i].ringtype, f)
