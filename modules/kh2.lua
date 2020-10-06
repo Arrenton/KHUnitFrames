@@ -668,10 +668,8 @@ end
 
 local function Update(self, elapsed)
 
-	--Faster update for power and mana for Retail
-	if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-		self.Update_Power()
-	end
+	--Faster update for power and mana
+	self.Update_Power()
 
 	self.lastUpdate = self.lastUpdate + elapsed
 
