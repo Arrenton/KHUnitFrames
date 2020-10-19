@@ -677,7 +677,7 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
         f:RegisterEvent("PLAYER_FLAGS_CHANGED")
     end
     f:RegisterEvent("UNIT_HEALTH")
-    f:RegisterEvent("UNIT_HEALTH_FREQUENT")
+    f:RegisterEvent("UNIT_HEALTH")
     f:RegisterEvent("UNIT_POWER_UPDATE")
     f:RegisterEvent("UNIT_MAXPOWER")
     f:RegisterEvent("UNIT_FACTION")
@@ -698,7 +698,7 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
     f:SetScript(
         "OnEvent",
         function(self, event, arg1)
-            if (event == "UNIT_HEALTH_FREQUENT" and arg1 == self.unit) then
+            if (event == "UNIT_HEALTH" and arg1 == self.unit) then
                 self.Update_Health()
             elseif (event == "UNIT_POWER_UPDATE" or event == "UNIT_MAXPOWER" and arg1 == self.unit) then
                 self.Update_Power()

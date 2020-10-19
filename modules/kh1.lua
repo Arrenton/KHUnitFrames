@@ -751,7 +751,7 @@ function KH_UI:New_KH1Unitframe(unit, setting)
     f:RegisterEvent("UNIT_POWER_UPDATE")
     f:RegisterEvent("UNIT_MANA")
     f:RegisterEvent("UNIT_MAXHEALTH")
-    f:RegisterEvent("UNIT_HEALTH_FREQUENT")
+    f:RegisterEvent("UNIT_HEALTH")
     f:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
     f:RegisterEvent("PLAYER_ENTERING_WORLD")
 
@@ -765,7 +765,7 @@ function KH_UI:New_KH1Unitframe(unit, setting)
             if arg1 == f.unit then
                 if (event == "UNIT_MANA" or event == "UPDATE_SHAPESHIFT_FORM" or event == "UNIT_POWER_UPDATE" or event == "GROUP_ROSTER_UPDATE") then
                     f:Update_Power()
-                elseif (event == "UNIT_MAXHEALTH" or event == "UNIT_HEALTH_FREQUENT") then
+                elseif (event == "UNIT_MAXHEALTH" or event == "UNIT_HEALTH") then
                     f:Update_Health()
                 end
             end

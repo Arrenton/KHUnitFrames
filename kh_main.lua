@@ -900,12 +900,12 @@ function KH_UI:setup_rings(id, mainFrame, ring_table)
         ring_object:SetScript(
             "OnEvent",
             function(self, event, unit)
-                if ((event == "UNIT_HEALTH_FREQUENT" or event == "UNIT_MAXHEALTH") and unit == mainFrame.unit) or event == "PLAYER_ENTERING_WORLD" then
+                if ((event == "UNIT_HEALTH" or event == "UNIT_MAXHEALTH") and unit == mainFrame.unit) or event == "PLAYER_ENTERING_WORLD" then
                     KH_UI:calc_ring_health(ring_object, ring_config, mainFrame.unit, ring_config.global.ringtype, mainFrame)
                 end
             end
         )
-        ring_object:RegisterEvent("UNIT_HEALTH_FREQUENT")
+        ring_object:RegisterEvent("UNIT_HEALTH")
         ring_object:RegisterEvent("UNIT_MAXHEALTH")
         ring_object:RegisterEvent("PLAYER_ENTERING_WORLD")
     end]]

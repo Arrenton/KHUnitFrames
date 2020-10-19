@@ -3,6 +3,9 @@ function KH_UI:Create_KH_Target_Style_Settings(panel, frame, type)
     --Health Container--
     --------------------
     panel.healthBox = CreateFrame("Frame", nil, panel.generalBox)
+	if not panel.healthBox.SetBackdrop then
+		Mixin(panel.healthBox, BackdropTemplateMixin)
+	end
     panel.healthBox:SetSize(280, 150)
     panel.healthBox:SetPoint("TOPLEFT", panel.generalBox, "BOTTOMLEFT", 0, -24)
     panel.healthBox:SetBackdrop(
@@ -57,14 +60,16 @@ function KH_UI:Create_KH_Target_Style_Settings(panel, frame, type)
     panel.healthBox.lengthMax.tooltip.tooltipText = "Sets how long in total the health bar can be. (In maximum health)"
     panel.healthBox.lengthMax.tooltip:SetSize(136, 12)
     panel.healthBox.lengthMax.tooltip:SetPoint("TOPLEFT", panel.healthBox, "TOPLEFT", 0, -12)
-    GameTooltip_AddNewbieTip(
-        panel.healthBox.lengthMax.tooltip,
-        panel.healthBox.lengthMax.tooltip.tooltipText,
-        1.0,
-        1.0,
-        0
-    )
-    GameTooltip:Hide()
+    if GameTooltip_AddNewbieTip then
+        GameTooltip_AddNewbieTip(
+            panel.healthBox.lengthMax.tooltip,
+            panel.healthBox.lengthMax.tooltip.tooltipText,
+            1.0,
+            1.0,
+            0
+        )
+        GameTooltip:Hide()
+    end
     -----------------
     --HP Bars max----
     -----------------
@@ -104,14 +109,16 @@ function KH_UI:Create_KH_Target_Style_Settings(panel, frame, type)
     panel.healthBox.maxLength.tooltip.tooltipText = "Sets the maximum amount of extra bars health can extend. Limit 6."
     panel.healthBox.maxLength.tooltip:SetSize(80, 12)
     panel.healthBox.maxLength.tooltip:SetPoint("TOPRIGHT", panel.healthBox, "TOPRIGHT", -12, -12)
-    GameTooltip_AddNewbieTip(
-        panel.healthBox.maxLength.tooltip,
-        panel.healthBox.maxLength.tooltip.tooltipText,
-        1.0,
-        1.0,
-        1.0
-    )
-    GameTooltip:Hide()
+    if GameTooltip_AddNewbieTip then
+        GameTooltip_AddNewbieTip(
+            panel.healthBox.maxLength.tooltip,
+            panel.healthBox.maxLength.tooltip.tooltipText,
+            1.0,
+            1.0,
+            1.0
+        )
+        GameTooltip:Hide()
+    end
     -----------------
     --HP Bar Growth--
     -----------------
@@ -153,14 +160,16 @@ function KH_UI:Create_KH_Target_Style_Settings(panel, frame, type)
         "Sets the rate at which the stretch bar will extend. (5000 = 5 pixels every 1 HP, 1000 = 1 pixel every 1 HP, 200 = 1 pixel every 5 HP)"
     panel.healthBox.barGrowth.tooltip:SetSize(136, 12)
     panel.healthBox.barGrowth.tooltip:SetPoint("TOPLEFT", panel.healthBox.barGrowth, "TOPLEFT", -12, 4)
-    GameTooltip_AddNewbieTip(
-        panel.healthBox.barGrowth.tooltip,
-        panel.healthBox.barGrowth.tooltip.tooltipText,
-        1.0,
-        1.0,
-        1.0
-    )
-    GameTooltip:Hide()
+    if GameTooltip_AddNewbieTip then
+        GameTooltip_AddNewbieTip(
+            panel.healthBox.barGrowth.tooltip,
+            panel.healthBox.barGrowth.tooltip.tooltipText,
+            1.0,
+            1.0,
+            1.0
+        )
+        GameTooltip:Hide()
+    end
     --------------------------
     --Display Value Checkbox--
     --------------------------
@@ -183,6 +192,9 @@ function KH_UI:Create_KH_Target_Style_Settings(panel, frame, type)
     --Power Container---
     --------------------
     panel.powerBox = CreateFrame("Frame", nil, panel.healthBox)
+	if not panel.powerBox.SetBackdrop then
+		Mixin(panel.powerBox, BackdropTemplateMixin)
+	end
     panel.powerBox:SetSize(280, 150)
     panel.powerBox:SetPoint("TOPLEFT", panel.healthBox, "TOPRIGHT", 30, 0)
     panel.powerBox:SetBackdrop(
@@ -240,7 +252,9 @@ function KH_UI:Create_KH_Target_Style_Settings(panel, frame, type)
     panel.powerBox.maxLength.tooltip.tooltipText = "Sets how long in total the power bar can be. (In maximum power)"
     panel.powerBox.maxLength.tooltip:SetSize(136, 12)
     panel.powerBox.maxLength.tooltip:SetPoint("TOPLEFT", panel.powerBox, "TOPLEFT", 0, -12)
-    GameTooltip_AddNewbieTip(panel.powerBox.maxLength.tooltip, panel.powerBox.maxLength.tooltip.tooltipText, 1.0, 1.0, 0)
+    if GameTooltip_AddNewbieTip then
+        GameTooltip_AddNewbieTip(panel.powerBox.maxLength.tooltip, panel.powerBox.maxLength.tooltip.tooltipText, 1.0, 1.0, 0)
+    end
     GameTooltip:Hide()
     -----------------
     --PP Bar Growth--
@@ -283,14 +297,16 @@ function KH_UI:Create_KH_Target_Style_Settings(panel, frame, type)
         "Sets the rate at which the bar will extend. (5000 = 5 pixels every 1 PP, 1000 = 1 pixel every 1 PP, 200 = 1 pixel every 5 PP)"
     panel.powerBox.barGrowth.tooltip:SetSize(136, 12)
     panel.powerBox.barGrowth.tooltip:SetPoint("TOPRight", panel.powerBox, "TOPRight", -12, -8)
-    GameTooltip_AddNewbieTip(
-        panel.powerBox.barGrowth.tooltip,
-        panel.powerBox.barGrowth.tooltip.tooltipText,
-        1.0,
-        1.0,
-        1.0
-    )
-    GameTooltip:Hide()
+    if GameTooltip_AddNewbieTip then
+        GameTooltip_AddNewbieTip(
+            panel.powerBox.barGrowth.tooltip,
+            panel.powerBox.barGrowth.tooltip.tooltipText,
+            1.0,
+            1.0,
+            1.0
+        )
+        GameTooltip:Hide()
+    end
     --------------------------
     --Display Value Checkbox--
     --------------------------

@@ -3,6 +3,9 @@ function KH_UI:Create_KH2_Style_Settings(panel, frame, type)
     --Health Container--
     --------------------
     panel.healthBox = CreateFrame("Frame", nil, panel.generalBox)
+	if not panel.healthBox.SetBackdrop then
+		Mixin(panel.healthBox, BackdropTemplateMixin)
+	end
     panel.healthBox:SetSize(280, 150)
     panel.healthBox:SetPoint("TOPLEFT", panel.generalBox, "BOTTOMLEFT", 0, -24)
     panel.healthBox:SetBackdrop(
@@ -57,14 +60,16 @@ function KH_UI:Create_KH2_Style_Settings(panel, frame, type)
     panel.healthBox.lengthMax.tooltip.tooltipText = "Sets how long in total the health bar can be. (In maximum health)"
     panel.healthBox.lengthMax.tooltip:SetSize(136, 12)
     panel.healthBox.lengthMax.tooltip:SetPoint("TOPLEFT", panel.healthBox, "TOPLEFT", 0, -12)
-    GameTooltip_AddNewbieTip(
-        panel.healthBox.lengthMax.tooltip,
-        panel.healthBox.lengthMax.tooltip.tooltipText,
-        1.0,
-        1.0,
-        0
-    )
-    GameTooltip:Hide()
+    if GameTooltip_AddNewbieTip then
+        GameTooltip_AddNewbieTip(
+            panel.healthBox.lengthMax.tooltip,
+            panel.healthBox.lengthMax.tooltip.tooltipText,
+            1.0,
+            1.0,
+            0
+        )
+        GameTooltip:Hide()
+    end
     -----------------
     --HP Ring Max----
     -----------------
@@ -104,14 +109,16 @@ function KH_UI:Create_KH2_Style_Settings(panel, frame, type)
     panel.healthBox.fullRing.tooltip.tooltipText = "Sets how much health will make the ring full"
     panel.healthBox.fullRing.tooltip:SetSize(80, 12)
     panel.healthBox.fullRing.tooltip:SetPoint("TOPRIGHT", panel.healthBox, "TOPRIGHT", -12, -12)
-    GameTooltip_AddNewbieTip(
-        panel.healthBox.fullRing.tooltip,
-        panel.healthBox.fullRing.tooltip.tooltipText,
-        1.0,
-        1.0,
-        1.0
-    )
-    GameTooltip:Hide()
+    if GameTooltip_AddNewbieTip then
+        GameTooltip_AddNewbieTip(
+            panel.healthBox.fullRing.tooltip,
+            panel.healthBox.fullRing.tooltip.tooltipText,
+            1.0,
+            1.0,
+            1.0
+        )
+        GameTooltip:Hide()
+    end
     -----------------
     --HP Bar Growth--
     -----------------
@@ -153,14 +160,17 @@ function KH_UI:Create_KH2_Style_Settings(panel, frame, type)
         "Sets the rate at which the stretch bar will extend. (5000 = 5 pixels every 1 HP, 1000 = 1 pixel every 1 HP, 200 = 1 pixel every 5 HP)"
     panel.healthBox.barGrowth.tooltip:SetSize(136, 12)
     panel.healthBox.barGrowth.tooltip:SetPoint("TOPLEFT", panel.healthBox.barGrowth, "TOPLEFT", -12, 4)
-    GameTooltip_AddNewbieTip(
-        panel.healthBox.barGrowth.tooltip,
-        panel.healthBox.barGrowth.tooltip.tooltipText,
-        1.0,
-        1.0,
-        1.0
-    )
-    GameTooltip:Hide()
+    
+    if GameTooltip_AddNewbieTip then
+        GameTooltip_AddNewbieTip(
+            panel.healthBox.barGrowth.tooltip,
+            panel.healthBox.barGrowth.tooltip.tooltipText,
+            1.0,
+            1.0,
+            1.0
+        )
+        GameTooltip:Hide()
+    end
     --------------------------
     --Display Value Checkbox--
     --------------------------
@@ -183,6 +193,9 @@ function KH_UI:Create_KH2_Style_Settings(panel, frame, type)
     --Power Container---
     --------------------
     panel.powerBox = CreateFrame("Frame", nil, panel.healthBox)
+	if not panel.powerBox.SetBackdrop then
+		Mixin(panel.powerBox, BackdropTemplateMixin)
+	end
     panel.powerBox:SetSize(280, 150)
     panel.powerBox:SetPoint("TOPLEFT", panel.healthBox, "TOPRIGHT", 30, 0)
     panel.powerBox:SetBackdrop(
@@ -220,6 +233,9 @@ function KH_UI:Create_KH2_Style_Settings(panel, frame, type)
     --Mana Container--
     ------------------
     panel.manaBox = CreateFrame("Frame", nil, panel.healthBox)
+	if not panel.manaBox.SetBackdrop then
+		Mixin(panel.manaBox, BackdropTemplateMixin)
+	end
     panel.manaBox:SetSize(280, 150)
     panel.manaBox:SetPoint("TOPLEFT", panel.healthBox, "BOTTOMLEFT", 0, -24)
     panel.manaBox:SetBackdrop(
@@ -268,7 +284,9 @@ function KH_UI:Create_KH2_Style_Settings(panel, frame, type)
     panel.manaBox.manaMax.tooltip.tooltipText = "Sets the maximum value of mana the bar will extend"
     panel.manaBox.manaMax.tooltip:SetSize(136, 12)
     panel.manaBox.manaMax.tooltip:SetPoint("TOPLEFT", panel.manaBox, "TOPLEFT", 0, -12)
-    GameTooltip_AddNewbieTip(panel.manaBox.manaMax.tooltip, panel.manaBox.manaMax.tooltip.tooltipText, 1.0, 1.0, 0)
+    if GameTooltip_AddNewbieTip then
+        GameTooltip_AddNewbieTip(panel.manaBox.manaMax.tooltip, panel.manaBox.manaMax.tooltip.tooltipText, 1.0, 1.0, 0)
+    end
     GameTooltip:Hide()
     -------------------
     --Mana Length Rate--
@@ -303,7 +321,9 @@ function KH_UI:Create_KH2_Style_Settings(panel, frame, type)
     panel.manaBox.manaRate.tooltip.tooltipText = "Sets the rate the mana bar will extend by mana per pixel"
     panel.manaBox.manaRate.tooltip:SetSize(90, 12)
     panel.manaBox.manaRate.tooltip:SetPoint("TOPRIGHT", panel.manaBox, "TOPRIGHT", -12, -12)
-    GameTooltip_AddNewbieTip(panel.manaBox.manaRate.tooltip, panel.manaBox.manaRate.tooltip.tooltipText, 1.0, 1.0, 0)
+    if GameTooltip_AddNewbieTip then
+        GameTooltip_AddNewbieTip(panel.manaBox.manaRate.tooltip, panel.manaBox.manaRate.tooltip.tooltipText, 1.0, 1.0, 0)
+    end
     GameTooltip:Hide()
     --------------------------
     --Display Value Checkbox--
@@ -326,6 +346,9 @@ function KH_UI:Create_KH2_Style_Settings(panel, frame, type)
     --Style Container--
     -------------------
     panel.styleContainer = CreateFrame("Frame", nil, panel.manaBox)
+	if not panel.styleContainer.SetBackdrop then
+		Mixin(panel.styleContainer, BackdropTemplateMixin)
+	end
     panel.styleContainer:SetSize(280, 150)
     panel.styleContainer:SetPoint("TOPLEFT", panel.manaBox, "TOPRIGHT", 30, 0)
     panel.styleContainer:SetBackdrop(

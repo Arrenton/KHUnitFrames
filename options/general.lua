@@ -3,6 +3,9 @@ function KH_UI:General_Options(panel)
 	--General Container--
 	---------------------
 	panel.generalBox = CreateFrame("Frame", nil, panel)
+	if not panel.generalBox.SetBackdrop then
+		Mixin(panel.generalBox, BackdropTemplateMixin)
+	end
 	panel.generalBox:SetSize(590, 75)
 	panel.generalBox:SetPoint("TOPLEFT", 16, -64)
 	panel.generalBox:SetBackdrop(

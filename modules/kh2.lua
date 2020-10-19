@@ -91,6 +91,11 @@ local ORB_COLORS = {
 		r = 0,
 		g = 0.75,
 		b = 1
+	},
+	["MAELSTROM"] = {
+		r = 0.4,
+		g = 0.4,
+		b = 1
 	}
 }
 
@@ -103,6 +108,11 @@ local RESOURCE_COLORS = {
 	["RUNES"] = {
 		r = 0,
 		g = 1,
+		b = 1
+	},
+	["MAELSTROM"] = {
+		r = 0.1,
+		g = 0.3,
 		b = 1
 	}
 }
@@ -171,6 +181,16 @@ local function Create_Power_Bar(mainFrame)
 	mainFrame.powerFrame.power.texture:SetVertexColor(r, g, b, 1)
 	mainFrame.powerFrame.powerVal.text:SetText(KH_UI:FormatNumber(UnitPower("player")))
 	function mainFrame.powerFrame:Update_Power_Bar(mainFrame)
+		if (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE) then
+			local _, class, _ = UnitClass(mainFrame.unit)
+			if (class == "SHAMAN" and GetSpecialization() == 2) then
+				self.base.texture:SetVertexColor(0, 0, 0, 0)
+				self.power.texture:SetVertexColor(0, 0, 0, 0)
+				self.bg.texture:SetAlpha(0)
+				self.powerVal.text:SetText("")
+				return
+			end
+		end
 		--Set power color
 		local powerType, powerToken, altR, altG, altB = UnitPowerType(mainFrame.unit)
 		local info, r, g, b = PowerBarColor[powerToken], 0, 0, 0
@@ -185,6 +205,7 @@ local function Create_Power_Bar(mainFrame)
 		end
 		self.base.texture:SetVertexColor(r, g, b, 1)
 		self.power.texture:SetVertexColor(r, g, b, 1)
+		self.bg.texture:SetAlpha(1)
 		--Set bar length
 		local power = mainFrame.unitPowerTemp
 		local maxPower = UnitPowerMax(mainFrame.unit)
@@ -241,6 +262,10 @@ local function Create_Resource_Counter(mainFrame)
 		local _, class, _ = UnitClass(mainFrame.unit)
 		if (class == "DEATHKNIGHT") then
 			resourceType = "RUNES"
+		elseif (class == "SHAMAN") then
+			if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+				resourceType = "MAELSTROM"
+			end
 		end
 		for i = 1, 9 do
 			self.orb[i].alpha = 0
@@ -274,6 +299,10 @@ local function Create_Resource_Counter(mainFrame)
 	local _, class, _ = UnitClass(mainFrame.unit)
 	if (class == "DEATHKNIGHT") then
 		resourceType = "RUNES"
+	elseif (class == "SHAMAN") then
+		if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+			resourceType = "MAELSTROM"
+		end
 	end
 	for i = 1, 9 do
 		mainFrame.resourceFrame.orb[i] = KH_UI:CreateImageFrame(10, 10, mainFrame.resourceFrame.bg, "CENTER", 0, 0, 28, {x = 100 / 256, xw = 110 / 256, y = 5 / 256, yh = 15 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
@@ -320,6 +349,22 @@ local function Create_Resource_Counter(mainFrame)
 				end
 				self.currentValue = numReady;
 				resourceType = "RUNES"
+			elseif (class == "SHAMAN") then
+				if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+					local buff, found = 344179, false
+
+					for i=1,40 do
+						local _, _, stacks, _, _, _, _, _, _, id = UnitBuff("player",i)
+						if id == buff then
+							self.currentValue = stacks;
+							found = true;
+						end
+					end
+					if (not found) then
+						self.currentValue = 0;
+					end
+					resourceType = "MAELSTROM"
+				end
 			end
 			if (self.currentValue ~= self.previousValue) then
 				self.value.texture:SetTexCoord(self.number[self.currentValue][self.side].x, self.number[self.currentValue][self.side].xw, self.number[self.currentValue][self.side].y, self.number[self.currentValue][self.side].yh)
@@ -334,6 +379,12 @@ local function Create_Resource_Counter(mainFrame)
 				maxResource = UnitPowerMax(PlayerFrame.unit, Enum.PowerType.ComboPoints)
 			elseif (class == "DEATHKNIGHT") then
 				maxResource = UnitPowerMax(PlayerFrame.unit, Enum.PowerType.Runes)
+			elseif (class == "SHAMAN") then
+				if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+					if (GetSpecialization() == 2) then
+						maxResource = 1
+					end
+				end
 			end
 			if (not self:IsShown()) then
 				if (maxResource > 0) then
@@ -374,7 +425,7 @@ local function create_ring_pretties(mainFrame)
 	mainFrame.healthFrame.edge_frame:SetScript(
 		"OnEvent",
 		function(self, event, unit)
-			if (event == "UNIT_HEALTH_FREQUENT" or event == "UNIT_MAXHEALTH" or event == "PLAYER_ENTERING_WORLD") and unit == mainFrame.unit then
+			if (event == "UNIT_HEALTH" or event == "UNIT_MAXHEALTH" or event == "PLAYER_ENTERING_WORLD") and unit == mainFrame.unit then
 				mainFrame.unitHealthMax = UnitHealthMax(mainFrame.unit)
 				if mainFrame.unitHealthMax > KH_UI_Settings[mainFrame.settings].healthLengthMax then
 					mainFrame.healthMaxMult = 1 / (mainFrame.unitHealthMax / KH_UI_Settings[mainFrame.settings].healthLengthMax)
@@ -384,7 +435,7 @@ local function create_ring_pretties(mainFrame)
 			end
 		end
 	)
-	mainFrame.healthFrame.edge_frame:RegisterEvent("UNIT_HEALTH_FREQUENT")
+	mainFrame.healthFrame.edge_frame:RegisterEvent("UNIT_HEALTH")
 	mainFrame.healthFrame.edge_frame:RegisterEvent("UNIT_MAXHEALTH")
 	mainFrame.healthFrame.edge_frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	mainFrame.healthFrame.edge_frame.texture = mainFrame.healthFrame.edge_frame:CreateTexture(nil, "BACKGROUND")
@@ -399,7 +450,7 @@ local function create_ring_pretties(mainFrame)
 	mainFrame.healthFrame.healthVal:SetWidth(27)
 	mainFrame.healthFrame.healthVal:SetHeight(6)
 	mainFrame.healthFrame.healthVal:SetScale(0.45)
-	mainFrame.healthFrame.healthVal:RegisterEvent("UNIT_HEALTH_FREQUENT")
+	mainFrame.healthFrame.healthVal:RegisterEvent("UNIT_HEALTH")
 	mainFrame.healthFrame.healthVal:RegisterEvent("PLAYER_ENTERING_WORLD")
 	mainFrame.healthFrame.healthVal:SetScript(
 		"OnEvent",
@@ -1004,6 +1055,11 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 				KH_UI:calc_ring_power(f.ring_frames[i], f.ring_table[i], f.unit, f.ring_frames[i].ringtype, f)
 			end
 		end
+		if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+			if (class == "Shaman" and GetSpecialization() == 2) then
+				powerToken = "MAELSTROM"
+			end
+		end
 		if (f.unit == "player") then
 			if (class == "Shaman" or class == "Priest" or class == "Druid" or powerToken == "MANA") then
 				f.enableMana = true
@@ -1160,7 +1216,7 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 	f:RegisterEvent("UNIT_POWER_UPDATE")
 	f:RegisterEvent("UNIT_MANA")
 	f:RegisterEvent("UNIT_MAXHEALTH")
-	f:RegisterEvent("UNIT_HEALTH_FREQUENT")
+	f:RegisterEvent("UNIT_HEALTH")
 	f:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 	f:RegisterEvent("PLAYER_ENTERING_WORLD")
 
@@ -1173,7 +1229,7 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 
 			if (event == "GROUP_ROSTER_UPDATE" or event == "UNIT_CONNECTION" or event == "UNIT_OTHER_PARTY_CHANGED" or event == "UPDATE_SHAPESHIFT_FORM" or event == "UNIT_POWER_UPDATE" or event == "UNIT_MANA") and arg1 == f.unit then
 				f:Update_Power()
-			elseif (event == "UNIT_MAXHEALTH" or event == "UNIT_HEALTH_FREQUENT" and arg1 == f.unit) then
+			elseif (event == "UNIT_MAXHEALTH" or event == "UNIT_HEALTH" and arg1 == f.unit) then
 				f:Update_Health()
 			elseif (event == "PLAYER_ENTERING_WORLD" and arg1 == f.unit) then
 				f:Update_Power()

@@ -3,6 +3,9 @@ function KH_UI:Create_KH1_Style_Settings(panel, frame, type)
     --Health Container--
     --------------------
     panel.healthBox = CreateFrame("Frame", nil, panel.generalBox)
+	if not panel.healthBox.SetBackdrop then
+		Mixin(panel.healthBox, BackdropTemplateMixin)
+	end
     panel.healthBox:SetSize(280, 150)
     panel.healthBox:SetPoint("TOPLEFT", panel.generalBox, "BOTTOMLEFT", 0, -24)
     panel.healthBox:SetBackdrop(
