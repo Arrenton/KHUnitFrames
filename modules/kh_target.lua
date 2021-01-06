@@ -429,38 +429,40 @@ function KH_UI:New_KHTargetUnitframe(unit, setting)
     f:SetScript(
         "OnEvent",
         function(self, event, arg1)
-            if (event == "UNIT_HEALTH" and arg1 == self.unit) then
-                self.Update_Health()
-            elseif (event == "UNIT_POWER_UPDATE" or event == "UNIT_MAXPOWER" and arg1 == self.unit) then
-                self.Update_Power()
-            elseif (event == "PLAYER_TARGET_CHANGED") then
-                -- Moved here to avoid taint from functions below
-                CloseDropDownMenus()
-                if (UnitExists(self.unit)) then
+            if (KH_UI_Settings["Target Frame"].enabled == true) then
+                if (event == "UNIT_HEALTH" and arg1 == self.unit) then
                     self.Update_Health()
+                elseif (event == "UNIT_POWER_UPDATE" or event == "UNIT_MAXPOWER" and arg1 == self.unit) then
                     self.Update_Power()
-                    self.CheckLevel(self)
-                    self.nameFrame.text:SetText(format(UnitName(self.unit)))
-                    if (not UnitPlayerControlled(self.unit) and UnitIsTapDenied(self.unit)) then
-                        --self.nameFrame.text:SetVertexColor(0.5, 0.5, 0.5)
-                        self.healthFrame.bg.texture:SetVertexColor(0.5, 0.5, 0.5)
-                    else
-                        --self.nameFrame.text:SetVertexColor(UnitSelectionColor(self.unit))
-                        self.healthFrame.bg.texture:SetVertexColor(UnitSelectionColor(self.unit))
+                elseif (event == "PLAYER_TARGET_CHANGED") then
+                    -- Moved here to avoid taint from functions below
+                    CloseDropDownMenus()
+                    if (UnitExists(self.unit)) then
+                        self.Update_Health()
+                        self.Update_Power()
+                        self.CheckLevel(self)
+                        self.nameFrame.text:SetText(format(UnitName(self.unit)))
+                        if (not UnitPlayerControlled(self.unit) and UnitIsTapDenied(self.unit)) then
+                            --self.nameFrame.text:SetVertexColor(0.5, 0.5, 0.5)
+                            self.healthFrame.bg.texture:SetVertexColor(0.5, 0.5, 0.5)
+                        else
+                            --self.nameFrame.text:SetVertexColor(UnitSelectionColor(self.unit))
+                            self.healthFrame.bg.texture:SetVertexColor(UnitSelectionColor(self.unit))
+                        end
                     end
-                end
 
-                if (UnitExists(self.unit) and not IsReplacingUnit()) then
-                    if (UnitIsEnemy(self.unit, "player")) then
-                        PlaySound(SOUNDKIT.IG_CREATURE_AGGRO_SELECT)
-                    elseif (UnitIsFriend("player", self.unit)) then
-                        PlaySound(SOUNDKIT.IG_CHARACTER_NPC_SELECT)
-                    else
-                        PlaySound(SOUNDKIT.IG_CREATURE_NEUTRAL_SELECT)
+                    if (UnitExists(self.unit) and not IsReplacingUnit()) then
+                        if (UnitIsEnemy(self.unit, "player")) then
+                            PlaySound(SOUNDKIT.IG_CREATURE_AGGRO_SELECT)
+                        elseif (UnitIsFriend("player", self.unit)) then
+                            PlaySound(SOUNDKIT.IG_CHARACTER_NPC_SELECT)
+                        else
+                            PlaySound(SOUNDKIT.IG_CREATURE_NEUTRAL_SELECT)
+                        end
                     end
-                end
-            elseif (event == "UNIT_AURA") then
-                if (arg1 == self.unit) then
+                elseif (event == "UNIT_AURA") then
+                    if (arg1 == self.unit) then
+                    end
                 end
             end
         end

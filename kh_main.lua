@@ -14,15 +14,15 @@ KH_UI = CreateFrame("Frame", nil, UIParent)
 -----------------------
 KH_UI_Settings_Defaults = {
     ["Player Frame"] = {
-        ringMaxHealth = 2000,
-        longBarHealthLengthRate = 200,
-        healthLengthMax = 5000,
+        ringMaxHealth = 2400,
+        longBarHealthLengthRate = 165,
+        healthLengthMax = 6720,
         displayHealthValue = true,
         maxBars = 20,
-        manaLengthRate = 100,
-        manaLengthMax = 5360,
+        manaLengthRate = 110,
+        manaLengthMax = 10080,
         displayManaValue = true,
-        ringMaxPower = 3000,
+        ringMaxPower = 3600,
         displayPowerValue = true,
         scale = 1,
         style = "KH2",
@@ -34,15 +34,15 @@ KH_UI_Settings_Defaults = {
         orientation = "Top Left"
     },
     ["Party Frame"] = {
-        ringMaxHealth = 2000,
-        longBarHealthLengthRate = 200,
-        healthLengthMax = 5000,
+        ringMaxHealth = 2400,
+        longBarHealthLengthRate = 165,
+        healthLengthMax = 6720,
         displayHealthValue = true,
         maxBars = 20,
-        manaLengthRate = 100,
-        manaLengthMax = 5360,
+        manaLengthRate = 110,
+        manaLengthMax = 10080,
         displayManaValue = true,
-        ringMaxPower = 3000,
+        ringMaxPower = 3600,
         displayPowerValue = true,
         scale = 0.5,
         style = "KH2 Party",
@@ -1159,6 +1159,7 @@ KH_UI:SetScript(
                     RegisterStateDriver(KH_UI.partyFrame[i], "visibility", "[@raid1, exists]hide;[@party" .. i .. ",exists]show;hide")
                 end
             end
+			KH_UI:Set_KHFrames()
             KH_UI:UnregisterEvent("PLAYER_LOGIN")
         elseif (event == "ADDON_LOADED") then
             KH_UI:Set_BlizzardFrames()

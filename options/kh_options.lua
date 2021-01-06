@@ -27,14 +27,96 @@ function KH_UI:createCheckbutton(parent, x_loc, y_loc, displayname)
 	return checkbutton
 end
 
+function KH_UI:Enable_BlizzardTarget()
+	if not TargetFrame:IsEventRegistered("UNIT_HEALTH") then
+		--Combo Frame
+		ComboFrame:RegisterEvent("PLAYER_TARGET_CHANGED");
+		ComboFrame:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player");
+		ComboFrame:RegisterUnitEvent("UNIT_MAXPOWER", "player");
+		ComboFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
+		--Target Frame
+		TargetFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+		TargetFrame:RegisterEvent("UNIT_HEALTH")
+		if (TargetFrame.showLevel) then
+			TargetFrame:RegisterEvent("UNIT_LEVEL")
+		end
+		TargetFrame:RegisterEvent("UNIT_FACTION")
+		if (TargetFrame.showClassification) then
+			TargetFrame:RegisterEvent("UNIT_CLASSIFICATION_CHANGED")
+		end
+		if (TargetFrame.showLeader) then
+			TargetFrame:RegisterEvent("PLAYER_FLAGS_CHANGED")
+		end
+		TargetFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
+		TargetFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
+		TargetFrame:RegisterEvent("RAID_TARGET_UPDATE")
+		TargetFrame:RegisterUnitEvent("UNIT_AURA", "target")
+	end
+end
+
+function KH_UI:Disable_BlizzardTarget()
+	if (TargetFrame:IsEventRegistered("UNIT_HEALTH")) then
+		TargetFrame:UnregisterAllEvents()
+		TargetFrame:Hide()
+		ComboFrame:UnregisterAllEvents()
+		ComboFrame:Hide()
+	end
+end
+
+function KH_UI:Set_KHFrames()
+	--Player Frame--
+	if (KH_UI_Settings["Player Frame"].enabled == false) then
+		if (KH_UI.playerFrame:IsVisible()) then
+			KH_UI.playerFrame:Hide()
+		end
+	elseif (KH_UI.playerFrame:IsVisible() == false) then
+		KH_UI.playerFrame:Show()
+	end
+	--Party Frame--
+	for i = 1, 4, 1 do
+		if (KH_UI_Settings["Party Frame"].enabled == false) then
+			if (KH_UI.partyFrame[i]:IsVisible()) then
+				KH_UI.partyFrame[i]:Hide()
+			end
+		elseif (KH_UI.partyFrame[i]:IsVisible() == false) then
+			KH_UI.partyFrame[i]:Show()
+		end
+	end
+	--Target Frame--
+	if (KH_UI_Settings["Target Frame"].enabled == false) then
+		KH_UI:Enable_BlizzardTarget()
+		if (KH_UI.targetFrame:IsVisible()) then
+			KH_UI.targetFrame:Hide()
+		end
+		UnregisterStateDriver(KH_UI.targetFrame, "visibility")
+		UnregisterStateDriver(KH_UI.targettargetFrame, "visibility")
+		if (KH_UI.targettargetFrame:IsVisible()) then
+			KH_UI.targettargetFrame:Hide()
+		end
+	else
+		RegisterStateDriver(KH_UI.targetFrame, "visibility", "[@target,exists] show; hide")
+		RegisterStateDriver(KH_UI.targettargetFrame, "visibility", "[@targettarget,exists] show; hide")
+		if (KH_UI_Settings["Player Frame"].blizzardEnabled) then
+			KH_UI:Disable_BlizzardTarget()
+		end
+		if (KH_UI.targetFrame:IsVisible() == false) then
+			KH_UI.targetFrame:Show()
+		end
+		if (KH_UI.targettargetFrame:IsVisible() == false) then
+			KH_UI.targettargetFrame:Show()
+		end
+	end
+end
+
 function KH_UI:Set_BlizzardFrames()
 	if (not InCombatLockdown()) then
+		--KH_UI.targetFrame = KH_UI:New_TargetFrame()
+		--KH_UI.targettargetFrame = KH_UI:New_TargetofTargetFrame()
 		if (KH_UI_Settings["Player Frame"].blizzardEnabled or KH_UI_Settings["Player Frame"].enabled == false) then
 			PlayerFrame:Show()
 		elseif (PlayerFrame:IsVisible()) then
 			PlayerFrame:Hide()
 		end
-		--Party Frame--
 		if (KH_UI_Settings["Party Frame"].blizzardEnabled or KH_UI_Settings["Party Frame"].enabled == false) then
 			ShowPartyFrame()
 		else
@@ -43,35 +125,11 @@ function KH_UI:Set_BlizzardFrames()
 		--Target Frame--
 		if
 			(KH_UI_Settings["Target Frame"].blizzardEnabled or
-				KH_UI_Settings["Target Frame"].enabled == false and not TargetFrame:IsEventRegistered("UNIT_HEALTH"))
+				KH_UI_Settings["Target Frame"].enabled == false)
 		 then
-			--Combo Frame
-			ComboFrame:RegisterEvent("PLAYER_TARGET_CHANGED");
-			ComboFrame:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player");
-			ComboFrame:RegisterUnitEvent("UNIT_MAXPOWER", "player");
-			ComboFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
-			--Target Frame
-			TargetFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-			TargetFrame:RegisterEvent("UNIT_HEALTH")
-			if (TargetFrame.showLevel) then
-				TargetFrame:RegisterEvent("UNIT_LEVEL")
-			end
-			TargetFrame:RegisterEvent("UNIT_FACTION")
-			if (TargetFrame.showClassification) then
-				TargetFrame:RegisterEvent("UNIT_CLASSIFICATION_CHANGED")
-			end
-			if (TargetFrame.showLeader) then
-				TargetFrame:RegisterEvent("PLAYER_FLAGS_CHANGED")
-			end
-			TargetFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
-			TargetFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
-			TargetFrame:RegisterEvent("RAID_TARGET_UPDATE")
-			TargetFrame:RegisterUnitEvent("UNIT_AURA", "target")
-		elseif (TargetFrame:IsEventRegistered("UNIT_HEALTH")) then
-			TargetFrame:UnregisterAllEvents()
-			TargetFrame:Hide()
-			ComboFrame:UnregisterAllEvents()
-			ComboFrame:Hide()
+			KH_UI:Enable_BlizzardTarget()
+		else
+			KH_UI:Disable_BlizzardTarget()
 		end
 	end
 end

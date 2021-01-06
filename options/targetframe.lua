@@ -33,6 +33,7 @@ function KH_UI:KH_Target_Frame_Options(panel)
 		function()
 			KH_UI_Settings[panel.name].enabled = panel.generalBox.enabledCheckbox:GetChecked()
 			KH_UI:Set_BlizzardFrames()
+			KH_UI:Set_KHFrames()
 			panel.generalBox.blizzardEnabledCheckbox:Hide()
 			if panel.generalBox.enabledCheckbox:GetChecked() then
 				panel.generalBox.blizzardEnabledCheckbox:Show()

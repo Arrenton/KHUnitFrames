@@ -117,6 +117,8 @@ local RESOURCE_COLORS = {
 	}
 }
 
+local RESOURCE_MAX = 10
+
 local function Create_Power_Bar(mainFrame)
 	mainFrame.powerFrame:RegisterEvent("UNIT_POWER_UPDATE")
 	mainFrame.powerFrame:RegisterEvent("UNIT_MAXPOWER")
@@ -232,7 +234,7 @@ local function Create_Resource_Counter(mainFrame)
 	local function UpdateOrbs(mainFrame)
 		local self = mainFrame.resourceFrame
 		local radius = 26
-		for i = 1, self.currentValue do
+		for i = 1, math.min(self.currentValue, RESOURCE_MAX) do
 			local dir = -self.orb[i].angle
 			if (KH_UI_Settings[mainFrame.settings].orientation == "Top Right" or KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
 				dir = self.orb[i].angle
@@ -267,13 +269,13 @@ local function Create_Resource_Counter(mainFrame)
 				resourceType = "MAELSTROM"
 			end
 		end
-		for i = 1, 9 do
+		for i = 1, RESOURCE_MAX do
 			self.orb[i].alpha = 0
 			self.orb[i].angle = 0
 			self.orb[i]:SetAlpha(0)
 			self.orb[i]:Hide()
 		end
-		for i = 1, self.currentValue do
+		for i = 1, math.min(self.currentValue, RESOURCE_MAX) do
 			self.orb[i]:Show()
 			self.orb[i].alpha = 0
 			self.orb[i].angle = 580 + (i - 1) * (360 / self.currentValue)
@@ -304,7 +306,7 @@ local function Create_Resource_Counter(mainFrame)
 			resourceType = "MAELSTROM"
 		end
 	end
-	for i = 1, 9 do
+	for i = 1, RESOURCE_MAX do
 		mainFrame.resourceFrame.orb[i] = KH_UI:CreateImageFrame(10, 10, mainFrame.resourceFrame.bg, "CENTER", 0, 0, 28, {x = 100 / 256, xw = 110 / 256, y = 5 / 256, yh = 15 / 256}, "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
 		mainFrame.resourceFrame.orb[i].alpha = 0
 		mainFrame.resourceFrame.orb[i].angle = 0
@@ -321,7 +323,8 @@ local function Create_Resource_Counter(mainFrame)
 		[6] = {{x = 137 / 256, xw = 163 / 256, y = 111 / 256, yh = 139 / 256}, {x = 137 / 256, xw = 163 / 256, y = 80 / 256, yh = 108 / 256}},
 		[7] = {{x = 165 / 256, xw = 191 / 256, y = 111 / 256, yh = 139 / 256}, {x = 165 / 256, xw = 191 / 256, y = 80 / 256, yh = 108 / 256}},
 		[8] = {{x = 193 / 256, xw = 219 / 256, y = 111 / 256, yh = 139 / 256}, {x = 193 / 256, xw = 219 / 256, y = 80 / 256, yh = 108 / 256}},
-		[9] = {{x = 221 / 256, xw = 247 / 256, y = 111 / 256, yh = 139 / 256}, {x = 221 / 256, xw = 247 / 256, y = 80 / 256, yh = 108 / 256}}
+		[9] = {{x = 221 / 256, xw = 247 / 256, y = 111 / 256, yh = 139 / 256}, {x = 221 / 256, xw = 247 / 256, y = 80 / 256, yh = 108 / 256}},
+		[10] = {{x = 154 / 256, xw = 191 / 256, y = 141 / 256, yh = 169 / 256}, {x = 115 / 256, xw = 149 / 256, y = 141 / 256, yh = 169 / 256}}
 	}
 	if (mainFrame.resourceFrame.side == 1) then
 		mainFrame.resourceFrame.value = KH_UI:CreateImageFrame(26, 28, mainFrame.resourceFrame.bg, "TOPLEFT", 6, -2, 27, mainFrame.resourceFrame.number[9][mainFrame.resourceFrame.side], "Interface\\AddOns\\KHUnitframes\\textures\\KH2\\powerbar")
@@ -366,10 +369,16 @@ local function Create_Resource_Counter(mainFrame)
 					resourceType = "MAELSTROM"
 				end
 			end
+
+			if (self.currentValue > RESOURCE_MAX) then
+				self.currentValue = RESOURCE_MAX;
+			end
+
 			if (self.currentValue ~= self.previousValue) then
 				self.value.texture:SetTexCoord(self.number[self.currentValue][self.side].x, self.number[self.currentValue][self.side].xw, self.number[self.currentValue][self.side].y, self.number[self.currentValue][self.side].yh)
 				SetOrbs(mainFrame)
 			end
+			
 			self.previousValue = self.currentValue
 			--Set Color
 			self.value.texture:SetVertexColor(RESOURCE_COLORS[resourceType].r, RESOURCE_COLORS[resourceType].g, RESOURCE_COLORS[resourceType].b, 1)
