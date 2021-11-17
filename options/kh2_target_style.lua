@@ -2,10 +2,17 @@ function KH_UI:Create_KH2_Target_Style_Settings(panel, frame, type)
     --------------------
     --Health Container--
     --------------------
-    panel.healthBox = CreateFrame("Frame", nil, panel.generalBox)
+    panel.healthBox = CreateFrame("Frame", nil, panel.generalBox, BackdropTemplateMixin and "BackdropTemplate")
+	--[[if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+		panel.healthBox = CreateFrame("Frame", nil, panel.generalBox)
+	elseif WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
+		panel.healthBox = CreateFrame("Frame", nil, panel.generalBox, 'BackdropTemplate')
+	else
+		panel.healthBox = CreateFrame("Frame", nil, panel.generalBox)
+	end
 	if not panel.healthBox.SetBackdrop then
 		Mixin(panel.healthBox, BackdropTemplateMixin)
-	end
+	end]]
     panel.healthBox:SetSize(280, 150)
     panel.healthBox:SetPoint("TOPLEFT", panel.generalBox, "BOTTOMLEFT", 0, -24)
     panel.healthBox:SetBackdrop(
@@ -185,7 +192,14 @@ function KH_UI:Create_KH2_Target_Style_Settings(panel, frame, type)
     --------------------
     --Power Container---
     --------------------
-    panel.powerBox = CreateFrame("Frame", nil, panel.healthBox)
+    panel.powerBox = CreateFrame("Frame", nil, panel.healthBox, BackdropTemplateMixin and "BackdropTemplate")
+	--[[if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+		panel.powerBox = CreateFrame("Frame", nil, panel.healthBox)
+	elseif WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
+		panel.powerBox = CreateFrame("Frame", nil, panel.healthBox, 'BackdropTemplate')
+	else
+		panel.powerBox = CreateFrame("Frame", nil, panel.healthBox)
+	end]]
     panel.powerBox:SetSize(280, 150)
     panel.powerBox:SetPoint("TOPLEFT", panel.healthBox, "TOPRIGHT", 30, 0)
     panel.powerBox:SetBackdrop(

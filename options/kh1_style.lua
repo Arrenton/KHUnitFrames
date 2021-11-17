@@ -2,10 +2,11 @@ function KH_UI:Create_KH1_Style_Settings(panel, frame, type)
     --------------------
     --Health Container--
     --------------------
-    panel.healthBox = CreateFrame("Frame", nil, panel.generalBox)
-	if not panel.healthBox.SetBackdrop then
-		Mixin(panel.healthBox, BackdropTemplateMixin)
-	end
+    --panel.healthBox = CreateFrame("Frame", nil, panel.generalBox)
+    panel.healthBox = CreateFrame("Frame", nil, panel.generalBox, BackdropTemplateMixin and "BackdropTemplate")
+	--if not panel.healthBox.SetBackdrop then
+	--	Mixin(panel.healthBox, BackdropTemplateMixin)
+	--end
     panel.healthBox:SetSize(280, 150)
     panel.healthBox:SetPoint("TOPLEFT", panel.generalBox, "BOTTOMLEFT", 0, -24)
     panel.healthBox:SetBackdrop(
@@ -185,7 +186,14 @@ function KH_UI:Create_KH1_Style_Settings(panel, frame, type)
     --------------------
     --Power Container---
     --------------------
-    panel.powerBox = CreateFrame("Frame", nil, panel.healthBox)
+    panel.powerBox = CreateFrame("Frame", nil, panel.healthBox, BackdropTemplateMixin and "BackdropTemplate")
+	--[[if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+		panel.powerBox = CreateFrame("Frame", nil, panel.healthBox)
+	elseif WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
+		panel.powerBox = CreateFrame("Frame", nil, panel.healthBox, 'BackdropTemplate')
+	else
+		panel.powerBox = CreateFrame("Frame", nil, panel.healthBox)
+	end]]
     panel.powerBox:SetSize(280, 150)
     panel.powerBox:SetPoint("TOPLEFT", panel.healthBox, "TOPRIGHT", 30, 0)
     panel.powerBox:SetBackdrop(
@@ -334,7 +342,14 @@ function KH_UI:Create_KH1_Style_Settings(panel, frame, type)
     ------------------
     --Power Container--
     ------------------
-    panel.manaBox = CreateFrame("Frame", nil, panel.healthBox)
+    panel.manaBox = CreateFrame("Frame", nil, panel.healthBox, BackdropTemplateMixin and "BackdropTemplate")
+	--[[if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+		panel.manaBox = CreateFrame("Frame", nil, panel.healthBox)
+	elseif WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
+		panel.manaBox = CreateFrame("Frame", nil, panel.healthBox, 'BackdropTemplate')
+	else
+		panel.manaBox = CreateFrame("Frame", nil, panel.healthBox)
+	end]]
     panel.manaBox:SetSize(280, 150)
     panel.manaBox:SetPoint("TOPLEFT", panel.healthBox, "BOTTOMLEFT", 0, -24)
     panel.manaBox:SetBackdrop(
@@ -371,7 +386,14 @@ function KH_UI:Create_KH1_Style_Settings(panel, frame, type)
     -------------------
     --Style Container--
     -------------------
-    panel.styleContainer = CreateFrame("Frame", nil, panel.manaBox)
+    panel.styleContainer = CreateFrame("Frame", nil, panel.manaBox, BackdropTemplateMixin and "BackdropTemplate")
+	--[[if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+		panel.styleContainer = CreateFrame("Frame", nil, panel.manaBox)
+	elseif WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
+		panel.styleContainer = CreateFrame("Frame", nil, panel.manaBox, 'BackdropTemplate')
+	else
+		panel.styleContainer = CreateFrame("Frame", nil, panel.manaBox)
+	end]]
     panel.styleContainer:SetSize(280, 150)
     panel.styleContainer:SetPoint("TOPLEFT", panel.manaBox, "TOPRIGHT", 30, 0)
     panel.styleContainer:SetBackdrop(

@@ -2,10 +2,11 @@ function KH_UI:Create_KH_Target_Style_Settings(panel, frame, type)
     --------------------
     --Health Container--
     --------------------
-    panel.healthBox = CreateFrame("Frame", nil, panel.generalBox)
-	if not panel.healthBox.SetBackdrop then
-		Mixin(panel.healthBox, BackdropTemplateMixin)
-	end
+    --panel.healthBox = CreateFrame("Frame", nil, panel.generalBox)
+    panel.healthBox = CreateFrame("Frame", nil, panel.generalBox, BackdropTemplateMixin and "BackdropTemplate")
+	--if not panel.healthBox.SetBackdrop then
+	--	Mixin(panel.healthBox, BackdropTemplateMixin)
+	--end
     panel.healthBox:SetSize(280, 150)
     panel.healthBox:SetPoint("TOPLEFT", panel.generalBox, "BOTTOMLEFT", 0, -24)
     panel.healthBox:SetBackdrop(
@@ -191,10 +192,11 @@ function KH_UI:Create_KH_Target_Style_Settings(panel, frame, type)
     --------------------
     --Power Container---
     --------------------
-    panel.powerBox = CreateFrame("Frame", nil, panel.healthBox)
+    panel.powerBox = CreateFrame("Frame", nil, panel.healthBox, BackdropTemplateMixin and "BackdropTemplate")
+    --[[panel.powerBox = CreateFrame("Frame", nil, panel.healthBox)
 	if not panel.powerBox.SetBackdrop then
 		Mixin(panel.powerBox, BackdropTemplateMixin)
-	end
+	end]]
     panel.powerBox:SetSize(280, 150)
     panel.powerBox:SetPoint("TOPLEFT", panel.healthBox, "TOPRIGHT", 30, 0)
     panel.powerBox:SetBackdrop(

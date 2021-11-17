@@ -2,10 +2,11 @@ function KH_UI:KH_Player_Frame_Options(panel)
 	---------------------
 	--General Container--
 	---------------------
-	panel.generalBox = CreateFrame("Frame", nil, panel)
+    panel.generalBox = CreateFrame("Frame", nil, panel, BackdropTemplateMixin and "BackdropTemplate")
+	--[[panel.generalBox = CreateFrame("Frame", nil, panel)
 	if not panel.generalBox.SetBackdrop then
 		Mixin(panel.generalBox, BackdropTemplateMixin)
-	end
+	end]]
 	panel.generalBox:SetSize(590, 75)
 	panel.generalBox:SetPoint("TOPLEFT", 16, -64)
 	panel.generalBox:SetBackdrop(
