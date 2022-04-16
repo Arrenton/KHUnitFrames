@@ -216,7 +216,7 @@ end
 ---------------------
 
 function KH_UI:FormatNumber(val)
-    formattedVal = ""
+    local formattedVal = ""
 
     if val >= 1000000000 then
         formattedVal = format("%.2fb", val / 1000000000)
@@ -238,7 +238,7 @@ function KH_UI:FormatNumber(val)
 end
 
 function KH_UI:CreateImageFrame(width, height, parent, anchor, x, y, level, texCoord, texture)
-    frame = CreateFrame("Frame", nil, parent)
+    local frame = CreateFrame("Frame", nil, parent)
     frame:SetWidth(width)
     frame:SetHeight(height)
     frame:SetFrameLevel(level)
@@ -251,7 +251,7 @@ function KH_UI:CreateImageFrame(width, height, parent, anchor, x, y, level, texC
 end
 
 function KH_UI:CreateColorFrame(width, height, parent, anchor, x, y, level, color)
-    frame = CreateFrame("Frame", nil, parent)
+    local frame = CreateFrame("Frame", nil, parent)
     frame:SetWidth(width)
     frame:SetHeight(height)
     frame:SetFrameLevel(level)
@@ -263,7 +263,7 @@ function KH_UI:CreateColorFrame(width, height, parent, anchor, x, y, level, colo
 end
 
 function KH_UI:CreateTextFrame(text, x, y, w, h, scale, align, parent, anchor, level, font)
-    frame = CreateFrame("Frame", nil, parent)
+    local frame = CreateFrame("Frame", nil, parent)
     frame:SetWidth(w)
     frame:SetHeight(h)
     frame:SetFrameLevel(level)
@@ -275,7 +275,7 @@ function KH_UI:CreateTextFrame(text, x, y, w, h, scale, align, parent, anchor, l
     return frame
 end
 
-function round(num, numDecimalPlaces)
+function KH_UI:round(num, numDecimalPlaces)
     local mult = 10 ^ (numDecimalPlaces or 0)
     return math.floor(num * mult + 0.5) / mult
 end
@@ -701,7 +701,7 @@ function KH_UI:calc_ring_health(self, ring_config, unit, type, mainFrame)
             mainFrame.damageHealth = mainFrame.lastHealth
         end
         act = mainFrame.damageHealth
-        perc = (mainFrame.damageHealth / max) * 100
+        perc = mainFrame.damageHealth / max * 100
         mainFrame.lastHealth = UnitHealth(unit)
     end
 
@@ -720,7 +720,7 @@ function KH_UI:calc_ring_health(self, ring_config, unit, type, mainFrame)
         end
     end
 
-    perc = round(perc, 4)
+    perc = KH_UI:round(perc, 4)
 
     if perc > 100 then
         perc = 100
@@ -747,8 +747,8 @@ function KH_UI:calc_ring_health(self, ring_config, unit, type, mainFrame)
                 self.segments[i].square2:Hide()
                 self.segments[i].slicer:Hide()
                 self.segments[i].fullsegment:Show()
-            elseif ((perc >= round((i - 1) * perc_per_seg, 4)) and (perc <= round(i * perc_per_seg, 4))) then
-                local value = round(((perc - ((i - 1) * perc_per_seg)) / perc_per_seg) * 100, 4)
+            elseif ((perc >= KH_UI:round((i - 1) * perc_per_seg, 4)) and (perc <= KH_UI:round(i * perc_per_seg, 4))) then
+                local value = KH_UI:round(((perc - ((i - 1) * perc_per_seg)) / perc_per_seg) * 100, 4)
                 KH_UI:calc_ring_segment(self.segments[i], value)
                 self.segments[i].square1:Show()
                 self.segments[i].square2:Show()
@@ -824,7 +824,7 @@ function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
         end
     end
 
-    perc = round(perc, 4)
+    perc = KH_UI:round(perc, 4)
 
     if perc > 100 then
         perc = 100
@@ -851,8 +851,8 @@ function KH_UI:calc_ring_power(self, ring_config, unit, type, mainFrame)
                 self.segments[i].square2:Hide()
                 self.segments[i].slicer:Hide()
                 self.segments[i].fullsegment:Show()
-            elseif ((perc >= round((i - 1) * perc_per_seg, 4)) and (perc <= round(i * perc_per_seg, 4))) then
-                local value = round(((perc - ((i - 1) * perc_per_seg)) / perc_per_seg) * 100, 4)
+            elseif ((perc >= KH_UI:round((i - 1) * perc_per_seg, 4)) and (perc <= KH_UI:round(i * perc_per_seg, 4))) then
+                local value = KH_UI:round(((perc - ((i - 1) * perc_per_seg)) / perc_per_seg) * 100, 4)
                 KH_UI:calc_ring_segment(self.segments[i], value)
                 self.segments[i].square1:Show()
                 self.segments[i].square2:Show()
