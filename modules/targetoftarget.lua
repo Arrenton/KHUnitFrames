@@ -202,10 +202,10 @@ local function Update(self, elapsed)
         self.lastUpdate = self.lastUpdate - 1 / 144
         if self.lastTimer <= 0 and self.healthFrame.healthLast.alpha > 0 then
             self.healthFrame.healthLast.alpha = self.healthFrame.healthLast.alpha - 0.01
-            self.healthFrame.healthLast:SetAlpha(self.healthFrame.healthLast.alpha)
+            self.healthFrame.healthLast:SetAlpha(math.min(math.max(self.healthFrame.healthLast.alpha, 0), 1))
         elseif self.healthFrame.healthLast.alpha > 0.7 then
             self.healthFrame.healthLast.alpha = self.healthFrame.healthLast.alpha - 0.006
-            self.healthFrame.healthLast:SetAlpha(self.healthFrame.healthLast.alpha)
+            self.healthFrame.healthLast:SetAlpha(math.min(math.max(self.healthFrame.healthLast.alpha, 0), 1))
         end
     end
     --Update Unit

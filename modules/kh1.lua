@@ -7,7 +7,39 @@ local ResourceColor = {
     ["RUNES"] = {
         r = 0,
         g = 1,
-        b = 1
+        b = 1,
+        multi = {
+            [1] = {
+                r = 1,
+                g = 0,
+                b = 0
+            },
+            [2] = {
+                r = 1,
+                g = 0,
+                b = 0
+            },
+            [3] = {
+                r = 0,
+                g = 1,
+                b = 0
+            },
+            [4] = {
+                r = 0,
+                g = 1,
+                b = 0
+            },
+            [5] = {
+                r = 0,
+                g = 1,
+                b = 1
+            },
+            [6] = {
+                r = 0,
+                g = 1,
+                b = 1
+            }
+        }
     }
 }
 local ring_table = {
@@ -236,6 +268,25 @@ local function Create_Resource_Bar(mainFrame)
     mainFrame.resourceFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
     mainFrame.resourceFrame.currentValue = 0
     mainFrame.resourceFrame:SetScript(
+        "OnUpdate",
+        function(self, elapsed)
+            local _, class, _ = UnitClass(mainFrame.unit)
+            if WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and class == "DEATHKNIGHT" then
+                for i in ipairs(self.resource) do
+                    if (i <= 6) then
+                        local start, duration, runeReady = GetRuneCooldown(i)
+                        if (start == nil) then
+                            start = 0
+                            duration = 10;
+                        end
+                        local charge = math.max(math.min((GetTime() - start) / duration, 1), 0.001)
+                        self.resource[i]:SetHeight(charge * 12)
+                    end
+                end
+            end
+        end
+    )
+    mainFrame.resourceFrame:SetScript(
         "OnEvent",
         function(self, event, arg1)
             if (mainFrame.unit == "player") then
@@ -246,7 +297,7 @@ local function Create_Resource_Bar(mainFrame)
                 end
                 if (resourceType == "COMBO") then
                     self.currentValue = GetComboPoints(mainFrame.unit, "target")
-                elseif (resourceType == "RUNES") then
+                elseif (resourceType == "RUNES" and WOW_PROJECT_ID ~= WOW_PROJECT_WRATH_CLASSIC) then
                     local numReady = 0
                     for runeSlot = 1, UnitPowerMax(PlayerFrame.unit, Enum.PowerType.Runes) do
                         local start, duration, runeReady = GetRuneCooldown(runeSlot)
@@ -257,11 +308,19 @@ local function Create_Resource_Bar(mainFrame)
                     self.currentValue = numReady
                 end
                 for i in ipairs(self.resource) do
-                    self.resource[i].texture:SetVertexColor(ResourceColor[resourceType].r, ResourceColor[resourceType].g, ResourceColor[resourceType].b, 1)
-                    if (self.currentValue >= i) then
-                        self.resource[i]:Show()
+                    if WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and resourceType == "RUNES" then
+                        if (i <= 6) then
+                            self.resource[i].texture:SetVertexColor(ResourceColor[resourceType].multi[i].r, ResourceColor[resourceType].multi[i].g, ResourceColor[resourceType].multi[i].b, 1)
+                        else
+                            self.resource[i]:Hide()
+                        end
                     else
-                        self.resource[i]:Hide()
+                        self.resource[i].texture:SetVertexColor(ResourceColor[resourceType].r, ResourceColor[resourceType].g, ResourceColor[resourceType].b, 1)
+                        if (self.currentValue >= i) then
+                            self.resource[i]:Show()
+                        else
+                            self.resource[i]:Hide()
+                        end
                     end
                 end
                 local powerType, powerToken, _, _, _ = UnitPowerType(mainFrame.unit)
@@ -271,6 +330,9 @@ local function Create_Resource_Bar(mainFrame)
                     maxResource = UnitPowerMax(PlayerFrame.unit, Enum.PowerType.ComboPoints)
                 elseif (class == "DEATHKNIGHT") then
                     maxResource = UnitPowerMax(PlayerFrame.unit, Enum.PowerType.Runes)
+                    if WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC then
+                        maxResource = 6
+                    end
                 end
                 if (not self:IsShown()) then
                     if (maxResource > 0) then
@@ -311,6 +373,7 @@ local function Create_Health_Bar(mainFrame)
         mainFrame.healthFrame.healthBarLowHealth = 
         KH_UI:CreateImageFrame(200, 25, mainFrame.healthFrame.healthBarBack, "TOPLEFT", 0, 0, 5, {x = 59.5 / 64, xw = 59.5 / 64, y = 4 / 128, yh = 29 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
         mainFrame.healthFrame.healthBarLowHealth.texture:SetVertexColor(1,0,0,1);
+        mainFrame.healthFrame.healthBarLowHealth.texture:SetRotation(math.rad(180))
         mainFrame.healthFrame.healthBarHealth =
             KH_UI:CreateImageFrame(200, 25, mainFrame.healthFrame.healthBarBack, "TOPLEFT", 0, 0, 6, {x = 59.5 / 64, xw = 59.5 / 64, y = 4 / 128, yh = 29 / 128}, "Interface\\AddOns\\KHUnitframes\\textures\\KH1\\props")
         mainFrame.healthFrame.healthBarHealth.texture:SetRotation(math.rad(180))
@@ -376,7 +439,7 @@ local function Update(self, elapsed)
             self.lowHealthDirection = 0
         end
         --Update frames
-        self.healthFrame.healthBarLowHealth.texture:SetAlpha(self.lowHealthAlpha)
+        self.healthFrame.healthBarLowHealth.texture:SetAlpha(math.min(math.max(self.lowHealthAlpha, 0), 1))
         for i in ipairs(self.ring_frames) do
             if self.ring_frames[i].ringtype == "lasthealth" then
                 if self.lastTimer <= 0 then
@@ -384,8 +447,13 @@ local function Update(self, elapsed)
                 elseif self.ring_frames[i].alpha > 0.5 then
                     self.ring_frames[i].alpha = self.ring_frames[i].alpha - 0.006
                 end
-                self.healthFrame.healthBarDamage.texture:SetAlpha(self.ring_frames[i].alpha)
-                self.portrait.redTexture:SetAlpha(self.ring_frames[i].alpha)
+				if (self.ring_frames[i].alpha < 0) then
+					self.ring_frames[i].alpha = 0
+				elseif (self.ring_frames[i].alpha > 1) then
+					self.ring_frames[i].alpha = 1
+				end
+                self.healthFrame.healthBarDamage.texture:SetAlpha(math.min(math.max(self.ring_frames[i].alpha, 0), 1))
+                self.portrait.redTexture:SetAlpha(math.min(math.max(self.ring_frames[i].alpha, 0), 1))
             end
             
             if self.ring_frames[i].ringtype == "lastmana" then
@@ -394,8 +462,8 @@ local function Update(self, elapsed)
             end
                 self.ring_frames[i].alpha = self.lastManaAlpha
             end
-            self.ring_frames[i]:SetAlpha(self.ring_frames[i].alpha)
-            self.ring_frames[5]:SetAlpha(self.lowHealthAlpha)
+            self.ring_frames[i]:SetAlpha(math.min(math.max(self.ring_frames[i].alpha, 0), 1))
+            self.ring_frames[5]:SetAlpha(math.min(math.max(self.lowHealthAlpha, 0), 1))
         end
     end
 
@@ -466,7 +534,7 @@ function KH_UI:New_KH1Unitframe(unit, setting)
         if (KH_UI_Settings[f.settings].movable) then
             f:RegisterForDrag("LeftButton")
         else
-            f:RegisterForDrag(nil)
+            --f:RegisterForDrag(nil)
         end
         f.Update_Health(true)
         f.Update_Power(true)
@@ -729,14 +797,14 @@ function KH_UI:New_KH1Unitframe(unit, setting)
     bgtex:SetAllPoints()
     bgtex:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH1\\ring_bg")
     if (KH_UI_Settings[f.settings].orientation == "Top Left") then
-        bgtex:SetRotation(math.rad(180), 0.5, 0.5)
+        bgtex:SetRotation(math.rad(180))
     end
     if (KH_UI_Settings[f.settings].orientation == "Top Right") then
-        bgtex:SetRotation(math.rad(-90), 0.5, 0.5)
+        bgtex:SetRotation(math.rad(-90))
         bgtex:SetTexCoord(0, 1, 1, 0)
     end
     if (KH_UI_Settings[f.settings].orientation == "Bottom Left") then
-        bgtex:SetRotation(math.rad(90), 0.5, 0.5)
+        bgtex:SetRotation(math.rad(90))
         bgtex:SetTexCoord(0, 1, 1, 0)
     end
 
@@ -748,7 +816,7 @@ function KH_UI:New_KH1Unitframe(unit, setting)
     Create_Health_Bar(f)
     Create_Mana_Bar(f)
 
-    f:RegisterEvent("UNIT_POWER_UPDATE")
+    f:RegisterEvent("UNIT_POWER_FREQUENT")
     f:RegisterEvent("UNIT_MANA")
     f:RegisterEvent("UNIT_MAXHEALTH")
 	if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
@@ -767,7 +835,7 @@ function KH_UI:New_KH1Unitframe(unit, setting)
             end
 
             if arg1 == f.unit then
-                if (event == "UNIT_MANA" or event == "UPDATE_SHAPESHIFT_FORM" or event == "UNIT_POWER_UPDATE" or event == "GROUP_ROSTER_UPDATE") then
+                if (event == "UNIT_MANA" or event == "UPDATE_SHAPESHIFT_FORM" or event == "UNIT_POWER_FREQUENT" or event == "GROUP_ROSTER_UPDATE") then
                     f:Update_Power()
                 elseif (event == "UNIT_MAXHEALTH" or event == "UNIT_HEALTH" or event == "UNIT_HEALTH_FREQUENT") then
                     f:Update_Health()

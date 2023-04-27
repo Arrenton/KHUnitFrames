@@ -200,10 +200,14 @@ local function Create_Power_Bar(mainFrame)
 			r = info.r
 			g = info.g
 			b = info.b
-		else
+		elseif (altR) then
 			r = altR
 			g = altG
 			b = altB
+		else
+			r = 1;
+			g = 1;
+			b = 1;
 		end
 		self.base.texture:SetVertexColor(r, g, b, 1)
 		self.power.texture:SetVertexColor(r, g, b, 1)
@@ -543,7 +547,7 @@ local function create_health_stretch(mainFrame)
 	mainFrame.healthFrame.long_bar.texture = mainFrame.healthFrame.long_bar:CreateTexture(nil, "BACKGROUND")
 	mainFrame.healthFrame.long_bar.texture:SetAllPoints()
 	mainFrame.healthFrame.long_bar.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2\\longbars")
-	mainFrame.healthFrame.long_bar.texture:SetTexCoord(1 / 64, 1 / 64, 1 / 64, 34 / 64)
+	mainFrame.healthFrame.long_bar.texture:SetTexCoord(1 / 64, 1 / 64, 0 / 64, 35 / 64)
 	------Low HP
 	mainFrame.healthFrame.long_bar.lowHealth = KH_UI:CreateColorFrame(0, 0, mainFrame.healthFrame, "BOTTOMLEFT", 0, 0, 19, {r = mainFrame.ring_table[5].segment.color.r, g = mainFrame.ring_table[5].segment.color.g, b = mainFrame.ring_table[5].segment.color.b, a = mainFrame.ring_table[5].segment.color.a})
 	mainFrame.healthFrame.long_bar.lowHealth:ClearAllPoints();
@@ -555,7 +559,7 @@ local function create_health_stretch(mainFrame)
 	mainFrame.healthFrame.long_bar.health.texture:SetAllPoints()
 	mainFrame.healthFrame.long_bar.health.texture:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2\\longbars")
 	mainFrame.healthFrame.long_bar.health.texture:SetVertexColor(mainFrame.ring_table[1].segment.color.r, mainFrame.ring_table[1].segment.color.g, mainFrame.ring_table[1].segment.color.b, mainFrame.ring_table[1].segment.color.a)
-	mainFrame.healthFrame.long_bar.health.texture:SetTexCoord(13 / 64, 13 / 64, 1 / 64, 25 / 64)
+	mainFrame.healthFrame.long_bar.health.texture:SetTexCoord(13 / 64, 13 / 64, 0 / 64, 26 / 64)
 	if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right" or KH_UI_Settings[mainFrame.settings].orientation == "Bottom Left") then
 		mainFrame.healthFrame.long_bar.health.texture:SetRotation(math.rad(180))
 	end
@@ -663,7 +667,7 @@ local function calc_health_stretch(mainFrame)
 	else
 		mainFrame.healthFrame.long_bar:Show()
 		mainFrame.healthFrame.long_bar.edge:Show()
-		mainFrame.healthFrame.long_bar:SetSize(mainFrame.healthFrame.long_bar.length, 33)
+		mainFrame.healthFrame.long_bar:SetSize(mainFrame.healthFrame.long_bar.length, 35)
 		if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
 			mainFrame.healthFrame.long_bar:SetPoint("LEFT", -mainFrame.healthFrame.long_bar.length + 64, -mainFrame.healthFrame.edge_frame.texture.radius - 0.5)
 			mainFrame.healthFrame.long_bar.edge:SetPoint("LEFT", -mainFrame.healthFrame.long_bar.length + 59, -mainFrame.healthFrame.edge_frame.texture.radius - 0.5)
@@ -695,11 +699,11 @@ local function calc_health_stretch(mainFrame)
 		mainFrame.healthFrame.long_bar.lowHealth:Hide()
 	end
 	if (mainFrame.healthFrame.long_bar.health.length > 0) then
-		mainFrame.healthFrame.long_bar.health:SetSize(mainFrame.healthFrame.long_bar.health.length, 25)
+		mainFrame.healthFrame.long_bar.health:SetSize(mainFrame.healthFrame.long_bar.health.length, 26)
 		if (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Right") then
 			mainFrame.healthFrame.long_bar.health:SetPoint("LEFT", -mainFrame.healthFrame.long_bar.health.length + 64, -mainFrame.healthFrame.edge_frame.texture.radius - 0.5)
 		elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Left") then
-			mainFrame.healthFrame.long_bar.health:SetPoint("Left", 64, mainFrame.healthFrame.edge_frame.texture.radius + 0.5)
+			mainFrame.healthFrame.long_bar.health:SetPoint("Left", 64, mainFrame.healthFrame.edge_frame.texture.radius + 1)
 		elseif (KH_UI_Settings[mainFrame.settings].orientation == "Top Right") then
 			mainFrame.healthFrame.long_bar.health:SetPoint("Left", -mainFrame.healthFrame.long_bar.health.length + 64, mainFrame.healthFrame.edge_frame.texture.radius + 0.5)
 		elseif (KH_UI_Settings[mainFrame.settings].orientation == "Bottom Left") then
@@ -799,11 +803,11 @@ local function Update(self, elapsed)
 				elseif self.ring_frames[i].alpha > 0.5 then
 					self.ring_frames[i].alpha = self.ring_frames[i].alpha - 0.006
 				end
-				self.healthFrame.long_bar.healthLast.texture:SetAlpha(self.ring_frames[i].alpha)
-				self.portrait.redTexture:SetAlpha(self.ring_frames[i].alpha)
+				self.healthFrame.long_bar.healthLast.texture:SetAlpha(math.min(math.max(self.ring_frames[i].alpha, 0), 1))
+				self.portrait.redTexture:SetAlpha(math.min(math.max(self.ring_frames[i].alpha, 0), 1))
 			end
-			self.ring_frames[i]:SetAlpha(self.ring_frames[i].alpha)
-			self.ring_frames[5]:SetAlpha(self.lowHealthAlpha)
+			self.ring_frames[i]:SetAlpha(math.min(math.max(self.ring_frames[i].alpha, 0), 1))
+			self.ring_frames[5]:SetAlpha(math.min(math.max(self.lowHealthAlpha, 0), 1))
 		end
 	end
 
@@ -1029,7 +1033,7 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 		if (KH_UI_Settings[f.settings].movable) then
 			f:RegisterForDrag("LeftButton")
 		else
-			f:RegisterForDrag(nil)
+			--f:RegisterForDrag(nil)
 		end
 		f.Update_Health()
 		f.Update_Power()
@@ -1204,14 +1208,14 @@ function KH_UI:New_KH2Unitframe(unit, setting)
 	bgtex:SetTexture("Interface\\AddOns\\KHUnitframes\\textures\\KH2\\ring_bg")
 	bgtex:SetTexCoord(1, 0, 0, 0, 1, 1, 0, 1)
 	if (KH_UI_Settings[f.settings].orientation == "Top Left") then
-		bgtex:SetRotation(math.rad(180), 0.5, 0.5)
+		bgtex:SetRotation(math.rad(180))
 	end
 	if (KH_UI_Settings[f.settings].orientation == "Top Right") then
-		bgtex:SetRotation(math.rad(-90), 0.5, 0.5)
+		bgtex:SetRotation(math.rad(-90))
 		bgtex:SetTexCoord(0, 1, 1, 0)
 	end
 	if (KH_UI_Settings[f.settings].orientation == "Bottom Left") then
-		bgtex:SetRotation(math.rad(90), 0.5, 0.5)
+		bgtex:SetRotation(math.rad(90))
 		bgtex:SetTexCoord(0, 1, 1, 0)
 	end
 

@@ -317,14 +317,14 @@ local function Update(self, elapsed)
         self.lastUpdate = self.lastUpdate - 1 / 144
         if self.lastTimer <= 0 and self.healthFrame.healthLast.alpha > 0 then
             self.healthFrame.healthLast.alpha = self.healthFrame.healthLast.alpha - 0.01
-            self.healthFrame.healthLast:SetAlpha(self.healthFrame.healthLast.alpha)
+            self.healthFrame.healthLast:SetAlpha(math.min(math.max(self.healthFrame.healthLast.alpha, 0), 1))
             if (self.healthFrame.healthLast.alpha <= 0) then
                 self.damageHealth = self.unitHealth
                 self.Update_Health()
             end
         elseif self.healthFrame.healthLast.alpha > 0.7 then
             self.healthFrame.healthLast.alpha = self.healthFrame.healthLast.alpha - 0.006
-            self.healthFrame.healthLast:SetAlpha(self.healthFrame.healthLast.alpha)
+            self.healthFrame.healthLast:SetAlpha(math.min(math.max(self.healthFrame.healthLast.alpha, 0), 1))
         end
     end
 
@@ -716,7 +716,7 @@ function KH_UI:New_KH2TargetUnitframe(unit, setting)
                     self.Update_Power()
                 end
 
-                if (UnitExists(self.unit) and not IsReplacingUnit()) then
+                if (UnitExists(self.unit) and not C_PlayerInteractionManager.IsReplacingUnit()) then
                     if (UnitIsEnemy(self.unit, "player")) then
                         PlaySound(SOUNDKIT.IG_CREATURE_AGGRO_SELECT)
                     elseif (UnitIsFriend("player", self.unit)) then
