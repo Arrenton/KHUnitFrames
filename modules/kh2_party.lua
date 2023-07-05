@@ -229,10 +229,10 @@ local function Update(self, elapsed)
                 elseif self.ring_frames[i].alpha > 0.5 then
                     self.ring_frames[i].alpha = self.ring_frames[i].alpha - 0.006
                 end
-                self.portrait.redTexture:SetAlpha(self.ring_frames[i].alpha)
+                self.portrait.redTexture:SetAlpha(math.min(math.max(self.ring_frames[i].alpha, 0), 1))
             end
-            self.ring_frames[i]:SetAlpha(self.ring_frames[i].alpha)
-            self.ring_frames[2]:SetAlpha(self.lowHealthAlpha)
+            self.ring_frames[i]:SetAlpha(math.min(math.max(self.ring_frames[i].alpha, 0), 1))
+            self.ring_frames[2]:SetAlpha(math.min(math.max(self.lowHealthAlpha, 0), 1))
         end
     end
 
@@ -288,7 +288,7 @@ function KH_UI:New_KH2PartyUnitframe(unit, setting)
         if (KH_UI_Settings[f.settings].movable) then
             f:RegisterForDrag("LeftButton")
         else
-            f:RegisterForDrag(nil)
+            --f:RegisterForDrag(nil)
         end
         f.Update_Health()
         f.Update_Power()

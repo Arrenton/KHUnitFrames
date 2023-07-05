@@ -174,10 +174,14 @@ local function Create_Power_Bar(mainFrame)
 		r = info.r
 		g = info.g
 		b = info.b
-	else
+	elseif (altR) then
 		r = altR
 		g = altG
 		b = altB
+	else
+		r = 1;
+		g = 1;
+		b = 1;
 	end
 	mainFrame.powerFrame.base.texture:SetVertexColor(r, g, b, 1)
 	mainFrame.powerFrame.power.texture:SetVertexColor(r, g, b, 1)
