@@ -727,30 +727,58 @@ function KH_UI:New_KH1Unitframe(unit, setting)
         end
     )
 
-    local menuFunc = TargetFrameDropDown_Initialize
+    --local menuFunc = TargetFrameDropDown_Initialize
 
-    if f.unit == "player" then
-        menuFunc = function()
-            ToggleDropDownMenu(1, nil, PlayerFrameDropDown, f, 106, 27)
+	--if f.unit == "player" then
+	--	menuFunc = function()
+	--		ToggleDropDownMenu(1, nil, PlayerFrameDropDown, f, 106, 27)
+	--	end
+	--elseif f.unit == "target" then
+	--	menuFunc = function()
+	--		ToggleDropDownMenu(1, nil, _G["TargetFrameDropDown"], f, 106, 27)
+	--	end
+	--elseif (f.settings == "Party Frame") then
+	--	local id = 1
+	--	if f.unit == "party2" then
+	--		id = 2
+	--	elseif f.unit == "party3" then
+	--		id = 3
+	--	elseif f.unit == "party4" then
+	--		id = 4
+	--	end
+	--	menuFunc = function()
+	--		ToggleDropDownMenu(1, nil, _G["PartyMemberFrame" .. id .. "DropDown"], f, 47, 45)
+	--	end
+	--end
+	--SecureUnitButton_OnLoad(f, f.unit, menuFunc)
+    local function OpenContextMenu(frame, unit, button, isKeyPress)
+        if (f.settings == "Party Frame") then
+                local contextData =
+            {
+                unit = unit,
+            };
+            UnitPopup_OpenMenu("PARTY", contextData);
+        else
+            local which = nil;
+            local contextData = {
+                fromPlayerFrame = true;
+            };
+
+            if f.unit == "vehicle" then
+                which = "VEHICLE";
+                contextData.unit = "vehicle";
+            else
+                which = "SELF";
+                contextData.unit = f.unit;
+            end
+            UnitPopup_OpenMenu(which, contextData);
         end
-    elseif f.unit == "target" then
-        menuFunc = function()
-            ToggleDropDownMenu(1, nil, _G["TargetFrameDropDown"], f, 106, 27)
-        end
-    elseif (f.settings == "Party Frame") then
-        local id = 1
-        if f.unit == "party2" then
-            id = 2
-        elseif f.unit == "party3" then
-            id = 3
-        elseif f.unit == "party4" then
-            id = 4
-        end
-        menuFunc = function()
-            ToggleDropDownMenu(1, nil, _G["PartyMemberFrame" .. id .. "DropDown"], f, 47, 45)
-        end
+	end
+    if (f.unit == "target") then
+	    SecureUnitButton_OnLoad(f, f.unit, TargetFrame_OpenMenu);
+    else
+	    SecureUnitButton_OnLoad(f, f.unit, OpenContextMenu);
     end
-    SecureUnitButton_OnLoad(f, f.unit, menuFunc)
     f:SetScript("OnEnter", UnitFrame_OnEnter)
     f:SetScript("OnLeave", UnitFrame_OnLeave)
 

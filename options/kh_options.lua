@@ -1,4 +1,5 @@
 local KHOptions
+local category, layout
 
 StaticPopupDialogs["KH_UI_Set_Default"] = {
 	text = "Are you sure you wish to set the default values? (Will reload)",
@@ -237,9 +238,9 @@ local function Options_Panel_Template(name, top)
 	local f = CreateFrame("Frame", nil, UIParent)
 	f:SetPoint("TOPLEFT", 0, 0)
 
-	if top ~= nil then
-		f.parent = KHOptions.name
-	end
+	--if top ~= nil then
+	--	f.parent = KHOptions.name
+	--end
 
 	f.name = name
 
@@ -275,8 +276,19 @@ local function Options_Panel_Template(name, top)
 			StaticPopup_Show ("KH_UI_Set_Default")
 		end
 	)
-
-	InterfaceOptions_AddCategory(f)
+	if InterfaceOptions_AddCategory then
+		InterfaceOptions_AddCategory(f)
+	else
+		if (not category) then
+			category, layout = Settings.RegisterCanvasLayoutCategory(f, f.name);
+			category.ID = f.name
+			Settings.RegisterAddOnCategory(category);
+		else
+			local subcategory, layout = Settings.RegisterCanvasLayoutSubcategory(category, f, f.name);
+			subcategory.ID = f.name
+			Settings.RegisterAddOnCategory(subcategory);
+		end
+	end
 	return f
 end
 
@@ -284,21 +296,27 @@ local function Create_Panel(name, top)
 	return Options_Panel_Template(name, top)
 end
 
-KHOptions = Create_Panel("Kingdom Hearts UI")
+local loaded = false
+
+KHOptions = Create_Panel("Kingdom Hearts UI");
+local PlayerPanel = Create_Panel("Player Frame");
+local PartyPanel = Create_Panel("Party Frame");
+local TargetPanel = Create_Panel("Target Frame");
+
 KHOptions:RegisterEvent("PLAYER_ENTERING_WORLD")
 KHOptions:SetScript(
 	"OnEvent",
 	function(self, event, arg1)
-		if (event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_LOGIN") then
+		if ((event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_LOGIN") and loaded == false) then
 			KH_UI:General_Options(self)
-			local playerPanel = Create_Panel("Player Frame", true)
-			local partyPanel = Create_Panel("Party Frame", true)
-			local targetPanel = Create_Panel("Target Frame", true)
+			--local playerPanel = Create_Panel("Player Frame", true)
+			--local partyPanel = Create_Panel("Party Frame", true)
+			--local targetPanel = Create_Panel("Target Frame", true)
 
-			KH_UI:KH_Player_Frame_Options(playerPanel)
-			KH_UI:KH_Party_Frame_Options(partyPanel)
-			KH_UI:KH_Target_Frame_Options(targetPanel)
-
+			KH_UI:KH_Player_Frame_Options(PlayerPanel)
+			KH_UI:KH_Party_Frame_Options(PartyPanel)
+			KH_UI:KH_Target_Frame_Options(TargetPanel)
+			loaded = true
 			--InterfaceOptionsFrame_Show()
 			--InterfaceOptionsFrame_OpenToCategory(playerPanel)
 			KHOptions:UnregisterEvent("PLAYER_ENTERING_WORLD")
