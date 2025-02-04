@@ -23,13 +23,14 @@ local PowerBarColor = {
 local function create_portrait(mainFrame)
     mainFrame.portrait = CreateFrame("Frame", nil, mainFrame.healthFrame)
     mainFrame.portrait:RegisterUnitEvent("UNIT_PORTRAIT_UPDATE", mainFrame.unit)
-    mainFrame.portrait:RegisterEvent("UNIT_LEVEL")
+    mainFrame.portrait:RegisterUnitEvent("UNIT_LEVEL", mainFrame.unit)
     mainFrame.portrait:RegisterEvent("PLAYER_ENTERING_WORLD")
     mainFrame.portrait:RegisterEvent("PLAYER_TARGET_CHANGED")
-    mainFrame.portrait:RegisterEvent("UNIT_FLAGS")
-    mainFrame.portrait:RegisterEvent("UNIT_PHASE")
-    mainFrame.portrait:RegisterEvent("UNIT_FACTION")
-    mainFrame.portrait:RegisterEvent("UNIT_CONNECTION")
+    mainFrame.portrait:RegisterUnitEvent("UNIT_TARGET", "target", "player")
+    mainFrame.portrait:RegisterUnitEvent("UNIT_FLAGS", mainFrame.unit)
+    mainFrame.portrait:RegisterUnitEvent("UNIT_PHASE", mainFrame.unit)
+    mainFrame.portrait:RegisterUnitEvent("UNIT_FACTION", mainFrame.unit)
+    mainFrame.portrait:RegisterUnitEvent("UNIT_CONNECTION", mainFrame.unit)
     mainFrame.portrait.Texture = mainFrame.portrait:CreateTexture("$parent_Texture", "BACKGROUND")
     mainFrame.portrait.Texture:SetAllPoints()
     SetPortraitTexture(mainFrame.portrait.Texture, mainFrame.unit)
@@ -136,6 +137,7 @@ local function CreateBarPretties(mainFrame)
     mainFrame.nameFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
     mainFrame.nameFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
     mainFrame.nameFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
+    mainFrame.nameFrame:RegisterUnitEvent("UNIT_TARGET", mainFrame.unit, "player")
     mainFrame.nameFrame:RegisterEvent("UNIT_OTHER_PARTY_CHANGED")
     mainFrame.nameFrame:SetScript(
         "OnEvent",
@@ -438,7 +440,7 @@ function KH_UI:New_KH2TargetofTargetUnitframe(unit, setting)
 
     f:RegisterEvent("PLAYER_ENTERING_WORLD")
     if (TargetFrame.showLevel) then
-        f:RegisterEvent("UNIT_LEVEL")
+        f:RegisterUnitEvent("UNIT_LEVEL", f.unit)
     end
     if (TargetFrame.showClassification) then
         f:RegisterEvent("UNIT_CLASSIFICATION_CHANGED")
@@ -447,31 +449,35 @@ function KH_UI:New_KH2TargetofTargetUnitframe(unit, setting)
         f:RegisterEvent("PLAYER_FLAGS_CHANGED")
     end
 	if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-		f:RegisterEvent("UNIT_HEALTH")
+		f:RegisterUnitEvent("UNIT_HEALTH", f.unit)
 	else
-		f:RegisterEvent("UNIT_HEALTH_FREQUENT")
+		f:RegisterUnitEvent("UNIT_HEALTH_FREQUENT", f.unit)
 	end
-    f:RegisterEvent("UNIT_POWER_UPDATE")
-    f:RegisterEvent("UNIT_MAXPOWER")
-    f:RegisterEvent("UNIT_FACTION")
-    f:RegisterEvent("UNIT_TARGET")
+    f:RegisterUnitEvent("UNIT_POWER_UPDATE", f.unit)
+    f:RegisterUnitEvent("UNIT_MAXPOWER", f.unit)
+    f:RegisterUnitEvent("UNIT_FACTION", f.unit)
+    f:RegisterUnitEvent("UNIT_TARGET", "target", "player")
     f:RegisterEvent("PLAYER_TARGET_CHANGED")
     f:RegisterEvent("GROUP_ROSTER_UPDATE")
     f:RegisterEvent("RAID_TARGET_UPDATE")
-    f:RegisterUnitEvent("UNIT_AURA", "target")
+    f:RegisterUnitEvent("UNIT_AURA", f.unit)
 
     RegisterStateDriver(f, "visibility", "[@targettarget,exists] show; hide")
 
     f:SetScript(
         "OnEvent",
         function(self, event, arg1)
-            if (event == "UNIT_HEALTH" or event == "UNIT_HEALTH_FREQUENT" and arg1 == self.unit) then
-                self.Update_Health()
+            
+            if (UnitExists(self.unit)) then
+                if (event == "UNIT_HEALTH" or event == "UNIT_HEALTH_FREQUENT") then
+                    self.Update_Health()
+                end
+                if (event == "UNIT_POWER_UPDATE" or event == "UNIT_MAXPOWER") then
+                    self.Update_Power()
+                end
             end
-            if (event == "UNIT_POWER_UPDATE" or event == "UNIT_MAXPOWER" and arg1 == self.unit) then
-                self.Update_Power()
-            end
-            if (event == "PLAYER_TARGET_CHANGED") then
+
+            if (event == "UNIT_TARGET") then
                 -- Moved here to avoid taint from functions below
                 self.damageHealth = 1
                 self.lastHealth = 1
