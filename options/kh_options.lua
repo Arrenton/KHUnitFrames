@@ -119,9 +119,15 @@ function KH_UI:Set_BlizzardFrames()
 			PlayerFrame:Hide()
 		end
 		if (KH_UI_Settings["Party Frame"].blizzardEnabled or KH_UI_Settings["Party Frame"].enabled == false) then
-			ShowPartyFrame()
+			if WOW_PROJECT_ID == WOW_PROJECT_MISTS_CLASSIC then
+				ShowPartyFrame()
+			end
 		else
-			HidePartyFrame()
+			if WOW_PROJECT_ID == WOW_PROJECT_MISTS_CLASSIC then
+				HidePartyFrame()
+			else
+				PartyFrame:HidePartyFrames();
+			end
 		end
 		--Target Frame--
 		if

@@ -55,7 +55,7 @@ local function create_portrait(mainFrame)
                 mainFrame.portrait.pvpIcon:Hide()
             end
             --------Master Loot----------
-            local lootMethod, lootMaster = GetLootMethod()
+            local lootMethod, lootMaster = C_PartyInfo and C_PartyInfo.GetLootMethod or GetLootMethod
             if (lootMaster == 0 and IsInGroup()) then
                 mainFrame.portrait.masterLootFrame:Show()
             else

@@ -579,7 +579,7 @@ function KH_UI:New_KH1Unitframe(unit, setting)
         end
         --Set Text
         if f.unitHealth ~= nil then
-            f.healthFrame.healthVal.text:SetText(format(f.unitHealth))
+            f.healthFrame.healthVal.text:SetText(KH_UI:FormatNumber(f.unitHealth))
         end
         if KH_UI_Settings[f.settings].displayHealthValue and f.healthFrame.healthVal:IsVisible() == false then
             f.healthFrame.healthVal:Show()
